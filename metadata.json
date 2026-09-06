@@ -1,0 +1,6 @@
+{
+  "name": "VidyaSetu 10",
+  "description": "VidyaSetu v2.0 - Offline educational suite for Class 10 with notes, DPP, interactive MCQ tests, Drive & direct PDF uploads, and JSON backup/restore.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

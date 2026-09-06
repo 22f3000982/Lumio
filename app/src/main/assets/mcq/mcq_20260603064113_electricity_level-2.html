@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Class 10 - Advanced Quiz Application</title>
+    
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #f4f6f9;
+            --bg-card: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --primary: #4a51de;
+            --primary-light: #eef0fe;
+            --success: #28a745;
+            --success-light: #eafaf1;
+            --danger: #dc3545;
+            --danger-light: #fdf2f2;
+            --warning: #ffc107;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary: #6366f1;
+            --primary-light: #202540;
+            --success: #10b981;
+            --success-light: #14322d;
+            --danger: #ef4444;
+            --danger-light: #3b181a;
+            --border-color: #334155;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .brand-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .btn-icon {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .btn-icon:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .main-container {
+            max-width: 800px;
+            width: 100%;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .quiz-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        @media (max-width: 600px) {
+            .quiz-card {
+                padding: 1.25rem;
+            }
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .meta-tag {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .top-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .top-stats span strong {
+            color: var(--primary);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+            position: relative;
+            outline: none;
+            width: 100%;
+            text-align: left;
+            color: var(--text-main);
+        }
+
+        .option-item:hover:not(.locked) {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .option-item:focus-visible {
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+
+        .option-item.selected-correct {
+            border-color: var(--success) !important;
+            background-color: var(--success-light) !important;
+        }
+
+        .option-item.selected-incorrect {
+            border-color: var(--danger) !important;
+            background-color: var(--danger-light) !important;
+        }
+
+        .option-item.revealed-correct {
+            border-color: var(--success) !important;
+            background-color: var(--success-light) !important;
+        }
+
+        .option-item.locked {
+            cursor: default;
+        }
+
+        .option-prefix {
+            font-weight: 700;
+            margin-right: 0.75rem;
+            color: var(--primary);
+        }
+
+        .feedback-badge {
+            margin-left: auto;
+            font-weight: bold;
+        }
+
+        .action-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 0.85rem 2rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        @media (min-width: 600px) {
+            .btn-primary, .btn-secondary {
+                width: auto;
+            }
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 6px rgba(74, 81, 222, 0.2);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--border-color);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .explanation-box {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            display: none;
+            height: auto;
+            overflow: visible;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .option-explanations {
+            margin-bottom: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .opt-exp-line {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+
+        .learning-section {
+            background: var(--bg-card);
+            border-left: 4px solid var(--primary);
+            padding: 0.75rem 1rem;
+            margin-top: 0.75rem;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            font-size: 0.9rem;
+        }
+
+        .learning-section strong {
+            color: var(--primary);
+        }
+
+        /* Results Screen Styles */
+        .results-container {
+            display: none;
+            grid-column: 1 / -1;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary), #6366f1);
+            color: white;
+            border-radius: var(--radius);
+        }
+
+        .grade-badge {
+            font-size: 4rem;
+            font-weight: 900;
+            margin: 1rem 0;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-analysis-card, .skills-card, .insights-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .analysis-table th, .analysis-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .analysis-table th {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .bar-metric {
+            margin-bottom: 1rem;
+        }
+
+        .bar-lbl {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+        }
+
+        .bar-outer {
+            width: 100%;
+            height: 10px;
+            background-color: var(--border-color);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .bar-inner {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 5px;
+        }
+
+        .area-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .area-item {
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .area-strong {
+            background-color: var(--success-light);
+            color: var(--success);
+        }
+
+        .area-weak {
+            background-color: var(--danger-light);
+            color: var(--danger);
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body class="tex2jax_process">
+
+    <canvas id="canvas"></canvas>
+
+    <header class="tex2jax_ignore">
+        <div class="brand-title">💡 EdTechPro : Electricity Quiz</div>
+        <div class="header-actions">
+            <button class="btn-icon" id="theme-toggle" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">🌓</button>
+            <button class="btn-icon" id="reset-quiz" title="Reset Quiz State" aria-label="Reset Quiz">🔄</button>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div id="quiz-arena" class="quiz-card">
+            <div class="quiz-header tex2jax_ignore">
+                <span class="meta-tag" id="topic-tag">Topic</span>
+                <div class="top-stats">
+                    <span id="question-counter">Question 1 of 40</span>
+                    <span>Score: <strong id="top-stat-score">0/0</strong></span>
+                    <span>Accuracy: <strong id="top-stat-accuracy">0%</strong></span>
+                </div>
+            </div>
+
+            <div class="progress-container tex2jax_ignore">
+                <div class="progress-bar" id="ui-progress"></div>
+            </div>
+
+            <div class="question-text" id="ui-question">Loading Question...</div>
+
+            <div class="options-list" id="ui-options"></div>
+
+            <div class="action-container tex2jax_ignore">
+                <button class="btn-secondary" id="btn-prev" disabled>&larr; Previous</button>
+                <button class="btn-primary" id="btn-next" disabled>Select an Option</button>
+            </div>
+
+            <div class="explanation-box" id="ui-explanation">
+                <div class="explanation-title tex2jax_ignore">Detailed Analytics & Explanations</div>
+                <div class="option-explanations" id="ui-opt-explanations"></div>
+                <div class="learning-section"><strong>Concept Tested:</strong> <span id="ui-concept"></span></div>
+                <div class="learning-section"><strong>Quick Revision:</strong> <span id="ui-revision"></span></div>
+                <div class="learning-section"><strong>Exam Tip:</strong> <span id="ui-exam-tip"></span></div>
+            </div>
+        </div>
+
+        <div class="results-container tex2jax_ignore" id="results-board">
+            <div class="results-header">
+                <h2>🎉 Quiz Completed!</h2>
+                <div class="grade-badge" id="res-grade">A+</div>
+                <p id="res-summary">Incredible performance! You've mastered the concepts perfectly.</p>
+            </div>
+
+            <div class="results-grid">
+                <div class="topic-analysis-card">
+                    <h3>📊 Topic Performance Analysis</h3>
+                    <table class="analysis-table">
+                        <thead>
+                            <tr>
+                                <th>Topic</th>
+                                <th>Score</th>
+                                <th>Accuracy</th>
+                            </tr>
+                        </thead>
+                        <tbody id="res-topic-table"></tbody>
+                    </table>
+                </div>
+
+                <div class="skills-card">
+                    <h3>⚡ Report Card Skills</h3>
+                    <div id="res-skills"></div>
+                    <div class="bar-metric" style="margin-top: 1.5rem;">
+                        <div class="bar-lbl"><strong>Overall Readiness Score</strong><span id="res-readiness-val">0/100</span></div>
+                        <div class="bar-outer"><div class="bar-inner" id="res-readiness-bar" style="width: 0%;"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-grid">
+                <div class="insights-card">
+                    <h3>💡 Dynamic Core Insights</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <strong>✅ Strong Areas (>= 80%):</strong>
+                        <ul class="area-list" id="res-strong-list"></ul>
+                    </div>
+                    <div>
+                        <strong>⚠️ Needs Improvement (< 70%):</strong>
+                        <ul class="area-list" id="res-weak-list"></ul>
+                    </div>
+                </div>
+
+                <div class="insights-card">
+                    <h3>🚀 Hyper-Personalized Action Plan</h3>
+                    <div id="res-action-plan" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main);"></div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 1rem; margin-bottom: 3rem;">
+                <button class="btn-primary" id="btn-restart-final" style="padding: 1rem 2.5rem; font-size: 1.1rem; width: auto;">Restart Full Assessment</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Core Question Database Array
+        const quizData = [
+            {
+                topic: "Electric Charge & Current",
+                question: "A current of 0.5 A flows through a conductor for 20 minutes. The total charge passed is:",
+                options: ["300 C", "600 C", "1200 C", "2400 C"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This happens if you omit converting minutes to seconds properly.",
+                    "Correct! Time $t = 20 \\text{ minutes} = 20 \\times 60 = 1200 \\text{ s}$. Total charge $Q = I \\times t = 0.5 \\times 1200 = 600 \\text{ C}$.",
+                    "Incorrect. Check your math; it looks like a conversion multiplier error.",
+                    "Incorrect. This would mean double the actual value derived from the formula."
+                ],
+                concept: "Quantization of charge and the relation between electric current and charge over time ($Q = I \\cdot t$).",
+                revision: "Always change standard time measurements to base SI units (Seconds) before proceeding with algebraic multiplications.",
+                examTip: "Double check your unit conversions ($1 \\text{ min} = 60 \\text{ s}$) before selecting your final answer matrix choice."
+            },
+            {
+                topic: "Resistance & Factors",
+                question: "A wire has resistance R. Its length is doubled and radius becomes half. New resistance is:",
+                options: ["4R", "8R", "16R", "2R"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This accounts only for area changes without factoring the scale up of length properties.",
+                    "Correct! Resistance $R = \\rho \\frac{L}{A} = \\rho \\frac{L}{\\pi r^2}$. New length $L' = 2L$, new radius $r' = r/2$. Thus new cross-sectional area $A' = \\pi (r/2)^2 = A/4$. Substituting gives $R' = \\rho \\frac{2L}{A/4} = 8R$.",
+                    "Incorrect. This is an over-scaling error, likely from squaring the radius factor a second time incorrectly.",
+                    "Incorrect. This only accounts for length metrics while entirely omitting the cross-sectional area contraction physics."
+                ],
+                concept: "Dependence of electrical resistance on physical dimensions ($R = \\rho \\frac{L}{A}$).",
+                revision: "Halving the linear radius scales down cross-sectional area by a structural power of 4.",
+                examTip: "Express changes as explicit ratios relative to initial variables to avoid conceptual algebraic processing mistakes."
+            },
+            {
+                topic: "Electric Power",
+                question: "A 220 V bulb draws 0.5 A. Power consumed is:",
+                options: ["55 W", "110 W", "220 W", "440 W"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This looks like an incorrect division calculation rather than standard wattage multiplication.",
+                    "Correct! Power $P = V \\times I$. Given $V = 220 \\text{ V}$ and $I = 0.5 \\text{ A}$, $P = 220 \\times 0.5 = 110 \\text{ W}$.",
+                    "Incorrect. This value matches only the operating voltage magnitude directly.",
+                    "Incorrect. This calculation matches a multiplication tracking double the true actual circuit input parameters."
+                ],
+                concept: "Electric power consumption metric derived from current through a potential difference boundary ($P = V \\cdot I$).",
+                revision: "Power represents total work delivered per unit time, directly tracking combined potential pressure and current parameters.",
+                examTip: "Ensure units align cleanly with fundamental definitions to easily rule out odd distractors."
+            },
+            {
+                topic: "Resistivity Properties",
+                question: "Assertion: Resistivity is independent of dimensions.\nReason: Resistivity depends only on material and temperature.",
+                options: [
+                    "Both true and R explains A",
+                    "Both true but R doesn't explain A",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct! Resistivity is an intrinsic property. Because it depends uniquely on material composition and environmental temperature, macro geometric dimensional scaling does not adjust its inner value metrics.",
+                    "Incorrect. The reason directly provides the fundamental logical basis for why geometric dimensions do not influence the constant value.",
+                    "Incorrect. The reason statement is perfectly sound and validated under material physics.",
+                    "Incorrect. Both logical claims track correctly; structural dimensions cannot modify intrinsic material constants."
+                ],
+                concept: "Intrinsic material resistivity principles vs. extrinsic total structural component resistance properties.",
+                revision: "Resistance changes with object shape scaling; resistivity remains constant unless structural material composition or temperature shifts.",
+                examTip: "When evaluating assertion-reason pairs, check if adding 'because' between the statements forms a coherent logical sentence."
+            },
+            {
+                topic: "Resistor Combinations",
+                question: "Three resistors 2Ω, 3Ω and 6Ω are connected in parallel. Equivalent resistance is:",
+                options: ["1 Ω", "2 Ω", "3 Ω", "11 Ω"],
+                correct: 0,
+                explanations: [
+                    "Correct! For parallel setups: $\\frac{1}{R_p} = \\frac{1}{2} + \\frac{1}{3} + \\frac{1}{6} = \\frac{3+2+1}{6} = \\frac{6}{6} = 1 \\Rightarrow R_p = 1 \\,\\Omega$.",
+                    "Incorrect. The equivalent resistance of a parallel circuit must always be less than the smallest individual resistor value.",
+                    "Incorrect. This cannot be true; individual values in parallel networks decrease total combined net flow impedance.",
+                    "Incorrect. This is the simple arithmetic sum, which applies only to series connections."
+                ],
+                concept: "Parallel combination network inverse-sum reciprocal balance properties.",
+                revision: "Adding alternate path choices via parallel connections always lowers total effective resistance below the minimum path component value.",
+                examTip: "Always remember to invert your final calculated $\\frac{1}{R_p}$ value fraction to discover the true net $R_p$ value."
+            },
+            {
+                topic: "Ohm's Law Application",
+                question: "[Case Study 1 - Q6] A student connects a resistor of 10 Ω across a 20 V battery. Current through resistor is:",
+                options: ["0.5 A", "1 A", "2 A", "5 A"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This happens if you invert the terms and divide resistance by voltage instead.",
+                    "Incorrect. This value fails Ohm's simple proportional constant calculation constraints.",
+                    "Correct! Using Ohm's Law: $I = \\frac{V}{R} = \\frac{20 \\text{ V}}{10 \\,\\Omega} = 2 \\text{ A}$.",
+                    "Incorrect. Check your basic division arithmetic here."
+                ],
+                concept: "Direct execution of classical Ohm's law current proportionality constants ($I = \\frac{V}{R}$).",
+                revision: "Current flow scales up with structural pressure and down with channel impedance.",
+                examTip: "Verify that values match basic equations to avoid simple mathematical calculation mistakes."
+            },
+            {
+                topic: "Joule's Heating Effect",
+                question: "[Case Study 1 - Q7] Heat produced in 5 s is:",
+                options: ["100 J", "200 J", "400 J", "1000 J"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This omits either the current-squared term or time scaling properties.",
+                    "Correct! Joule's heating law dictates: $H = I^2 R t$. Using $I = 2 \\text{ A}$, $R = 10 \\,\\Omega$, and $t = 5 \\text{ s}$: $H = 2^2 \\times 10 \\times 5 = 4 \\times 10 \\times 5 = 200 \\text{ J}$.",
+                    "Incorrect. This value scales double the true real total calculated physical metric matrix.",
+                    "Incorrect. Double check your multiplication steps; this calculation overshot significantly."
+                ],
+                concept: "Campatibility of thermal conversion formulas ($H = I^2 R t$).",
+                revision: "Thermal heat generation tracks with the square of structural input flow velocity metrics.",
+                examTip: "Remember to square the current value first before completing the rest of the multiplication steps."
+            },
+            {
+                topic: "Electric Power",
+                question: "[Case Study 1 - Q8] Power dissipated in the resistor is:",
+                options: ["20 W", "30 W", "40 W", "50 W"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This value matches only the battery's potential difference magnitude.",
+                    "Incorrect. This tracking does not align with any valid formula permutation for the given metrics.",
+                    "Correct! Power $P = I^2 R = 2^2 \\times 10 = 40 \\text{ W}$. Alternatively, $P = V \\times I = 20 \\times 2 = 40 \\text{ W}$ or $P = \\frac{V^2}{R} = \\frac{400}{10} = 40 \\text{ W}$.",
+                    "Incorrect. This does not match any correct calculations based on the given parameters."
+                ],
+                concept: "Power distribution options via alternative parameter sets ($P = V \\cdot I = I^2 R = \\frac{V^2}{R}$).",
+                revision: "All three standard power formula formats yield identical values if current and voltage are calculated correctly.",
+                examTip: "Use an alternative formula formulation to double check your answer whenever time permits during testing."
+            },
+            {
+                topic: "Resistor Combinations",
+                question: "Assertion: Current is same through all resistors in series.\nReason: Charge has only one path to flow through.",
+                options: [
+                    "Both true and R explains A",
+                    "Both true but R doesn't explain A",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct! In a series loop, there are no branching points. Conservation of charge requires that all charge passing through one element must also pass through the next.",
+                    "Incorrect. The physical path limitation is precisely what guarantees identical current values across each component.",
+                    "Incorrect. The explanation given is correct, matching real circuit performance characteristics.",
+                    "Incorrect. Both statements represent valid principles, and the reason serves as a clear logical explanation."
+                ],
+                concept: "Conservation of charge constraints within isolated single-path series electrical networks.",
+                revision: "Series structures prevent alternate route selection, keeping current flow uniform across all components.",
+                examTip: "Remember that current remains constant in series connections, while voltage drops across individual components are cumulative."
+            },
+            {
+                topic: "Electric Power",
+                question: "Two bulbs rated 100 W and 40 W operate at same voltage. Which has greater resistance?",
+                options: ["100 W bulb", "40 W bulb", "Equal", "Cannot determine"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. Higher power requires higher current, which requires lower internal resistance.",
+                    "Correct! Resistance $R = \\frac{V^2}{P}$. At a fixed voltage $V$, resistance is inversely proportional to rated power ($R \\propto \\frac{1}{P}$). Therefore, the lower-wattage ($40 \\text{ W}$) bulb possesses higher resistance.",
+                    "Incorrect. If resistances were equal, their power ratings at identical voltages would also be equal.",
+                    "Incorrect. The relationship is clearly defined through the standard power formula specifications."
+                ],
+                concept: "Inverse proportional scaling of power vs. structural device electrical path resistance.",
+                revision: "Lower power consumption at a fixed voltage signifies a more restrictive, higher-resistance path.",
+                examTip: "Remember that low-wattage household appliances always have higher internal resistance than high-wattage ones."
+            },
+            {
+                topic: "Resistor Combinations",
+                question: "Equivalent resistance of 4Ω and 12Ω connected in parallel is:",
+                options: ["2 Ω", "3 Ω", "4 Ω", "8 Ω"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This value falls outside the exact inverse reciprocal product calculation results.",
+                    "Correct! $\\frac{1}{R_p} = \\frac{1}{4} + \\frac{1}{12} = \\frac{3+1}{12} = \\frac{4}{12} = \\frac{1}{3} \\Rightarrow R_p = 3 \\,\\Omega$.",
+                    "Incorrect. The net combined parallel total must be strictly less than the smallest single component (which is $4 \\,\\Omega$).",
+                    "Incorrect. This looks like a simple average value, which is incorrect for parallel resistor networks."
+                ],
+                concept: "Standard two-resistor parallel product-over-sum simplification rule ($R_p = \\frac{R_1 R_2}{R_1 + R_2}$).",
+                revision: "Using $R_p = \\frac{\\text{Product}}{\\text{Sum}} = \\frac{4 \\times 12}{4 + 12} = \\frac{48}{16} = 3 \\,\\Omega$ provides a fast, reliable shortcut.",
+                examTip: "The shortcut formula $R_p = \\frac{\\text{Product}}{\\text{Sum}}$ helps save time during competitive entry exams."
+            },
+            {
+                topic: "Measuring Instruments",
+                question: "[Measuring Instruments - HOTS] A voltmeter mistakenly connected in series inside a circuit would:",
+                options: [
+                    "Increase current flow significantly",
+                    "Decrease current drastically",
+                    "Have no structural effect at all",
+                    "Short circuit the battery elements"
+                ],
+                correct: 1,
+                explanations: [
+                    "Incorrect. To increase current, you would need to add a low-resistance path, not an insulating one.",
+                    "Correct! An ideal voltmeter has infinite resistance (and real ones have extremely high resistance) to avoid drawing current when connected in parallel. If placed in series, it acts like an open switch, dropping total circuit current near zero.",
+                    "Incorrect. A component with high internal resistance will significantly alter a series circuit's behavior.",
+                    "Incorrect. Short circuits happen when low-resistance loops bypass the load entirely, which is the opposite of this scenario."
+                ],
+                concept: "Voltmeter internal design constraints requiring high resistance to prevent circuit loading.",
+                revision: "Voltmeters must have high resistance to minimize current draw when connected across a load in parallel.",
+                examTip: "Remember: Ammeters have low resistance and go in series; voltmeters have high resistance and go in parallel."
+            },
+            {
+                topic: "Joule's Heating Effect",
+                question: "Assertion: Heating effect increases when current increases.\nReason: Heat produced is proportional to square of current.",
+                options: [
+                    "Both true and R explains A",
+                    "Both true but R doesn't explain A",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct! According to Joule's Law ($H = I^2 R t$), heat scales with the square of the current, which explains why increasing current leads to higher thermal generation.",
+                    "Incorrect. The reason directly provides the exact mathematical rule that explains the assertion.",
+                    "Incorrect. The reason is a verified physical law and cannot be labeled false.",
+                    "Incorrect. Both statements are accurate, and they share a clear, direct logical connection."
+                ],
+                concept: "Joule's law squaring behaviors governing electrical-to-thermal energy conversion.",
+                revision: "Doubling the current quadruples the thermal generation rate if resistance and time remain constant.",
+                examTip: "Pay close attention to squared relationships in formulas, as they dominate changes in the overall output."
+            },
+            {
+                topic: "Electric Charge & Current",
+                question: "A conductor carries 5 C charge every second. Current is:",
+                options: ["0.2 A", "5 A", "10 A", "25 A"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This happens if you invert the formula and divide time by charge instead.",
+                    "Correct! Current is the rate of charge flow: $I = \\frac{Q}{t}$. Given $Q = 5 \\text{ C}$ and $t = 1 \\text{ s}$, $I = \\frac{5}{1} = 5 \\text{ A}$.",
+                    "Incorrect. Check your base metrics; there is no multiplier of 2 in this scenario.",
+                    "Incorrect. This looks like an incorrect squaring calculation ($Q^2$) rather than standard division."
+                ],
+                concept: "Fundamental definition of electric current as the total charge passing a point per second.",
+                revision: "One Ampere is defined as one Coulomb of charge moving past a given point in one second.",
+                examTip: "When a problem states 'every second', it means the time parameter $t = 1 \\text{ s}$ exactly."
+            },
+            {
+                topic: "Resistor Combinations",
+                question: "Two resistors 8Ω and 12Ω in series are connected across 20V. Current in circuit:",
+                options: ["0.5 A", "1 A", "2 A", "4 A"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This calculation error may come from using an incorrect combination method.",
+                    "Correct! Series equivalent resistance: $R_s = R_1 + R_2 = 8 + 12 = 20 \\,\\Omega$. Total circuit current: $I = \\frac{V}{R_s} = \\frac{20 \\text{ V}}{20 \\,\\Omega} = 1 \\text{ A}$.",
+                    "Incorrect. Check your math; this value is double the correct answer.",
+                    "Incorrect. This matches the result you would get if you used a parallel combination formula instead."
+                ],
+                concept: "Series resistance summation used alongside Ohm's law to find total circuit current.",
+                revision: "Calculate total equivalent resistance first before trying to find the total circuit loop current.",
+                examTip: "Always confirm whether resistors are connected in series or parallel before starting your calculations."
+            },
+            {
+                topic: "Ohm's Law Application",
+                question: "[Case Study 2 - Q16] An electric heater is rated 2000 W, 250 V. Current drawn:",
+                options: ["4 A", "8 A", "10 A", "12 A"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. Check your arithmetic; this value is half of the required amount.",
+                    "Correct! Power $P = V \\times I \\Rightarrow I = \\frac{P}{V}$. Substituting values: $I = \\frac{2000 \\text{ W}}{250 \\text{ V}} = 8 \\text{ A}$.",
+                    "Incorrect. This value does not satisfy the standard power equation variables.",
+                    "Incorrect. Check your division; this value overshoots the actual calculation."
+                ],
+                concept: "Finding current from power and voltage ratings ($I = \\frac{P}{V}$).",
+                revision: "Appliances draw current based on their rated power consumption and the operating voltage.",
+                examTip: "Isolate the unknown variable on one side of the equation before plugging in the given numbers."
+            },
+            {
+                topic: "Ohm's Law Application",
+                question: "[Case Study 2 - Q17] Resistance of the heater is:",
+                options: ["15.6 Ω", "31.25 Ω", "62.5 Ω", "125 Ω"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This looks like a calculation or rounding error.",
+                    "Correct! $R = \\frac{V}{I} = \\frac{250}{8} = 31.25 \\,\\Omega$. Alternatively, use $R = \\frac{V^2}{P} = \\frac{250 \\times 250}{2000} = \\frac{62500}{2000} = 31.25 \\,\\Omega$.",
+                    "Incorrect. This is exactly double the correct resistance value.",
+                    "Incorrect. Check your division steps; this value is four times too large."
+                ],
+                concept: "Calculating component resistance using rated power and operating voltage parameters.",
+                revision: "The formula $R = \\frac{V^2}{P}$ lets you find resistance directly from the device's nameplate ratings.",
+                examTip: "Using $R = \\frac{V^2}{P}$ avoids compounding any errors from previous current calculations."
+            },
+            {
+                topic: "Electricity Billing",
+                question: "[Case Study 2 - Q18] Energy consumed by the heater in 3 hours is:",
+                options: ["2 kWh", "4 kWh", "6 kWh", "8 kWh"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This value only matches the power rating in kilowatts without accounting for runtime.",
+                    "Incorrect. Check your multiplication steps.",
+                    "Correct! Electrical Energy $E = \\text{Power (kW)} \\times \\text{Time (hours)}$. Here, $P = 2000 \\text{ W} = 2 \\text{ kW}$, and $t = 3 \\text{ hours}$. Thus, $E = 2 \\times 3 = 6 \\text{ kWh}$.",
+                    "Incorrect. This value overshoots the correct multiplication result."
+                ],
+                concept: "Commercial unit of electrical energy calculation based on kilowatt-hours ($E = P_{\\text{kW}} \\cdot t_{\\text{hr}}$).",
+                revision: "Convert power from Watts to kilowatts (divide by 1000) before multiplying by time in hours.",
+                examTip: "Always make sure power is in kilowatts and time is in hours when calculating commercial energy units."
+            },
+            {
+                topic: "Resistor Combinations",
+                question: "Assertion: Equivalent resistance in parallel decreases.\nReason: More current paths become available.",
+                options: [
+                    "Both true and R explains A",
+                    "Both true but R doesn't explain A",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct! Connecting resistors in parallel creates alternate pathways for current to flow, which reduces the overall resistance to current from the source.",
+                    "Incorrect. The availability of extra paths explains why total resistance decreases in parallel layouts.",
+                    "Incorrect. The reason statement is a factually correct description of parallel circuits.",
+                    "Incorrect. Both statements are accurate, and the reason provides the physical explanation for the assertion."
+                ],
+                concept: "How adding parallel paths increases total circuit conductance and lowers net resistance.",
+                revision: "Adding parallel branches is like opening more lanes on a highway; it helps traffic flow more easily.",
+                examTip: "Remember that the total resistance of parallel paths is always smaller than the smallest individual resistor."
+            },
+            {
+                topic: "Resistance & Factors",
+                question: "[Resistance & Factors - HOTS] If all dimensions of a wire are doubled, its resistance becomes:",
+                options: ["R", "2R", "R/2", "4R"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. Resistance will change because the dimensions of the wire have been modified.",
+                    "Incorrect. This happens if you only factor in the longer length while ignoring the wider cross-sectional area.",
+                    "Correct! Initial $R = \\rho \\frac{L}{\\pi r^2}$. If all dimensions double, new length $L' = 2L$ and new radius $r' = 2r$. New area $A' = \\pi(2r)^2 = 4A$. Therefore, $R' = \\rho \\frac{2L}{4A} = \\frac{1}{2}\\left(\\rho \\frac{L}{A}\\right) = \\frac{R}{2}$.",
+                    "Incorrect. This option assumes resistance scales up with area, but it actually scales down."
+                ],
+                concept: "Proportional changes in resistance when length and radius scale simultaneously.",
+                revision: "Doubling the radius increases cross-sectional area fourfold, which offsets the doubled length and cuts resistance in half.",
+                examTip: "Be careful when a question says 'all dimensions'; this means both length and cross-sectional dimensions change."
+            },
+            {
+                topic: "Electricity Billing",
+                question: "Meter Reading: Previous = 15420, Current = 15680. At ₹8/unit, total bill is:",
+                options: ["₹1920", "₹2080", "₹2160", "₹2240"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. Check your subtraction; this value is based on an incorrect unit count.",
+                    "Correct! Total units consumed $= 15680 - 15420 = 260 \\text{ units (kWh)}$. Total bill amount $= 260 \\text{ units} \\times \\text{₹}8 = \\text{₹}2080$.",
+                    "Incorrect. This looks like a minor calculation or multiplication error.",
+                    "Incorrect. This value is higher than the calculated total."
+                ],
+                concept: "Calculating utility bills based on energy consumption differences between meter readings.",
+                revision: "Subtract the older reading from the newer reading to find the total units consumed during the billing cycle.",
+                examTip: "Make sure your subtraction is correct before multiplying by the cost per unit."
+            },
+            {
+                topic: "Electricity Billing",
+                question: "[Electricity Billing - HOTS] A family uses a 1 kW heater for 2 h/day and a 100 W fan for 10 h/day. Daily consumption is:",
+                options: ["2.5 kWh", "3 kWh", "4 kWh", "5 kWh"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. Check your conversion math for the fan's daily power usage.",
+                    "Correct! Heater energy $= 1 \\text{ kW} \\times 2 \\text{ h} = 2 \\text{ kWh}$. Fan energy $= 100 \\text{ W} \\times 10 \\text{ h} = 1000 \\text{ Wh} = 1 \\text{ kWh}$. Total daily energy $= 2 + 1 = 3 \\text{ kWh}$.",
+                    "Incorrect. This value overstates the combined daily energy consumption.",
+                    "Incorrect. Double check your addition and unit conversions."
+                ],
+                concept: "Calculating total daily energy usage for multiple household appliances.",
+                revision: "Convert all appliance power ratings to kilowatts before calculating individual energy totals.",
+                examTip: "Sum the energy usage of each appliance separately before calculating the final total."
+            },
+            {
+                topic: "Resistivity Properties",
+                question: "Assertion: Copper is preferred for domestic wiring.\nReason: Copper has low resistivity.",
+                options: [
+                    "Both true and R explains A",
+                    "Both true but R doesn't explain A",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct! Copper's low resistivity means wires have low resistance, which minimizes energy losses as heat during transmission.",
+                    "Incorrect. Low resistivity is the main reason why copper is chosen for household wiring.",
+                    "Incorrect. The reason statement is factually correct; copper is an excellent electrical conductor.",
+                    "Incorrect. Both statements are true, and there is a direct logical link between them."
+                ],
+                concept: "Material properties that influence selection for safe, efficient power transmission.",
+                revision: "Low resistivity keeps internal resistance low, which reduces voltage drops and unwanted heating in walls.",
+                examTip: "Good conductors have low resistivity values; good insulators have very high resistivity values."
+            },
+            {
+                topic: "Electric Charge & Current",
+                question: "1 kWh equals:",
+                options: ["3.6 × 10⁴ J", "3.6 × 10⁵ J", "3.6 × 10⁶ J", "3.6 × 10⁷ J"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This value is missing some zero multipliers from the unit conversion.",
+                    "Incorrect. This is an incorrect exponent value for Joule conversions.",
+                    "Correct! $1 \\text{ kWh} = 1000 \\text{ W} \\times 3600 \\text{ s} = 3,\\!600,\\!000 \\text{ Joules} = 3.6 \\times 10^6 \\text{ J}$."
+                ],
+                concept: "Converting commercial energy units (kilowatt-hours) to standard SI units (Joules).",
+                revision: "Multiply Watts by seconds to convert power and time definitions directly into Joules.",
+                examTip: "Remember the value $3.6 \\times 10^6 \\text{ J}$, as it frequently appears on standardized science exams."
+            },
+            {
+                topic: "Household Circuits",
+                question: "[Case Study 3 - Q25] Three bulbs are connected in parallel to a 220 V source. Voltage across each bulb is:",
+                options: ["73.3 V", "110 V", "220 V", "Depends on resistance"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This happens if you treat the setup like a series circuit and divide the voltage by three.",
+                    "Incorrect. The voltage is not halved in a standard parallel configuration.",
+                    "Correct! In a parallel circuit, the voltage across each branch is identical to the source voltage ($220 \\text{ V}$).",
+                    "Incorrect. Branch voltage in parallel circuits remains constant regardless of individual component resistances."
+                ],
+                concept: "Voltage behavior across parallel branches connected to a common voltage source.",
+                revision: "Parallel configurations provide the full source voltage to every connected component branch.",
+                examTip: "Voltages are equal across parallel branches, but currents can differ based on branch resistance."
+            },
+            {
+                topic: "Household Circuits",
+                question: "[Case Study 3 - Q26] If one bulb fuses in a parallel circuit setup:",
+                options: [
+                    "Others also stop glowing",
+                    "Others continue to glow normally",
+                    "The entire circuit breaks down",
+                    "The battery short-circuits instantly"
+                ],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This describes a series circuit, not a parallel layout.",
+                    "Correct! Parallel connections provide independent current paths. If one branch opens, current continues flowing through the remaining closed loops.",
+                    "Incorrect. The other branches remain connected to the voltage source and continue functioning.",
+                    "Incorrect. A broken bulb creates an open circuit in that branch, not a low-resistance short circuit."
+                ],
+                concept: "Independent current path operations within parallel electrical wiring schemes.",
+                revision: "A broken component in a parallel circuit only stops current within its own branch.",
+                examTip: "Parallel wiring is why turning off one appliance at home doesn't turn off everything else."
+            },
+            {
+                topic: "Household Circuits",
+                question: "[Case Study 3 - Q27] The primary reason for household parallel wiring is:",
+                options: [
+                    "To reduce total branch voltage",
+                    "To ensure equal current flows",
+                    "To allow independent operation",
+                    "To lower power consumption"
+                ],
+                correct: 2,
+                explanations: [
+                    "Incorrect. Parallel wiring ensures appliances receive the full source voltage, not less.",
+                    "Incorrect. Current values vary in parallel circuits depending on the resistance of each appliance.",
+                    "Correct! Parallel wiring allows each appliance to be turned on or off independently without affecting others.",
+                    "Incorrect. Power consumption depends on the total number of active loads, not the wiring style."
+                ],
+                concept: "Practical engineering benefits of using parallel connections for residential utility wiring.",
+                revision: "Parallel circuits deliver full voltage to each appliance and keep branches independent.",
+                examTip: "Independent control and constant voltage are the two main reasons houses use parallel wiring."
+            },
+            {
+                topic: "Ohm's Law Application",
+                question: "[Ohm's Law Application - HOTS] A student plots a V-I graph and obtains a curved line. This indicates:",
+                options: [
+                    "An ohmic conductor",
+                    "A non-ohmic conductor",
+                    "Zero circuit resistance",
+                    "Infinite path resistance"
+                ],
+                correct: 1,
+                explanations: [
+                    "Incorrect. Ohmic conductors produce a straight line graph because resistance stays constant.",
+                    "Correct! A curved $V-I$ graph shows that the ratio of voltage to current is changing, which means the material is non-ohmic (like a filament bulb or semiconductor).",
+                    "Incorrect. A zero-resistance graph would run flat along one of the axis lines.",
+                    "Incorrect. Infinite resistance would show no current flowing at any voltage level."
+                ],
+                concept: "Distinguishing between linear ohmic conductors and non-linear non-ohmic devices.",
+                revision: "Ohmic devices have constant resistance (straight line); non-ohmic devices have changing resistance (curved line).",
+                examTip: "The slope of a $V-I$ graph represents resistance; a changing slope means resistance is changing."
+            },
+            {
+                topic: "Resistance & Factors",
+                question: "Assertion: Resistance increases with length.\nReason: A longer wire offers more opposition to electron flow.",
+                options: [
+                    "Both true and R explains A",
+                    "Both true but R doesn't explain A",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct! Resistance is directly proportional to length ($R \\propto L$). A longer path means electrons collide with more ions in the material, which increases resistance.",
+                    "Incorrect. The reason explains the physical cause behind the assertion.",
+                    "Incorrect. The reason is correct; longer paths lead to more internal particle collisions.",
+                    "Incorrect. Both statements are accurate, and the reason explains the assertion."
+                ],
+                concept: "Why a longer physical path increases internal electron collisions and resistance.",
+                revision: "Longer wires mean more internal collisions, which reduces total current flow.",
+                examTip: "Think of resistance as friction; a longer road means more friction over the course of the trip."
+            },
+            {
+                topic: "Electricity Billing",
+                question: "An appliance consumes 3 kWh/day. Monthly consumption (30 days) is:",
+                options: ["60 units", "75 units", "90 units", "120 units"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. Check your multiplication math here.",
+                    "Incorrect. This value doesn't match the daily consumption multiplied by 30 days.",
+                    "Correct! Total monthly energy $= 3 \\text{ kWh/day} \\times 30 \\text{ days} = 90 \\text{ kWh} = 90 \\text{ units}$."
+                ],
+                concept: "Scaling daily energy consumption to monthly utility usage metrics.",
+                revision: "Multiply daily unit consumption by the number of days in the billing period.",
+                examTip: "Remember that 'units' on an electricity bill means kilowatt-hours ($\\text{kWh}$)."
+            },
+            {
+                topic: "Electricity Billing",
+                question: "Monthly usage = 250 units. Rate = ₹7.5/unit. Total bill amount:",
+                options: ["₹1750", "₹1875", "₹1950", "₹2125"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. Check your multiplication; this value is too low.",
+                    "Correct! Total Bill $= 250 \\text{ units} \\times \\text{₹}7.5 = \\text{₹}1875$.",
+                    "Incorrect. This looks like a minor calculation error.",
+                    "Incorrect. This value is higher than the calculated total."
+                ],
+                concept: "Calculating total cost from total units consumed and the cost per unit.",
+                revision: "Total Cost $=$ Total Energy Units $\\times$ Cost Per Unit.",
+                examTip: "Break down the multiplication ($250 \\times 7$ plus $250 \\times 0.5$) to make mental math easier during exams."
+            },
+            {
+                topic: "Electricity Billing",
+                question: "A 2 kW geyser runs for 45 min daily. Monthly units consumed (30 days):",
+                options: ["30", "45", "60", "75"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This happens if you use an incorrect hour conversion for the 45-minute runtime.",
+                    "Correct! Daily runtime $= 45/60 = 0.75 \\text{ hours}$. Daily energy $= 2 \\text{ kW} \\times 0.75 \\text{ h} = 1.5 \\text{ kWh}$. Monthly energy (30 days) $= 1.5 \\times 30 = 45 \\text{ units}$."
+                ],
+                concept: "Converting runtimes from minutes to hours for energy billing calculations.",
+                revision: "Always divide minutes by 60 to convert them to hours before calculating energy usage.",
+                examTip: "Be sure to convert time to hours before multiplying by power to find kilowatt-hours."
+            },
+            {
+                topic: "Safety Devices",
+                question: "Assertion: An electric fuse works on the heating effect of current.\nReason: A fuse wire has a low melting point.",
+                options: [
+                    "Both true and R explains A",
+                    "Both true but R doesn't explain A",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 1,
+                explanations: [
+                    "Incorrect. While both statements are true, the low melting point doesn't explain *how* heat is generated; it explains how the fuse reacts to that heat.",
+                    "Correct! Both statements are true. A fuse generates heat via Joule heating ($H=I^2Rt$). It is designed with a low melting point so it melts and breaks the circuit if that heat gets too high, but the low melting point itself isn't what causes the heating effect.",
+                    "Incorrect. The reason statement is correct; fuse wires must melt easily to protect circuits.",
+                    "Incorrect. Both statements are accurate, but the reason is not the direct cause of the assertion."
+                ],
+                concept: "How electric fuses protect circuits using Joule heating and material melting points.",
+                revision: "Current generates heat in the fuse wire; if the current is unsafe, the heat melts the low-melting-point wire to open the circuit.",
+                examTip: "Fuses are safety devices connected in series with the live wire to protect against short circuits and overloads."
+            },
+            {
+                topic: "Ohm's Law Application",
+                question: "[Case Study 4 - Q34] A resistor draws 4 A from a 12 V battery. Its resistance is:",
+                options: ["2 Ω", "3 Ω", "4 Ω", "6 Ω"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. Check your division; this value is incorrect.",
+                    "Correct! Using Ohm's Law: $R = \\frac{V}{I} = \\frac{12 \\text{ V}}{4 \\text{ A}} = 3 \\,\\Omega$.",
+                    "Incorrect. This value matches the current rating instead of the calculated resistance.",
+                    "Incorrect. This value does not satisfy the formula parameters."
+                ],
+                concept: "Calculating resistance from measured voltage and current ($R = \\frac{V}{I}$).",
+                revision: "Resistance is the ratio of potential difference to the current flowing through a component.",
+                examTip: "Make sure you use the correct values for voltage and current when solving for resistance."
+            },
+            {
+                topic: "Electric Power",
+                question: "[Case Study 4 - Q35] Power consumed by the resistor is:",
+                options: ["24 W", "36 W", "48 W", "60 W"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This looks like an incorrect multiplication or calculation step.",
+                    "Incorrect. Check your math; this value is too low.",
+                    "Correct! Power $P = V \\times I = 12 \\text{ V} \\times 4 \\text{ A} = 48 \\text{ W}$."
+                ],
+                concept: "Calculating power dissipation from circuit voltage and current measurements.",
+                revision: "Power is the product of voltage and current ($P = V \\cdot I$).",
+                examTip: "Double check your basic multiplication to avoid making simple errors on straightforward problems."
+            },
+            {
+                topic: "Electric Power",
+                question: "[Case Study 4 - Q36] Energy used in 10 s is:",
+                options: ["240 J", "360 J", "480 J", "600 J"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This value uses an incorrect power metric in the calculation.",
+                    "Incorrect. Check your multiplication steps.",
+                    "Correct! Energy $E = \\text{Power} \\times \\text{Time} = 48 \\text{ W} \\times 10 \\text{ s} = 480 \\text{ Joules}$."
+                ],
+                concept: "Calculating energy consumption from power and time values in standard SI units.",
+                revision: "Energy in Joules is equal to power in Watts multiplied by time in seconds.",
+                examTip: "When time is already given in seconds, you can calculate energy in Joules directly without conversions."
+            },
+            {
+                topic: "Electric Power",
+                question: "[Electric Power - HOTS] A bulb rated 100 W–220 V is operated at 110 V. Its power will:",
+                options: ["Increase", "Remain same", "Decrease to 25 W", "Become zero"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. Reducing the voltage reduces the current, which lowers the overall power consumption.",
+                    "Incorrect. Power changes with voltage because the bulb's internal resistance stays mostly constant.",
+                    "Correct! Bulb resistance $R = \\frac{V^2}{P} = \\frac{220^2}{100} = 484 \\,\\Omega$. New power at $110 \\text{ V}$: $P' = \\frac{V'^2}{R} = \\frac{110^2}{484} = \\frac{12100}{484} = 25 \\text{ W}$. When voltage is cut in half, power drops to one-quarter ($1/4$).",
+                    "Incorrect. Current still flows at $110 \\text{ V}$, so the power will be lower but not zero."
+                ],
+                concept: "How changing the operating voltage impacts total power consumption based on constant resistance.",
+                revision: "Power is proportional to the square of the voltage ($P \\propto V^2$). Halving the voltage reduces power by a factor of four.",
+                examTip: "Remember that power drops with the square of the voltage reduction ($1/2$ voltage $=$ $1/4$ power)."
+            },
+            {
+                topic: "Resistivity Properties",
+                question: "Assertion: A good conductor has low resistance.\nReason: Good conductors have many free electrons.",
+                options: [
+                    "Both true and R explains A",
+                    "Both true but R doesn't explain A",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct! Materials with a high concentration of free electrons can conduct charge easily, which results in low electrical resistance.",
+                    "Incorrect. The large number of free electrons is exactly what allows current to flow with low resistance.",
+                    "Incorrect. The reason statement is correct; electron density determines conductivity.",
+                    "Incorrect. Both statements are accurate, and the reason explains the assertion."
+                ],
+                concept: "Microscopic basis of electrical conductivity and resistance in materials.",
+                revision: "Free electrons act as charge carriers; more carriers mean lower resistance to current.",
+                examTip: "Metals make great conductors because their atomic structure includes a large number of free electrons."
+            },
+            {
+                topic: "Ohm's Law Application",
+                question: "[Ohm's Law Application - HOTS] A battery provides constant voltage. If circuit resistance is halved, current becomes:",
+                options: ["Half", "Double", "Four times", "Unchanged"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. Lowering resistance makes it easier for current to flow, so current will increase, not decrease.",
+                    "Correct! According to Ohm's Law ($I = \\frac{V}{R}$), current is inversely proportional to resistance when voltage is constant ($I \\propto \\frac{1}{R}$). Halving the resistance doubles the current.",
+                    "Incorrect. Current increases inversely with resistance, not with the square of resistance.",
+                    "Incorrect. Current must change if resistance changes while voltage stays the same."
+                ],
+                concept: "Inverse relationship between current and resistance at a constant voltage.",
+                revision: "Cutting resistance in half removes obstacles to current, allowing twice as much charge to flow.",
+                examTip: "Inversely proportional means that whatever factor changes the resistance, the flipped factor changes the current."
+            },
+            {
+                topic: "Measuring Instruments",
+                question: "[Measuring Instruments - HOTS – Multi Concept] Which statement is completely correct?",
+                options: [
+                    "Ammeter has high resistance and is connected in parallel",
+                    "Voltmeter has low resistance and is connected in series",
+                    "Ammeter has low resistance and is connected in series",
+                    "Both ammeter and voltmeter are connected in series"
+                ],
+                correct: 2,
+                explanations: [
+                    "Incorrect. Ammeters must have low resistance and be connected in series to measure current accurately.",
+                    "Incorrect. Voltmeters must have high resistance and be connected in parallel to measure voltage without drawing current.",
+                    "Correct! An ammeter measures total circuit current, so it is connected in series and has very low resistance to avoid altering the current it is measuring.",
+                    "Incorrect. Voltmeters must be connected in parallel across the component being measured."
+                ],
+                concept: "Proper connection methods and internal resistance designs for electrical test instruments.",
+                revision: "Ammeters go in series and have low resistance; voltmeters go in parallel and have high resistance.",
+                examTip: "Remember: Series-Low for Ammeters, Parallel-High for Voltmeters to ensure accurate circuit measurements."
+            }
+        ];
+
+        // Application State Management
+        let currentIdx = 0;
+        let userAnswers = JSON.parse(localStorage.getItem('electricity_quiz_answers')) || {};
+
+        // DOM Element Cache
+        const topicTag = document.getElementById('topic-tag');
+        const qCounter = document.getElementById('question-counter');
+        const uiProgress = document.getElementById('ui-progress');
+        const uiQuestion = document.getElementById('ui-question');
+        const uiOptions = document.getElementById('ui-options');
+        const uiExplanation = document.getElementById('ui-explanation');
+        const uiOptExplanations = document.getElementById('ui-opt-explanations');
+        const uiConcept = document.getElementById('ui-concept');
+        const uiRevision = document.getElementById('ui-revision');
+        const uiExamTip = document.getElementById('ui-exam-tip');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const topStatAccuracy = document.getElementById('top-stat-accuracy');
+        const topStatScore = document.getElementById('top-stat-score');
+        const quizArena = document.getElementById('quiz-arena');
+        const StarkResultsBoard = document.getElementById('results-board');
+
+        // Theme Management Engine
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', targetTheme);
+        });
+
+        // Initialize Core Component Engine
+        function initApp() {
+            renderQuestion();
+            updateStats();
+        }
+
+        function updateStats() {
+            const attempted = Object.keys(userAnswers).length;
+            let correctCount = 0;
+            quizData.forEach((q, idx) => {
+                if (userAnswers[idx] !== undefined && userAnswers[idx] === q.correct) {
+                    correctCount++;
+                }
+            });
+            const accuracy = attempted === 0 ? 0 : Math.round((correctCount / attempted) * 100);
+            topStatAccuracy.innerText = `${accuracy}%`;
+            topStatScore.innerText = `${correctCount}/${quizData.length}`;
+        }
+
+        function renderQuestion() {
+            const currentQ = quizData[currentIdx];
+            topicTag.innerText = currentQ.topic;
+            qCounter.innerText = `Question ${currentIdx + 1} of ${quizData.length}`;
+            uiProgress.style.width = `${((currentIdx + 1) / quizData.length) * 100}%`;
+            uiQuestion.innerText = currentQ.question;
+
+            uiOptions.innerHTML = '';
+            uiExplanation.style.display = 'none';
+
+            // Control state of previous button
+            btnPrev.disabled = currentIdx === 0;
+
+            const hasAnswered = userAnswers[currentIdx] !== undefined;
+
+            currentQ.options.forEach((opt, idx) => {
+                const button = document.createElement('button');
+                button.className = 'option-item';
+                if (hasAnswered) button.classList.add('locked');
+                
+                const prefix = document.createElement('span');
+                prefix.className = 'option-prefix';
+                prefix.innerText = String.fromCharCode(65 + idx) + ".";
+                button.appendChild(prefix);
+
+                const textNode = document.createTextNode(opt);
+                button.appendChild(textNode);
+
+                // Styling logic for completed options
+                if (hasAnswered) {
+                    if (idx === currentQ.correct) {
+                        button.classList.add('revealed-correct');
+                        const badge = document.createElement('span');
+                        badge.className = 'feedback-badge';
+                        badge.innerText = '✅ Correct';
+                        button.appendChild(badge);
+                    }
+                    if (userAnswers[currentIdx] === idx && idx !== currentQ.correct) {
+                        button.classList.add('selected-incorrect');
+                        const badge = document.createElement('span');
+                        badge.className = 'feedback-badge';
+                        badge.innerText = '❌ Incorrect';
+                        button.appendChild(badge);
+                    }
+                } else {
+                    button.addEventListener('click', () => handleSelection(idx));
+                }
+
+                uiOptions.appendChild(button);
+            });
+
+            if (hasAnswered) {
+                showExplanationBlock(currentQ);
+                btnNext.disabled = false;
+                if (currentIdx === quizData.length - 1) {
+                    btnNext.innerText = "Finish Quiz & View Results";
+                } else {
+                    btnNext.innerText = "Next Question \u2192";
+                }
+            } else {
+                btnNext.disabled = true;
+                btnNext.innerText = "Select an Option";
+            }
+
+            // Request MathJax to re-render mathematical structures smoothly
+            if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+                window.MathJax.typesetPromise();
+            }
+        }
+
+        function handleSelection(selectedIdx) {
+            userAnswers[currentIdx] = selectedIdx;
+            localStorage.setItem('electricity_quiz_answers', JSON.stringify(userAnswers));
+            
+            updateStats();
+            renderQuestion();
+        }
+
+        function showExplanationBlock(q) {
+            uiOptExplanations.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const div = document.createElement('div');
+                div.className = 'opt-exp-line';
+                const statusIcon = idx === q.correct ? '✅' : '❌';
+                div.innerHTML = `<strong>${String.fromCharCode(65 + idx)} ${statusIcon}:</strong> ${q.explanations[idx]}`;
+                uiOptExplanations.appendChild(div);
+            });
+
+            uiConcept.innerText = q.concept;
+            uiRevision.innerText = q.revision;
+            uiExamTip.innerText = q.examTip;
+            uiExplanation.style.display = 'block';
+        }
+
+        // Navigation Controllers
+        btnNext.addEventListener('click', () => {
+            if (currentIdx < quizData.length - 1) {
+                currentIdx++;
+                renderQuestion();
+            } else {
+                displayFinalResults();
+            }
+        });
+
+        btnPrev.addEventListener('click', () => {
+            if (currentIdx > 0) {
+                currentIdx--;
+                renderQuestion();
+            }
+        });
+
+        // Reset Quiz Hook Interface
+        document.getElementById('reset-quiz').addEventListener('click', () => {
+            if (confirm("Are you sure you want to reset all your answers and progress?")) {
+                userAnswers = {};
+                localStorage.removeItem('electricity_quiz_answers');
+                currentIdx = 0;
+                quizArena.style.display = 'block';
+                StarkResultsBoard.style.display = 'none';
+                initApp();
+            }
+        });
+
+        document.getElementById('btn-restart-final').addEventListener('click', () => {
+            userAnswers = {};
+            localStorage.removeItem('electricity_quiz_answers');
+            currentIdx = 0;
+            quizArena.style.display = 'block';
+            StarkResultsBoard.style.display = 'none';
+            initApp();
+        });
+
+        // Metrics Calculation Engine
+        function displayFinalResults() {
+            quizArena.style.display = 'none';
+            StarkResultsBoard.style.display = 'block';
+
+            let correctCount = 0;
+            const topicStats = {};
+
+            quizData.forEach((q, idx) => {
+                if (!topicStats[q.topic]) {
+                    topicStats[q.topic] = { total: 0, correct: 0 };
+                }
+                topicStats[q.topic].total++;
+
+                if (userAnswers[idx] !== undefined && userAnswers[idx] === q.correct) {
+                    correctCount++;
+                    topicStats[q.topic].correct++;
+                }
+            });
+
+            const overallPct = Math.round((correctCount / quizData.length) * 100);
+            
+            // Determine Performance Grade
+            let grade = 'D';
+            let message = 'Keep reviewing the material and practicing to build up your foundational core.';
+            if (overallPct >= 90) { grade = 'A+'; message = 'Excellent work! You have fully mastered these advanced electricity physics concepts.'; }
+            else if (overallPct >= 80) { grade = 'A'; message = 'Great performance! You have a solid grasp of most advanced engineering parameters.'; }
+            else if (overallPct >= 70) { grade = 'B'; message = 'Good effort. A little more revision on targeted sections will lead to absolute mastery.'; }
+            else if (overallPct >= 50) { grade = 'C'; message = 'Fair results. Review the core concept notes and formula sheets regularly.'; }
+
+            document.getElementById('res-grade').innerText = grade;
+            document.getElementById('res-summary').innerText = `You answered ${correctCount} out of ${quizData.length} questions correctly. ${message}`;
+
+            // Build Topic Performance Analysis Table
+            const tableBody = document.getElementById('res-topic-table');
+            tableBody.innerHTML = '';
+            const strongList = document.getElementById('res-strong-list');
+            const weakList = document.getElementById('res-weak-list');
+            strongList.innerHTML = '';
+            weakList.innerHTML = '';
+
+            let actionPlanHtml = '';
+
+            for (const topic in topicStats) {
+                const stats = topicStats[topic];
+                const pct = Math.round((stats.correct / stats.total) * 100);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td><strong>${topic}</strong></td><td>${stats.correct}/${stats.total}</td><td><strong>${pct}%</strong></td>`;
+                tableBody.appendChild(tr);
+
+                const li = document.createElement('li');
+                li.className = `area-item ${pct >= 80 ? 'area-strong' : (pct < 70 ? 'area-weak' : '')}`;
+                if (pct >= 80 || pct < 70) {
+                    li.innerText = `${topic} (${pct}% Accuracy)`;
+                    if (pct >= 80) strongList.appendChild(li);
+                    else {
+                        weakList.appendChild(li);
+                        // Dynamically build suggestions into the personalized action plan
+                        actionPlanHtml += `<div style="margin-bottom:0.8rem;"><strong>📚 ${topic}:</strong> Focus on reviewing its fundamental formulas. Complete 10 additional targeted practice problems to reinforce the concept.</div>`;
+                    }
+                }
+            }
+
+            if (!actionPlanHtml) {
+                actionPlanHtml = "<p>✅ Your understanding is consistent across all sections! Continue practicing mixed question sets to maintain high accuracy.</p>";
+            }
+            document.getElementById('res-action-plan').innerHTML = actionPlanHtml;
+
+            // Generate Report Card Metrics
+            const skillSets = [
+                { name: "Conceptual Understanding", wt: 0.25, basePct: overallPct + 5 },
+                { name: "Numerical Calculation Speed", wt: 0.30, basePct: overallPct - 2 },
+                { name: "Application Engineering Skills", wt: 0.25, basePct: overallPct },
+                { name: "HOTS Analytical Processing", wt: 0.20, basePct: overallPct - 5 }
+            ];
+
+            const skillsContainer = document.getElementById('res-skills');
+            skillsContainer.innerHTML = '';
+            skillSets.forEach(s => {
+                const score = Math.max(10, Math.min(100, Math.round(s.basePct)));
+                const bar = document.createElement('div');
+                bar.className = 'bar-metric';
+                bar.innerHTML = `
+                    <div class="bar-lbl"><span>${s.name}</span><strong>${score}%</strong></div>
+                    <div class="bar-outer"><div class="bar-inner" style="width: ${score}%;"></div></div>
+                `;
+                skillsContainer.appendChild(bar);
+            });
+
+            // Set final overall readiness metric score
+            document.getElementById('res-readiness-val').innerText = `${overallPct}/100`;
+            document.getElementById('res-readiness-bar').style.width = `${overallPct}%`;
+
+            // Trigger celebratory effects if performance is strong
+            if (overallPct >= 75) triggerConfetti();
+        }
+
+        // Confetti Celebration Particle System
+        function triggerConfetti() {
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let pieces = [];
+            const numberOfPieces = 150;
+            const colors = ["#4a51de", "#6366f1", "#10b981", "#ffc107", "#ef4444", "#ec4899"];
+
+            function Particle() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.rotation = Math.random() * 360;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.diameter = Math.random() * 8 + 6;
+                this.speed = Math.random() * 3 + 2;
+            }
+
+            for (let i = 0; i < numberOfPieces; i++) {
+                pieces.push(new Particle());
+            }
+
+            let animationFrameId;
+            let ticks = 0;
+
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                pieces.forEach((p) => {
+                    p.y += p.speed;
+                    p.rotation += p.speed;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.diameter / 2, -p.diameter / 2, p.diameter, p.diameter);
+                    ctx.restore();
+
+                    if (p.y > canvas.height) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+                });
+
+                ticks++;
+                if (ticks < 250) { // Automatically clean up animation resources over time
+                    animationFrameId = requestAnimationFrame(update);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            update();
+        }
+
+        // Window resize adjustment listener hook
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById("canvas");
+            if(canvas && canvas.style.display !== 'none') {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
+
+        // Launch Core Module System Engine
+        initApp();
+    </script>
+</body>
+</html>

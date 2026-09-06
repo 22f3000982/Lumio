@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Human Eye & Lens Quiz</title>
+  <style>
+    :root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#647087;--line:#e5e9f2;--brand:#5b5ce2;--brand2:#8586ff;--good:#139a6b;--bad:#dc4f5d;--soft:#eef0ff;--shadow:0 15px 45px #25275d12}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#e8eaff 0,transparent 32%),var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.5}.wrap{max-width:1050px;margin:auto;padding:28px 18px 50px}.hero{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:24px}.eyebrow{color:var(--brand);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.74rem}.hero h1{font-size:clamp(1.8rem,4vw,3rem);line-height:1.05;margin:7px 0}.hero p{color:var(--muted);margin:0}.pill{background:var(--soft);color:var(--brand);font-weight:800;border-radius:999px;padding:9px 14px;white-space:nowrap}.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(250px,.8fr);gap:20px}.card{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}.quiz{padding:clamp(20px,4vw,36px)}.topline{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:.9rem;font-weight:700}.progress{height:9px;background:#edf0f6;border-radius:99px;overflow:hidden;margin:12px 0 30px}.progress i{display:block;height:100%;width:4%;background:linear-gradient(90deg,var(--brand),var(--brand2));border-radius:inherit;transition:width .3s}.question{font-size:clamp(1.25rem,3vw,1.7rem);margin:0 0 22px;line-height:1.3}.options{display:grid;gap:11px}.option{appearance:none;text-align:left;width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 15px;display:flex;gap:12px;align-items:flex-start;color:var(--ink);font:inherit;cursor:pointer;transition:.18s}.option:hover{border-color:var(--brand2);background:#fafaff;transform:translateY(-1px)}.letter{min-width:29px;height:29px;border-radius:9px;background:#f0f2f7;display:grid;place-items:center;font-weight:850;color:#505a70}.option.correct{border-color:#9adeca;background:#ebfbf5}.option.correct .letter{background:#c7f2e2;color:var(--good)}.option.wrong{border-color:#f4b4bb;background:#fff0f1}.option.wrong .letter{background:#ffd7db;color:var(--bad)}.option:disabled{cursor:default;transform:none}.feedback{margin-top:20px;padding:17px;border-radius:15px;display:none}.feedback.show{display:block}.feedback.good{background:#ebfbf5;color:#08704c}.feedback.bad{background:#fff0f1;color:#a22d3a}.feedback strong{display:block;font-size:1.08rem}.feedback small{display:block;margin-top:5px;color:inherit;opacity:.9}.option-explain{margin-top:20px;border-top:1px solid var(--line);padding-top:17px;display:none}.option-explain.show{display:block}.option-explain h3,.side h2{font-size:1rem;margin:0 0 12px}.explain-row{padding:10px 0;border-bottom:1px dashed var(--line);font-size:.9rem}.explain-row:last-child{border:0}.explain-row b{color:var(--brand)}.concept{margin-top:18px;background:#f8f8ff;border:1px solid #e6e6ff;border-radius:15px;padding:15px;font-size:.92rem}.concept strong{color:var(--brand);display:block;margin-bottom:3px}.side{padding:20px;align-self:start;position:sticky;top:16px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 18px}.stat{background:#f8f9fc;border-radius:14px;padding:12px}.stat b{font-size:1.5rem;display:block}.stat span{font-size:.78rem;color:var(--muted)}.chart{height:11px;background:#f0f1f5;border-radius:99px;overflow:hidden;display:flex;margin:8px 0 17px}.chart .g{background:var(--good);width:0;transition:.3s}.chart .r{background:var(--bad);width:0;transition:.3s}.legend{display:flex;justify-content:space-between;color:var(--muted);font-size:.78rem}.weak{border-top:1px solid var(--line);margin-top:20px;padding-top:17px}.weak p{color:var(--muted);font-size:.86rem;margin:0}.nav{display:flex;justify-content:space-between;gap:12px;margin-top:25px}.btn{border:0;border-radius:12px;padding:12px 17px;font:inherit;font-weight:800;cursor:pointer}.btn.primary{color:#fff;background:var(--brand);box-shadow:0 8px 18px #5b5ce238}.btn.secondary{background:#eef0f5;color:#4c5870}.btn:disabled{opacity:.45;cursor:not-allowed}.results{display:none;padding:clamp(22px,5vw,40px)}.results.show{display:block}.score{font-size:clamp(2.6rem,9vw,5.6rem);font-weight:900;color:var(--brand);line-height:1;margin:12px 0}.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:25px 0}.guide{display:grid;gap:10px}.guide article{background:#f8f9fc;border:1px solid var(--line);border-radius:14px;padding:14px}.guide article h3{margin:0 0 5px;font-size:1rem}.guide article p{margin:0;color:var(--muted);font-size:.88rem}.tip{background:#fff9e8;border:1px solid #f5df9d;color:#755817;border-radius:14px;padding:14px;font-size:.9rem;margin-top:18px}
+    
+    /* Comprehensive Mobile Responsive Adjustments */
+    @media(max-width:760px){
+      .wrap{padding:15px 12px 35px}
+      .hero{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+      .pill{margin-top:0}
+      .layout{display:flex;flex-direction:column;gap:16px}
+      .side{position:static;margin-top:0}
+      .quiz{padding:18px 14px}
+      .result-grid{grid-template-columns:1fr 1fr}
+      /* Sticky navigation fixed for mobile devices */
+      .nav{position:sticky;bottom:12px;background:#ffffffeb;backdrop-filter:blur(10px);padding:10px;border-radius:16px;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.08);border:1px solid var(--line)}
+      .nav .btn{flex:1;padding:12px 10px;font-size:0.95rem}
+      .option{padding:12px 10px;gap:10px}
+    }
+    @media(max-width:480px){
+      .topline{flex-direction:column;align-items:flex-start;gap:4px}
+      .result-grid{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr;gap:8px}
+      .question{font-size:1.15rem;margin-bottom:18px}
+      .option{font-size:0.95rem}
+      .letter{min-width:26px;height:26px;font-size:0.9rem;border-radius:6px}
+      .score{font-size:3rem}
+      .pill{font-size:0.7rem;padding:7px 12px}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <div>
+        <div class="eyebrow">Class 10 • Science revision</div>
+        <h1>Human Eye & Lens Quiz</h1>
+        <p>One question at a time. Learn from every option.</p>
+      </div>
+      <div class="pill" id="modePill">25 questions</div>
+    </header>
+    
+    <section class="layout" id="quizLayout">
+      <div class="card quiz">
+        <div class="topline"><span id="qCount">Question 1 of 25</span><span id="areaLabel">Eye anatomy</span></div>
+        <div class="progress"><i id="bar"></i></div>
+        <h2 class="question" id="question"></h2><div class="options" id="options"></div>
+        <div class="feedback" id="feedback"></div>
+        <div class="option-explain" id="optionExplain"><h3>Why each option?</h3><div id="explainRows"></div><div class="concept"><strong>Revision concept & formula</strong><span id="concept"></span></div></div>
+        <div class="nav"><button class="btn secondary" id="prev" disabled>← Previous</button><button class="btn primary" id="next" disabled>Next →</button></div>
+      </div>
+      <aside class="card side"><h2>Your progress</h2><div class="stats"><div class="stat"><b id="correctStat">0</b><span>Correct</span></div><div class="stat"><b id="wrongStat">0</b><span>Incorrect</span></div></div><div class="chart"><i class="g" id="goodBar"></i><i class="r" id="badBar"></i></div><div class="legend"><span>✓ Correct</span><span>✕ Incorrect</span></div><div class="weak"><h2>Focus areas</h2><p id="weakText">Answer questions to identify your weak areas.</p></div></aside>
+    </section>
+    <section class="card results" id="results"><div class="eyebrow">Quiz complete</div><h2>Your revision report</h2><div class="score" id="score"></div><p id="scoreLine"></p><div class="result-grid"><div class="stat"><b id="finalCorrect">0</b><span>Correct</span></div><div class="stat"><b id="finalWrong">0</b><span>Incorrect</span></div><div class="stat"><b id="finalPercent">0%</b><span>Score</span></div></div><h2>Weak-area study guide</h2><div class="guide" id="guide"></div><div class="tip">Tip: Repeat the quiz after revising the focus areas. Your answers are saved only in this page and are not sent anywhere.</div><button class="btn primary" id="restart">↻ Restart quiz</button></section>
+  </main>
+  <script>
+    const questions = [
+      ['A myopic person has a far point of 2 m. Which spectacle lens should be used?',['Convex lens, +0.5 D','Concave lens, –0.5 D','Concave lens, –2 D','Convex lens, +2 D'],1,'Numericals','For myopia, P = −1/F = −1/2 = −0.5 D; use a concave lens.'],
+      ["A hypermetropic person's near point is 50 cm. The power of the correcting lens is closest to:",['+2 D','+1 D','–2 D','–1 D'],0,'Numericals','P = 1/0.25 − 1/0.50 = 4 − 2 = +2 D; use a convex lens.'],
+      ['A student observes that his friend can read a book only if it is held beyond 40 cm. Which statement is correct?',['Friend is myopic and needs a concave lens.','Friend is hypermetropic because the near point has shifted away.','Friend has cataract.','Friend has normal vision.'],1,'Defects of vision','A near point beyond 25 cm indicates hypermetropia.'],
+      ['Which combination is impossible?',['Myopia + Concave lens','Hypermetropia + Convex lens','Presbyopia + Bifocal lens','Myopia + Convex lens only'],3,'Defects of vision','Myopia is corrected by a concave lens, not a convex lens alone.'],
+      ['The power of a spectacle lens is –2.5 D. Which statement is correct?',['The person cannot see nearby objects.','The lens is convex.','The focal length is –40 cm.','The person is hypermetropic.'],2,'Lens power','f = 1/P = 1/(−2.5) m = −0.4 m = −40 cm; it is a concave lens.'],
+      ['A person has both myopia and presbyopia. The most suitable spectacles will contain:',['Only concave lens','Only convex lens','Bifocal lens with concave and convex parts','Plane glass'],2,'Defects of vision','Bifocals can combine concave distance correction with convex near correction.'],
+      ['A doctor replaces the cloudy natural eye lens with an artificial lens. Which defect is being treated?',['Myopia','Cataract','Hypermetropia','Presbyopia'],1,'Eye health','Clouding of the natural lens is cataract; treatment is lens replacement surgery.'],
+      ['If ciliary muscles become completely relaxed, the eye is focused on:',['Near objects','Distant objects','Blind spot','Retina'],1,'Accommodation','Relaxed ciliary muscles make the lens thin with maximum focal length for distant vision.'],
+      ['Which pair is correctly matched?',['Retina → Controls light entering eye','Iris → Forms image','Optic nerve → Carries impulses to brain','Cornea → Detects colour'],2,'Eye anatomy','The optic nerve carries electrical impulses from the retina to the brain.'],
+      ['A person can clearly see objects between 25 cm and infinity. His vision is:',['Myopic','Hypermetropic','Normal','Presbyopic'],2,'Vision facts','Near point 25 cm and far point infinity are the normal values.'],
+      ['A concave spectacle lens always forms an image that is:',['Real, inverted','Virtual, erect and diminished','Real, erect','Virtual and magnified'],1,'Image formation','For a real object, a concave lens always gives a virtual, erect and diminished image.'],
+      ['A convex lens used for correcting hypermetropia makes the object at 25 cm appear to be:',['At infinity',"At the person's near point",'At retina','Beyond infinity'],1,'Defects of vision','The convex lens forms a virtual image at the hypermetropic eye’s near point.'],
+      ['Assertion: A myopic person cannot see distant objects clearly. Reason: The image of distant objects is formed in front of the retina.',['Both A and R are true and R is the correct explanation.','Both true but R is not the explanation.','A true, R false.','A false, R true.'],0,'Assertion–Reason','Both statements are true, and the front-of-retina image explains blurred distant vision.'],
+      ['Assertion: Hypermetropia is corrected by a convex lens. Reason: A convex lens decreases the converging power of the eye.',['Both true and R explains A.','Both true but R does not explain A.','A true, R false.','A false, R true.'],2,'Assertion–Reason','The assertion is true, but a convex lens increases convergence; the reason is false.'],
+      ['Assertion: Presbyopia generally develops with age. Reason: The eye lens loses flexibility and ciliary muscles weaken.',['Both true and R explains A.','Both true but R does not explain A.','A true, R false.','A false, R true.'],0,'Assertion–Reason','Both are true, and loss of flexibility plus weaker muscles explains age-related presbyopia.'],
+      ['Which statement is FALSE?',['Iris controls pupil size.','Retina acts like a screen.','Cornea changes focal length during accommodation.','Optic nerve carries signals to the brain.'],2,'Accommodation','Ciliary muscles change the lens curvature/focal length; the cornea does not.'],
+      ['A student looks through an unknown spectacle lens. Printed letters appear smaller. The lens is most likely:',['Convex lens used for hypermetropia','Concave lens used for myopia','Plane glass','Bifocal lens'],1,'Image formation','A concave lens gives a diminished virtual image, so letters appear smaller.'],
+      ['The far point of a myopic eye is 80 cm. The required power of the correcting lens is:',['+1.25 D','–1.25 D','+0.8 D','–0.8 D'],1,'Numericals','P = −1/F = −1/0.8 = −1.25 D.'],
+      ['The near point of a hypermetropic eye is 75 cm. The required spectacle power is:',['+2.67 D','–2.67 D','+1.33 D','–1.33 D'],0,'Numericals','P = 1/0.25 − 1/0.75 = 4 − 1.33 ≈ +2.67 D.'],
+      ['A lens has focal length +50 cm. It can correct:',['Myopia','Hypermetropia','Cataract','Blindness'],1,'Defects of vision','Positive focal length means a convex lens; convex lenses correct hypermetropia.'],
+      ['A 55-year-old teacher keeps moving the newspaper farther away to read comfortably. Distant objects are visible clearly. Best conclusion?',['Myopia','Presbyopia','Cataract','Colour blindness'],1,'Case study','Age-related difficulty in near vision with clear distant vision indicates presbyopia.'],
+      ['Rahul wears spectacles. When he removes them, distant signboards become blurred but nearby objects remain clear. Which option is correct?',['Uses convex lens','Suffers from hypermetropia','Uses concave lens','Has cataract'],2,'Case study','Blurred distant vision with clear near vision is myopia, corrected with a concave lens.'],
+      ['Which sequence correctly represents the path of light inside the eye?',['Cornea → Lens → Pupil → Retina','Cornea → Pupil → Lens → Retina','Pupil → Cornea → Lens → Retina','Cornea → Retina → Lens → Optic nerve'],1,'Eye anatomy','Light travels through cornea, pupil, lens and then forms an image on the retina.'],
+      ['A lens has power –4 D. Which statement is correct?',['Focal length = +25 cm','It corrects hypermetropia.','Focal length = –25 cm and corrects myopia.','It forms only real images.'],2,'Numericals','f = 1/P = −0.25 m = −25 cm; a concave lens corrects myopia.'],
+      ['Which set is completely correct?',['Near point (normal) = 25 cm; Far point (normal) = Infinity; Myopia → Concave lens','Near point = Infinity; Hypermetropia → Concave lens; Retina controls light','Cornea changes focal length; Iris forms image; Cataract affects retina','Presbyopia occurs in children; Myopia → Convex lens; Hypermetropia → Concave lens'],0,'Mixed concepts','All three statements in option A are correct: 25 cm, infinity and concave correction for myopia.']
+    ];
+    
+    const letters=['A','B','C','D']; 
+    let current=0, answers=Array(questions.length).fill(null);
+    const $=id=>document.getElementById(id); 
+    const [questionElem,options,feedback,explain,concept,bar,qCount,areaLabel,next,prev]=['question','options','feedback','optionExplain','concept','bar','qCount','areaLabel','next','prev'].map($);
+    
+    function render(){
+      const q=questions[current]; 
+      qCount.textContent=`Question ${current+1} of ${questions.length}`; 
+      areaLabel.textContent=q[3]; 
+      questionElem.textContent=q[0]; 
+      bar.style.width=`${(current+1)/questions.length*100}%`; 
+      options.innerHTML=q[1].map((o,i)=>`<button class="option" data-i="${i}"><span class="letter">${letters[i]}</span><span>${o}</span></button>`).join(''); 
+      explain.classList.remove('show'); 
+      feedback.className='feedback'; 
+      next.disabled=answers[current]===null; 
+      prev.disabled=current===0; 
+      if(answers[current]!==null) showFeedback(answers[current]); 
+      updateStats();
+    }
+    
+    function showFeedback(selected){
+      const q=questions[current], right=selected===q[2]; 
+      document.querySelectorAll('.option').forEach((b,i)=>{
+        b.disabled=true;
+        if(i===q[2]) b.classList.add('correct');
+        if(i===selected&&i!==q[2]) b.classList.add('wrong');
+      }); 
+      feedback.className=`feedback show ${right?'good':'bad'}`; 
+      feedback.innerHTML=`<strong>${right?'✓ Correct!':'✕ Not quite.'}</strong><small>${right?'Great recall.':'Correct answer: '+letters[q[2]]+'. '+q[1][q[2]]}</small>`; 
+      $('explainRows').innerHTML=q[1].map((o,i)=>`<div class="explain-row"><b>${letters[i]}. ${o}</b> — ${i===q[2]?'Correct. ':''}${explainFor(q,i)}</div>`).join(''); 
+      concept.textContent=q[4]; 
+      explain.classList.add('show'); 
+      next.disabled=false;
+    }
+    
+    function explainFor(q,i){
+      if(i===q[2]) return q[4]; 
+      return `This is not the best answer here; review how it differs from ${q[1][q[2]]}.`;
+    }
+    
+    function updateStats(){
+      let done=answers.filter(a=>a!==null), good=done.filter((a,i)=>a===questions[i][2]).length, bad=done.length-good; 
+      $('correctStat').textContent=good;
+      $('wrongStat').textContent=bad;
+      $('goodBar').style.width=`${good/questions.length*100}%`;
+      $('badBar').style.width=`${bad/questions.length*100}%`; 
+      let counts={};
+      answers.forEach((a,i)=>{
+        if(a!==null&&a!==questions[i][2]) counts[questions[i][3]]=(counts[questions[i][3]]||0)+1;
+      });
+      let weak=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,2);
+      $('weakText').textContent=weak.length?weak.map(x=>`${x[0]} (${x[1]} missed)`).join(' • '):'Answer questions to identify your weak areas.';
+    }
+    
+    options.addEventListener('click',e=>{
+      let b=e.target.closest('.option');
+      if(!b) return;
+      answers[current]=+b.dataset.i;
+      showFeedback(answers[current]);
+      updateStats();
+    }); 
+    
+    next.addEventListener('click',()=>{
+      if(current<questions.length-1){
+        current++;
+        render();
+      } else {
+        finish();
+      }
+    }); 
+    
+    prev.addEventListener('click',()=>{
+      if(current>0){
+        current--;
+        render();
+      }
+    });
+    
+    function finish(){
+      let good=answers.filter((a,i)=>a===questions[i][2]).length,bad=questions.length-good;
+      $('quizLayout').style.display='none';
+      $('results').classList.add('show');
+      $('score').textContent=`${Math.round(good/questions.length*100)}%`;
+      $('scoreLine').textContent=`You answered ${good} correctly and missed ${bad}.`;
+      $('finalCorrect').textContent=good;
+      $('finalWrong').textContent=bad;
+      $('finalPercent').textContent=`${Math.round(good/questions.length*100)}%`;
+      let areas={};
+      answers.forEach((a,i)=>{
+        if(a!==questions[i][2]) areas[questions[i][3]]=(areas[questions[i][3]]||0)+1;
+      });
+      $('guide').innerHTML=Object.entries(areas).sort((a,b)=>b[1]-a[1]).map(([name,n])=>`<article><h3>${name} <span style="color:var(--bad)">• ${n} missed</span></h3><p>${guideText(name)}</p></article>`).join('')||'<article><h3>Excellent work!</h3><p>No weak area detected. Revise formulas once and try again for speed.</p></article>';
+    }
+    
+    function guideText(name){
+      return {'Eye anatomy':'Revise cornea, iris, pupil, retina and optic nerve roles. Draw and label the eye.','Vision facts':'Memorise near point = 25 cm and far point = infinity for a normal eye.','Accommodation':'Revise ciliary muscles, lens curvature, focal length and accommodation.','Defects of vision':'Make a table: myopia—concave; hypermetropia—convex; presbyopia—often bifocal.','Lens power':'Practise P = 1/f, with f in metres; convex is + and concave is −.','Eye health':'Revise cataract as lens clouding and its surgical treatment.','Image formation':'Recall the standard image properties of concave and convex lenses.','Numericals':'Practise P = 1/f and spectacle formulas. Always convert cm to metres and use the correct sign.','Assertion–Reason':'Check each statement independently, then decide whether the reason logically explains the assertion.','Case study':'Translate symptoms into near point/far point clues before choosing the defect and lens.','Mixed concepts':'Make a one-page map connecting normal eye values, defects, lens corrections and eye parts.'}[name]||'Review this chapter section and retry the questions.';
+    }
+    
+    function startQuiz(){
+      current=0;
+      answers=Array(questions.length).fill(null);
+      $('results').classList.remove('show');
+      $('quizLayout').style.display='grid';
+      render();
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    
+    $('restart').addEventListener('click', startQuiz); 
+    
+    // Initialize Quiz
+    $('modePill').textContent = questions.length + ' questions';
+    render();
+  </script>
+</body>
+</html>

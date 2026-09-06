@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 10 Science: Light - Reflection & Spherical Mirrors</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --success: #10B981;
+            --danger: #EF4444;
+            --bg-color: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', 'Open Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 80vh;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .quiz-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .main-content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .topic-badge {
+            background-color: #E0E7FF;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background-color: #F8FAFC;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background-color: #D1FAE5;
+            border-color: var(--success);
+            color: #065F46;
+        }
+
+        .option-btn.wrong {
+            background-color: #FEE2E2;
+            border-color: var(--danger);
+            color: #991B1B;
+        }
+
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #F3F4F6;
+            border-left: 4px solid var(--primary);
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .explanation-box h4 {
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .explanation-box p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .controls {
+            padding: 15px 20px;
+            background-color: #F9FAFB;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: opacity 0.2s;
+        }
+
+        .btn-nav {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-nav:disabled {
+            background-color: #9CA3AF;
+            cursor: not-allowed;
+        }
+
+        .btn-submit {
+            background-color: #F59E0B; /* A distinct warning/attention color */
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background-color: #D97706;
+        }
+
+        .palette-container {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .palette-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 8px;
+        }
+
+        .palette-btn {
+            width: 100%;
+            aspect-ratio: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .palette-btn.active {
+            border: 2px solid var(--primary);
+            transform: scale(1.1);
+        }
+
+        .palette-btn.answered-correct {
+            background-color: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .palette-btn.answered-wrong {
+            background-color: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        /* Results Page */
+        .results-container {
+            display: none;
+            padding: 30px 20px;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0%, var(--bg-color) 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .score-text {
+            position: relative;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .topic-results {
+            margin-bottom: 30px;
+        }
+
+        .topic-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .study-plan {
+            background-color: #FFFBEB;
+            border-left: 4px solid #F59E0B;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .study-plan h3 {
+            color: #B45309;
+            margin-bottom: 10px;
+        }
+
+        .study-plan ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .study-plan li {
+            margin-bottom: 5px;
+            color: #78350F;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .container { border-radius: 0; min-height: 100vh; }
+            body { padding: 0; }
+            .question-text { font-size: 1.1rem; }
+            .palette-grid { grid-template-columns: repeat(5, 1fr); }
+            .controls { flex-direction: column; gap: 10px; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Light: Reflection & Spherical Mirrors</h1>
+        <p>Class 10 Concept Checker</p>
+    </header>
+
+    <div id="quiz-section" class="quiz-body">
+        <div class="main-content">
+            <div class="question-header">
+                <span id="q-counter">Question 1 / 25</span>
+                <span id="q-topic" class="topic-badge">Topic</span>
+            </div>
+            <div id="question-text" class="question-text">
+                Question loading...
+            </div>
+            <div id="options-container" class="options-container">
+                <!-- Options injected via JS -->
+            </div>
+            
+            <div id="explanation" class="explanation-box">
+                <h4>Detailed Explanation</h4>
+                <p id="explanation-text"></p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="prev-btn" class="btn btn-nav" onclick="prevQuestion()" disabled>Previous</button>
+            <button id="submit-btn" class="btn btn-submit" onclick="finishQuiz()">Submit Quiz</button>
+            <button id="next-btn" class="btn btn-nav" onclick="nextQuestion()">Next</button>
+        </div>
+
+        <div class="palette-container">
+            <div class="palette-title">Question Navigator</div>
+            <div id="palette-grid" class="palette-grid">
+                <!-- Buttons injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <div id="results-section" class="results-container">
+        <h2 style="text-align: center; margin-bottom: 20px;">Your Performance Report</h2>
+        
+        <div id="score-chart" class="score-circle">
+            <div class="score-text">
+                <span id="final-score">0</span><br>
+                <span style="font-size: 1rem; color: var(--text-muted);">out of 25</span>
+            </div>
+        </div>
+
+        <h3>Topic-wise Breakdown</h3>
+        <div id="topic-results" class="topic-results">
+            <!-- Topic scores injected here -->
+        </div>
+
+        <div id="study-plan" class="study-plan">
+            <h3>Custom Study Plan</h3>
+            <p>Based on your performance, here are the topics you need to focus on:</p>
+            <ul id="weak-topics-list">
+                <!-- Weak topics injected here -->
+            </ul>
+            <p id="study-advice" style="margin-top:15px; font-weight: 500;"></p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-nav" onclick="location.reload()">Retake Quiz</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        // Topic: Laws of Reflection & Basics
+        {
+            topic: "Laws of Reflection",
+            q: "A ray of light strikes a plane mirror such that the angle of incidence is 35°. What is the angle between the incident ray and the reflected ray?",
+            options: [
+                "A) 35°",
+                "B) 70°",
+                "C) 55°",
+                "D) 90°"
+            ],
+            correct: 1,
+            explanation: "According to the Law of Reflection, Angle of Incidence (i) = Angle of Reflection (r). Here, i = 35°, so r = 35°. The total angle between incident and reflected ray is i + r = 35° + 35° = 70°. Other options misinterpret the geometric relationship."
+        },
+        {
+            topic: "Laws of Reflection",
+            q: "Which of the following statements about a real image is completely true?",
+            options: [
+                "A) It can be obtained on a screen and is always erect.",
+                "B) It cannot be obtained on a screen and is always inverted.",
+                "C) It can be obtained on a screen and is formed by actual intersection of light rays.",
+                "D) It is formed by apparent intersection of rays behind the mirror."
+            ],
+            correct: 2,
+            explanation: "A real image is formed when light rays actually meet after reflection/refraction. It can be captured on a screen. By convention in single mirror/lens systems, real images are inverted, not erect. Option D describes a virtual image."
+        },
+        {
+            topic: "Laws of Reflection",
+            q: "The magnification produced by a plane mirror is +1. What does this indicate?",
+            options: [
+                "A) The image is real, inverted, and of the same size as the object.",
+                "B) The image is virtual, erect, and larger than the object.",
+                "C) The image is virtual, erect, and of the same size as the object.",
+                "D) The image is real, erect, and of the same size as the object."
+            ],
+            correct: 2,
+            explanation: "Magnification (m) = +1. The positive sign (+) indicates that the image is virtual and erect. The numerical value 1 means the size of the image is equal to the size of the object. Plane mirrors always form virtual, erect, same-sized images."
+        },
+        {
+            topic: "Laws of Reflection",
+            q: "Assertion (A): The laws of reflection are valid for a plane mirror but not for a highly rough surface.<br>Reason (R): Regular reflection takes place only on smooth surfaces.",
+            options: [
+                "A) Both A and R are true and R is the correct explanation of A.",
+                "B) Both A and R are true but R is not the correct explanation of A.",
+                "C) A is true but R is false.",
+                "D) A is false but R is true."
+            ],
+            correct: 3,
+            explanation: "Assertion is False. The laws of reflection (i = r) are universal and apply to ALL reflecting surfaces, whether smooth (regular reflection) or rough (diffused/irregular reflection). Reason is True, as regular reflection indeed requires a smooth surface."
+        },
+        
+        // Topic: Spherical Mirrors Terms
+        {
+            topic: "Spherical Mirrors Terms",
+            q: "The geometric center of the reflecting surface of a spherical mirror is called:",
+            options: [
+                "A) Center of curvature",
+                "B) Principal focus",
+                "C) Pole",
+                "D) Optical center"
+            ],
+            correct: 2,
+            explanation: "The center of the actual reflecting surface (the physical mirror piece) is the Pole (P). Center of curvature is the center of the hollow sphere of which the mirror is a part. Optical center is a term used for lenses, not mirrors."
+        },
+        {
+            topic: "Spherical Mirrors Terms",
+            q: "What is the relationship between the radius of curvature (R) and focal length (f) of a spherical mirror of small aperture?",
+            options: [
+                "A) R = f",
+                "B) R = f/2",
+                "C) R = 2f",
+                "D) R = 3f"
+            ],
+            correct: 2,
+            explanation: "For spherical mirrors with small apertures, the principal focus lies exactly midway between the pole and the center of curvature. Therefore, Radius of Curvature (R) is twice the focal length (f), i.e., R = 2f."
+        },
+        {
+            topic: "Spherical Mirrors Terms",
+            q: "Assertion (A): The principal focus of a convex mirror is a virtual focus.<br>Reason (R): Light rays parallel to the principal axis actually meet at the focus after reflection from a convex mirror.",
+            options: [
+                "A) Both A and R are true and R is correct explanation of A.",
+                "B) Both A and R are true but R is not correct explanation of A.",
+                "C) A is true but R is false.",
+                "D) A is false but R is true."
+            ],
+            correct: 2,
+            explanation: "Assertion is True: The focus of a convex mirror lies behind the mirror, hence it is virtual. Reason is False: Light rays parallel to the principal axis diverge after reflection from a convex mirror and only *appear* to diverge from the focus. They do not actually meet."
+        },
+        {
+            topic: "Spherical Mirrors Terms",
+            q: "The effective diameter of the circular outline of a spherical mirror is referred to as its:",
+            options: [
+                "A) Principal axis",
+                "B) Focal plane",
+                "C) Curvature",
+                "D) Aperture"
+            ],
+            correct: 3,
+            explanation: "The diameter of the reflecting boundary of a spherical mirror is called its aperture. It basically represents the size of the mirror that is exposed to incident light."
+        },
+
+        // Topic: Image Formation & Ray Diagrams
+        {
+            topic: "Image Formation & Ray Diagrams",
+            q: "Where should an object be placed in front of a concave mirror to obtain a real, inverted, and same-sized image?",
+            options: [
+                "A) At the principal focus (F)",
+                "B) Between the pole (P) and focus (F)",
+                "C) At the center of curvature (C)",
+                "D) Beyond the center of curvature (C)"
+            ],
+            correct: 2,
+            explanation: "When an object is placed exactly at the Center of Curvature (C) of a concave mirror, the image is formed at C. The image is real, inverted, and exactly the same size as the object (magnification = -1)."
+        },
+        {
+            topic: "Image Formation & Ray Diagrams",
+            q: "Which type of image is ALWAYS formed by a convex mirror, regardless of the object's position?",
+            options: [
+                "A) Real, inverted, and diminished",
+                "B) Virtual, erect, and magnified",
+                "C) Virtual, erect, and diminished",
+                "D) Real, erect, and same size"
+            ],
+            correct: 2,
+            explanation: "A convex mirror always diverges light rays. Therefore, it always forms a virtual, erect, and diminished (smaller) image behind the mirror, no matter where the object is placed in front of it."
+        },
+        {
+            topic: "Image Formation & Ray Diagrams",
+            q: "A student wants to use a concave mirror as a makeup mirror. Where must she place her face relative to the mirror to see an enlarged, upright image?",
+            options: [
+                "A) Between the pole and principal focus",
+                "B) At the principal focus",
+                "C) Between focus and center of curvature",
+                "D) Beyond the center of curvature"
+            ],
+            correct: 0,
+            explanation: "To get a virtual, erect, and magnified image from a concave mirror, the object (face) must be placed very close to the mirror—specifically, between the Pole (P) and the Principal Focus (F). All other positions yield real, inverted images (except at infinity)."
+        },
+        {
+            topic: "Image Formation & Ray Diagrams",
+            q: "While drawing ray diagrams for spherical mirrors, a ray passing through the center of curvature (C) after reflection will:",
+            options: [
+                "A) Pass through the principal focus (F)",
+                "B) Become parallel to the principal axis",
+                "C) Retrace its original path",
+                "D) Pass through the pole (P)"
+            ],
+            correct: 2,
+            explanation: "A ray passing through the Center of Curvature (C) falls normally (perpendicularly) on the surface of the spherical mirror. Therefore, angle of incidence = 0, so angle of reflection = 0. The ray retraces its path back."
+        },
+        {
+            topic: "Image Formation & Ray Diagrams",
+            q: "Assertion (A): Concave mirrors can form both real and virtual images.<br>Reason (R): The nature of the image formed by a concave mirror depends on the distance of the object from the mirror.",
+            options: [
+                "A) Both A and R are true and R is correct explanation of A.",
+                "B) Both A and R are true but R is not correct explanation of A.",
+                "C) A is true but R is false.",
+                "D) A is false but R is true."
+            ],
+            correct: 0,
+            explanation: "Assertion is True. Reason is also True and correctly explains the Assertion. If the object is beyond F, the image is real. If the object is between F and P, the image is virtual. Thus, object distance determines image nature."
+        },
+
+        // Topic: Uses of Mirrors
+        {
+            topic: "Uses of Mirrors",
+            q: "Which of the following mirrors is used by dentists to examine small cavities in teeth?",
+            options: [
+                "A) Convex mirror",
+                "B) Plane mirror",
+                "C) Concave mirror",
+                "D) Parabolic mirror"
+            ],
+            correct: 2,
+            explanation: "Dentists use concave mirrors. When the mirror is held close to the tooth (object between P and F), it produces a magnified, virtual, and erect image, making it easier to examine cavities."
+        },
+        {
+            topic: "Uses of Mirrors",
+            q: "Which mirror is used as a rear-view mirror in vehicles and why?",
+            options: [
+                "A) Concave mirror, because it forms an inverted image.",
+                "B) Convex mirror, because it forms an erect, diminished image giving a wider field of view.",
+                "C) Plane mirror, because it shows the exact distance of vehicles.",
+                "D) Convex mirror, because it forms a magnified image."
+            ],
+            correct: 1,
+            explanation: "Convex mirrors are used as rear-view mirrors. They always produce erect and diminished images. Because the images are smaller, the mirror provides a much wider field of view of the traffic behind compared to a plane mirror."
+        },
+        {
+            topic: "Uses of Mirrors",
+            q: "Assertion (A): Large concave mirrors are used to concentrate sunlight to produce heat in solar furnaces.<br>Reason (R): Concave mirrors converge parallel rays of light to a single point called the focus.",
+            options: [
+                "A) Both A and R are true and R is correct explanation of A.",
+                "B) Both A and R are true but R is not correct explanation of A.",
+                "C) A is true but R is false.",
+                "D) A is false but R is true."
+            ],
+            correct: 0,
+            explanation: "Both statements are true. Sunlight consists of parallel rays. A concave mirror converges these parallel rays at its principal focus, creating intense heat at that point, which is exactly how a solar furnace works."
+        },
+
+        // Topic: Sign Convention
+        {
+            topic: "Sign Convention",
+            q: "According to the New Cartesian Sign Convention, the focal length of a concave mirror and a convex mirror are respectively:",
+            options: [
+                "A) Positive, Negative",
+                "B) Negative, Positive",
+                "C) Negative, Negative",
+                "D) Positive, Positive"
+            ],
+            correct: 1,
+            explanation: "The focus of a concave mirror lies in front of it (left side, against incident light direction), so its focal length is negative. The focus of a convex mirror lies behind it (right side, along incident light), so its focal length is positive."
+        },
+        {
+            topic: "Sign Convention",
+            q: "By sign convention, the object distance (u) for any spherical mirror is always:",
+            options: [
+                "A) Positive",
+                "B) Negative",
+                "C) Zero",
+                "D) Depends on the mirror type"
+            ],
+            correct: 1,
+            explanation: "The object is always placed in front of the mirror, to its left. Since distances measured to the left of the pole (against the direction of incident light) are taken as negative, object distance 'u' is always negative."
+        },
+        {
+            topic: "Sign Convention",
+            q: "Assertion (A): The height of a real and inverted image is taken as negative.<br>Reason (R): Distances measured downwards and perpendicular to the principal axis are taken as negative.",
+            options: [
+                "A) Both A and R are true and R is correct explanation of A.",
+                "B) Both A and R are true but R is not correct explanation of A.",
+                "C) A is true but R is false.",
+                "D) A is false but R is true."
+            ],
+            correct: 0,
+            explanation: "Real images are inverted, meaning they form below the principal axis. The Cartesian Sign Convention dictates that heights measured downwards from the principal axis are negative. Hence, A and R are true, and R explains A."
+        },
+
+        // Topic: Mirror Formula & Magnification
+        {
+            topic: "Mirror Formula & Magnification",
+            q: "What is the correct mathematical expression for the mirror formula relating object distance (u), image distance (v), and focal length (f)?",
+            options: [
+                "A) 1/v - 1/u = 1/f",
+                "B) 1/u - 1/v = 1/f",
+                "C) 1/v + 1/u = 1/f",
+                "D) u + v = f"
+            ],
+            correct: 2,
+            explanation: "The correct mirror formula is 1/v + 1/u = 1/f. This applies to all spherical mirrors for all positions of the object. Option A is the lens formula."
+        },
+        {
+            topic: "Mirror Formula & Magnification",
+            q: "The linear magnification (m) produced by a spherical mirror is given by the ratio of image height (h') to object height (h). What is its relation to 'u' and 'v'?",
+            options: [
+                "A) m = v / u",
+                "B) m = - v / u",
+                "C) m = u / v",
+                "D) m = - u / v"
+            ],
+            correct: 1,
+            explanation: "For spherical mirrors, linear magnification m = h'/h. It is also related to the object and image distances by the formula m = -v/u. (Note: For lenses, m = +v/u)."
+        },
+        {
+            topic: "Mirror Formula & Magnification",
+            q: "Numerical: A convex mirror used on an automobile has a radius of curvature of +3.00 m. What is its focal length?",
+            options: [
+                "A) +1.50 m",
+                "B) -1.50 m",
+                "C) +6.00 m",
+                "D) -6.00 m"
+            ],
+            correct: 0,
+            explanation: "Focal length f = R/2. Given R = +3.00 m (convex mirror has positive R). Therefore, f = +3.00 / 2 = +1.50 m."
+        },
+        {
+            topic: "Mirror Formula & Magnification",
+            q: "Numerical: An object is placed at a distance of 10 cm in front of a convex mirror of focal length 15 cm. The image distance (v) will be:",
+            options: [
+                "A) -6 cm",
+                "B) +6 cm",
+                "C) -30 cm",
+                "D) +30 cm"
+            ],
+            correct: 1,
+            explanation: "u = -10 cm, f = +15 cm (convex mirror). Formula: 1/v + 1/u = 1/f => 1/v - 1/10 = 1/15 => 1/v = 1/15 + 1/10 = (2+3)/30 = 5/30 = 1/6. Hence, v = +6 cm. Image forms behind the mirror."
+        },
+        {
+            topic: "Mirror Formula & Magnification",
+            q: "Numerical: A concave mirror produces a magnification of -2. The image formed is:",
+            options: [
+                "A) Virtual and twice the size of object",
+                "B) Real and twice the size of object",
+                "C) Virtual and half the size of object",
+                "D) Real and half the size of object"
+            ],
+            correct: 1,
+            explanation: "Magnification m = -2. The negative sign (-) indicates the image is real and inverted. The magnitude '2' indicates the image is magnified (twice the size of the object)."
+        },
+        {
+            topic: "Mirror Formula & Magnification",
+            q: "Assertion (A): If the magnification of a mirror is positive, the image must be virtual and erect.<br>Reason (R): A positive magnification means image height (h') and object height (h) have the same sign.",
+            options: [
+                "A) Both A and R are true and R is correct explanation of A.",
+                "B) Both A and R are true but R is not correct explanation of A.",
+                "C) A is true but R is false.",
+                "D) A is false but R is true."
+            ],
+            correct: 0,
+            explanation: "Both are true. m = h'/h. The object height (h) is always taken as positive. If m is positive, h' must also be positive, meaning the image is formed above the principal axis. Images above the principal axis are erect and therefore virtual."
+        }
+    ];
+
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+
+    // DOM Elements
+    const qCounter = document.getElementById('q-counter');
+    const qTopic = document.getElementById('q-topic');
+    const qText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const explanationBox = document.getElementById('explanation');
+    const explanationText = document.getElementById('explanation-text');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const paletteGrid = document.getElementById('palette-grid');
+
+    function initQuiz() {
+        renderPalette();
+        loadQuestion(0);
+    }
+
+    function renderPalette() {
+        paletteGrid.innerHTML = '';
+        for (let i = 0; i < questions.length; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'palette-btn';
+            btn.innerText = i + 1;
+            btn.onclick = () => loadQuestion(i);
+            btn.id = `pal-${i}`;
+            paletteGrid.appendChild(btn);
+        }
+        updatePaletteColors();
+    }
+
+    function loadQuestion(index) {
+        currentIndex = index;
+        const q = questions[index];
+        
+        qCounter.innerText = `Question ${index + 1} / ${questions.length}`;
+        qTopic.innerText = q.topic;
+        qText.innerHTML = q.q; 
+
+        optionsContainer.innerHTML = '';
+        explanationBox.style.display = 'none';
+
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => selectOption(i);
+            
+            // If already answered
+            if (userAnswers[index] !== null) {
+                btn.disabled = true;
+                if (i === q.correct) {
+                    btn.classList.add('correct');
+                } else if (i === userAnswers[index]) {
+                    btn.classList.add('wrong');
+                }
+            }
+            
+            optionsContainer.appendChild(btn);
+        });
+
+        // Show explanation if already answered
+        if (userAnswers[index] !== null) {
+            showExplanation(index);
+        }
+
+        // Update Nav Buttons based on question index
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === questions.length - 1;
+        
+        // Active Palette Highlight
+        document.querySelectorAll('.palette-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`pal-${index}`).classList.add('active');
+    }
+
+    function selectOption(optIndex) {
+        if (userAnswers[currentIndex] !== null) return; // Prevent double clicking
+
+        userAnswers[currentIndex] = optIndex;
+        
+        const btns = optionsContainer.children;
+        for (let i = 0; i < btns.length; i++) {
+            btns[i].disabled = true;
+            if (i === questions[currentIndex].correct) {
+                btns[i].classList.add('correct');
+            } else if (i === optIndex) {
+                btns[i].classList.add('wrong');
+            }
+        }
+
+        showExplanation(currentIndex);
+        updatePaletteColors();
+    }
+
+    function showExplanation(index) {
+        explanationText.innerHTML = questions[index].explanation;
+        explanationBox.style.display = 'block';
+    }
+
+    function updatePaletteColors() {
+        for (let i = 0; i < questions.length; i++) {
+            const btn = document.getElementById(`pal-${i}`);
+            if (userAnswers[i] !== null) {
+                if (userAnswers[i] === questions[i].correct) {
+                    btn.classList.add('answered-correct');
+                    btn.classList.remove('answered-wrong');
+                } else {
+                    btn.classList.add('answered-wrong');
+                    btn.classList.remove('answered-correct');
+                }
+            }
+        }
+    }
+
+    function nextQuestion() {
+        if (currentIndex < questions.length - 1) {
+            loadQuestion(currentIndex + 1);
+        }
+    }
+
+    function prevQuestion() {
+        if (currentIndex > 0) {
+            loadQuestion(currentIndex - 1);
+        }
+    }
+
+    function finishQuiz() {
+        if (!confirm("Are you sure you want to submit the quiz? Unanswered questions will be marked incorrect.")) {
+            return;
+        }
+        
+        document.getElementById('quiz-section').style.display = 'none';
+        const resultsSection = document.getElementById('results-section');
+        resultsSection.style.display = 'block';
+
+        let totalScore = 0;
+        const topicStats = {};
+
+        // Calculate scores
+        for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            if (!topicStats[q.topic]) {
+                topicStats[q.topic] = { total: 0, correct: 0 };
+            }
+            topicStats[q.topic].total += 1;
+            
+            if (userAnswers[i] === q.correct) {
+                totalScore++;
+                topicStats[q.topic].correct += 1;
+            }
+        }
+
+        // Render Overall Score
+        document.getElementById('final-score').innerText = totalScore;
+        const percentage = (totalScore / questions.length) * 100;
+        document.getElementById('score-chart').style.background = `conic-gradient(var(--primary) ${percentage}%, var(--bg-color) 0%)`;
+
+        // Render Topic Breakdown & Find Weak Topics
+        const topicResultsDiv = document.getElementById('topic-results');
+        const weakTopicsList = document.getElementById('weak-topics-list');
+        let hasWeakTopics = false;
+
+        for (const [topic, stats] of Object.entries(topicStats)) {
+            const topicPerc = (stats.correct / stats.total) * 100;
+            
+            // Topic Row
+            const row = document.createElement('div');
+            row.className = 'topic-row';
+            row.innerHTML = `
+                <span style="font-weight: 500;">${topic}</span>
+                <span style="font-weight: 600; color: ${topicPerc < 60 ? 'var(--danger)' : 'var(--success)'}">
+                    ${stats.correct} / ${stats.total} (${Math.round(topicPerc)}%)
+                </span>
+            `;
+            topicResultsDiv.appendChild(row);
+
+            // Check Weakness (< 60%)
+            if (topicPerc < 60) {
+                hasWeakTopics = true;
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${topic}</strong>: Please review the NCERT chapter notes on this topic.`;
+                weakTopicsList.appendChild(li);
+            }
+        }
+
+        // Study Advice
+        const adviceDiv = document.getElementById('study-advice');
+        if (!hasWeakTopics && totalScore === questions.length) {
+            document.getElementById('study-plan').style.backgroundColor = '#ECFDF5';
+            document.getElementById('study-plan').style.borderLeftColor = '#10B981';
+            document.getElementById('study-plan').querySelector('h3').style.color = '#065F46';
+            weakTopicsList.style.display = 'none';
+            adviceDiv.innerText = "Excellent work! You have a solid grasp on all the concepts for Reflection & Spherical Mirrors. You are ready to move on to Refraction and Lenses.";
+            adviceDiv.style.color = '#065F46';
+        } else {
+            adviceDiv.innerText = "Study Tip: Go through the incorrect questions from the palette grid and read the detailed explanations provided. Re-draw the ray diagrams manually to strengthen your concepts!";
+        }
+    }
+
+    // Initialize
+    initQuiz();
+
+</script>
+</body>
+</html>

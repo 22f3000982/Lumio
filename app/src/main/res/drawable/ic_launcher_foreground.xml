@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Golden Knowledge Sun / Flame at top center -->
+    <path
+        android:fillColor="#FFB703"
+        android:pathData="M54,23 C51,28 49,33 54,39 C59,33 57,28 54,23 Z" />
+    <path
+        android:fillColor="#FFE6A7"
+        android:pathData="M54,28 C52.5,31 51.5,33.5 54,37 C56.5,33.5 55.5,31 54,28 Z" />
+
+    <!-- Atom Orbit Ring (Science / Physics) -->
+    <path
+        android:strokeColor="#90E0EF"
+        android:strokeWidth="1.8"
+        android:fillColor="#00000000"
+        android:pathData="M38,36 C38,31 70,31 70,36 C70,41 38,41 38,36 Z" />
+    <path
+        android:fillColor="#00B4D8"
+        android:pathData="M67,36 A2,2 0 1,1 66.9,36 Z" />
+
+    <!-- Open Book Foundation (Vidya) -->
+    <!-- Left Page -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M52,55 C42,50 32,52 25,55 L25,75 C32,72 42,70 52,75 Z" />
+    <!-- Right Page -->
+    <path
+        android:fillColor="#E2EAFC"
+        android:pathData="M56,55 C66,50 76,52 83,55 L83,75 C76,72 66,70 56,75 Z" />
+    <!-- Center spine line -->
+    <path
+        android:strokeColor="#0B132B"
+        android:strokeWidth="1.5"
+        android:pathData="M54,54 L54,76" />
+
+    <!-- Golden Bridge Arch (Setu) spanning across under the book -->
+    <path
+        android:strokeColor="#FFB703"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M23,79 C38,71 70,71 85,79" />
+    <path
+        android:strokeColor="#FB8500"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M32,77 L32,83 M43,74 L43,83 M65,74 L65,83 M76,77 L76,83" />
+
+    <!-- Class "10" Golden Badge -->
+    <path
+        android:fillColor="#FFB703"
+        android:pathData="M54,42 A8,8 0 1,1 53.9,42 Z" />
+    <path
+        android:fillColor="#0B132B"
+        android:pathData="M51,38 L52.2,38 L52.2,46 L51,46 Z M54.5,38 C56,38 56.8,39.5 56.8,42 C56.8,44.5 56,46 54.5,46 C53,46 52.2,44.5 52.2,42 C52.2,39.5 53,38 54.5,38 Z" />
+</vector>

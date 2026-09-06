@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Class 10 Electricity Board Prep Exam Portal - Level-1</title>
+    <style>
+        /* --- DESIGN SYSTEM & THEME VARIABLES --- */
+        :root {
+            --bg-app: #f4f7fe;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --primary-light: #eeebff;
+            --success: #10b981;
+            --success-light: #ecfdf5;
+            --error: #ef4444;
+            --error-light: #fef2f2;
+            --warning: #f59e0b;
+            --warning-light: #fffbeb;
+            --border: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.05), 0 8px 10px -6px rgba(79, 70, 229, 0.05);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg-app: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #6366f1;
+            --primary-light: #2e2a5e;
+            --success: #34d399;
+            --success-light: #064e3b;
+            --error: #f87171;
+            --error-light: #4c1d1d;
+            --warning: #fbbf24;
+            --warning-light: #451a03;
+            --border: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- BASE STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font);
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 70px;
+            margin-bottom: 40px;
+        }
+
+        /* --- HEADER & CONTROLS --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.02em;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.82rem;
+        }
+
+        /* --- INTRO SCREEN MODULE --- */
+        .cursive-author {
+            font-family: 'Georgia', cursive, serif;
+            font-style: italic;
+            font-size: 1.35rem;
+            color: var(--primary);
+            margin: 8px 0 20px 0;
+            display: block;
+            letter-spacing: 0.03em;
+        }
+        
+        .intro-features {
+            text-align: left;
+            margin: 20px auto;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .intro-features li {
+            list-style: none;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- LIVE HUB METRICS --- */
+        .live-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .metric-mini-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .metric-mini-card p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .metric-mini-card h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* --- MAIN INTERFACE PANELS --- */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- PROGRESS TRACKING --- */
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .progress-track-wrapper {
+            background-color: var(--border);
+            border-radius: 999px;
+            height: 8px;
+            width: 100%;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--primary), #818cf8);
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- QUESTION PALETTE --- */
+        .palette-toggle-btn {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border: none;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-bottom: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: var(--bg-app);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+
+        .palette-node {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .palette-node.current { border: 2px solid var(--primary); color: var(--primary); font-weight: 700; }
+        .palette-node.correct { background-color: var(--success); color: white; border-color: var(--success); }
+        .palette-node.wrong { background-color: var(--error); color: white; border-color: var(--error); }
+
+        /* --- PRESENTATION AREA --- */
+        .topic-tag {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            white-space: pre-line;
+        }
+
+        /* --- OPTIONS LAYOUT --- */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            text-align: left;
+            position: relative;
+            outline: none;
+            width: 100%;
+            color: var(--text-main);
+        }
+
+        .option-item:hover:not(.locked) {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .option-item:focus-visible {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .option-prefix {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: var(--bg-app);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+            color: var(--text-main);
+        }
+
+        /* Dark Theme Specific Fixes */
+        [data-theme="dark"] .option-item {
+            color: #f8fafc !important;
+        }
+        [data-theme="dark"] .option-prefix {
+            color: #f8fafc !important;
+            background-color: #334155;
+        }
+
+        /* Lock States */
+        .option-item.locked { cursor: not-allowed; }
+        .option-item.state-correct { background-color: var(--success-light); border-color: var(--success); color: var(--text-main) !important; }
+        .option-item.state-correct .option-prefix { background-color: var(--success); color: white !important; border-color: var(--success); }
+        .option-item.state-wrong { background-color: var(--error-light); border-color: var(--error); color: var(--text-main) !important; }
+        .option-item.state-wrong .option-prefix { background-color: var(--error); color: white !important; border-color: var(--error); }
+
+        /* --- FEEDBACK SYSTEMS --- */
+        .feedback-box {
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feedback-box.correct { background-color: var(--success-light); color: var(--success); border: 1px solid var(--success); }
+        .feedback-box.wrong { background-color: var(--error-light); color: var(--error); border: 1px solid var(--error); }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 16px;
+            margin-bottom: 8px;
+            letter-spacing: 0.05em;
+        }
+
+        .explanation-space {
+            background-color: var(--bg-app);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .opt-exp-line {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border);
+        }
+        .opt-exp-line:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+        .learning-panel {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 16px;
+            margin-bottom: 24px;
+            color: var(--text-main);
+        }
+
+        .learning-bit {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        .learning-bit:last-child { margin-bottom: 0; }
+
+        /* --- APP ACTION CONTROLS --- */
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px; 
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { opacity: 0.95; }
+        .btn-secondary { background-color: var(--bg-app); color: var(--text-main); border: 1px solid var(--border); }
+
+        /* --- METRICS & MATRIX LAYOUTS --- */
+        .summary-banner {
+            text-align: center;
+            padding: 32px 16px;
+            background: linear-gradient(135deg, var(--primary-light), var(--bg-card));
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .badge-display {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .matrix-card {
+            background-color: var(--bg-app);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .matrix-card h5 { font-size: 1.5rem; font-weight: 700; margin-top: 4px; }
+        .matrix-card p { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+
+        /* --- ANALYTICS TABLE ENGINE --- */
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+            background-color: var(--bg-card);
+            min-width: 500px;
+        }
+
+        th, td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+        th { background-color: var(--bg-app); font-weight: 700; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; }
+        tr:last-child td { border-bottom: none; }
+
+        /* --- RADAR / CRITERIA METERS --- */
+        .radar-box {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .radar-line {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .radar-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .radar-track {
+            height: 8px;
+            background-color: var(--border);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .radar-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 999px;
+        }
+
+        .dynamic-zones {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .zone-card {
+            padding: 16px;
+            border-radius: var(--radius-md);
+            border-left: 4px solid #fff;
+        }
+        .zone-card.strong { background-color: var(--success-light); border-left-color: var(--success); }
+        .zone-card.weak { background-color: var(--error-light); border-left-color: var(--error); }
+
+        .zone-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .zone-body { font-size: 0.85rem; line-height: 1.5; color: var(--text-main); }
+
+        /* --- ACTION STACK LISTS --- */
+        .plan-stack { display: flex; flex-direction: column; gap: 12px; }
+        .plan-item {
+            background-color: var(--bg-app);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: var(--radius-md);
+        }
+        .plan-topic { font-weight: 700; font-size: 1rem; margin-bottom: 6px; color: var(--primary); }
+        .plan-details { font-size: 0.85rem; line-height: 1.5; color: var(--text-muted); }
+
+        /* --- CANVAS CONFETTI OVERLAY --- */
+        #confetti-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* --- RESPONSIVE OPTIMIZATIONS --- */
+        @media(max-width: 600px) {
+            body { padding: 12px; }
+            header { padding: 0 16px; }
+            .brand { font-size: 0.85rem; }
+            .theme-toggle { padding: 6px 10px; font-size: 0.75rem; }
+            .app-container { margin-top: 65px; }
+            .card { padding: 18px 14px; border-radius: var(--radius-md); }
+            
+            .live-metrics { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 8px; 
+                margin-bottom: 12px; 
+            }
+            .metric-mini-card { padding: 10px 6px; }
+            .metric-mini-card h4 { font-size: 1.05rem; }
+            .metric-mini-card p { font-size: 0.65rem; }
+            
+            .question-text { font-size: 1.1rem; margin-bottom: 18px; }
+            .option-item { padding: 12px 10px; font-size: 0.92rem; }
+            .option-prefix { width: 24px; height: 24px; font-size: 0.8rem; margin-right: 8px; }
+            
+            .action-row { flex-direction: column-reverse; gap: 10px; }
+            .btn { width: 100%; padding: 12px 20px; font-size: 0.95rem; }
+            .cursive-author { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">🚀 Electricity Portal — Level-1</div>
+        <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle display mode">🌙 DARK MODE</button>
+    </header>
+
+    <div class="app-container">
+
+        <div class="card" id="intro-screen-panel" style="text-align: center; padding: 36px 20px;">
+            <span class="topic-tag">Syllabus Evaluation</span>
+            <h2 style="font-size: 1.65rem; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.01em;">Class 10 Electricity Portal</h2>
+            <h3 style="font-size: 1rem; font-weight: 600; color: var(--text-muted); margin-bottom: 12px;">Board Preparation Framework (Level-1)</h3>
+            
+            <span class="cursive-author">made by Ashish Maurya</span>
+            
+            <div style="height: 1px; background-color: var(--border); width: 80%; margin: 0 auto 20px auto;"></div>
+            
+            <p style="font-size: 0.95rem; line-height: 1.6; max-width: 580px; margin: 0 auto 16px auto; color: var(--text-main);">
+                Welcome to the Level-1 evaluation matrix. This testing terminal has been specifically calibrated to analyze your diagnostic foundational proficiency across Class 10 Physics core electrical frameworks.
+            </p>
+            
+            <ul class="intro-features">
+                <li><span>🎯</span> <strong>40 High-Yield Board Questions</strong> (MCQ & Case-Studies)</li>
+                <li><span>⚡</span> <strong>Real-time KPI Matrix</strong> logging your core accuracy</li>
+                <li><span>🧠</span> <strong>Granular Adaptivity</strong> providing interactive breakdown charts</li>
+            </ul>
+
+            <button class="btn btn-primary" style="max-width: 280px; margin: 24px auto 0 auto; width: 100%; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);" onclick="startQuizPortal()">
+                Start Exam Portal ➔
+            </button>
+        </div>
+        
+        <div class="live-metrics hidden" id="live-metrics-panel">
+            <div class="metric-mini-card">
+                <p>Progress</p>
+                <h4 id="mini-progress">0/0</h4>
+            </div>
+            <div class="metric-mini-card">
+                <p>Correct</p>
+                <h4 id="mini-correct" style="color: var(--success);">0</h4>
+            </div>
+            <div class="metric-mini-card">
+                <p>Wrong</p>
+                <h4 id="mini-wrong" style="color: var(--error);">0</h4>
+            </div>
+            <div class="metric-mini-card">
+                <p>Accuracy</p>
+                <h4 id="mini-accuracy">0%</h4>
+            </div>
+        </div>
+
+        <main class="card hidden" id="quiz-workspace">
+            
+            <div class="progress-header">
+                <span id="question-index-label">Question 0 of 0</span>
+                <span id="runtime-topic-tag" class="topic-tag">General</span>
+            </div>
+            
+            <div class="progress-track-wrapper">
+                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+            </div>
+
+            <button class="palette-toggle-btn" onclick="togglePalette()" aria-expanded="false" id="palette-btn">
+                <span>Toggle Navigator Palette</span>
+            </button>
+            <div class="palette-grid hidden" id="palette-container"></div>
+
+            <div id="interactive-presentation-zone">
+                <div class="question-text" id="question-text-box">Loading question details...</div>
+                <div class="options-list" id="options-box" role="radiogroup" aria-label="Quiz Options"></div>
+            </div>
+
+            <div class="action-row">
+                <button class="btn btn-secondary hidden" id="prev-btn" onclick="navigatePrevious()">Previous</button>
+                <button class="btn btn-primary" id="action-btn" onclick="evaluateOrProgress()">Submit Answer</button>
+            </div>
+
+            <div id="feedback-expansion-subpanel" class="hidden">
+                <div class="feedback-box" id="feedback-alert-banner"></div>
+                
+                <h4 class="section-title">Option Breakdown</h4>
+                <div class="explanation-space" id="explanation-space"></div>
+
+                <div class="learning-panel">
+                    <div class="learning-bit" id="concept-tested-box"></div>
+                    <div class="learning-bit" id="quick-revision-box"></div>
+                    <div class="learning-bit" id="exam-tip-box"></div>
+                </div>
+            </div>
+        </main>
+
+        <div class="card hidden" id="report-card-dashboard">
+            <div class="summary-banner">
+                <p style="font-weight:700; text-transform:uppercase; color:var(--text-muted); font-size:0.85rem; letter-spacing:0.05em;">Performance Rank Score</p>
+                <div class="badge-display" id="grade-badge">-</div>
+                <h3 id="completion-heading">Evaluation Concluded</h3>
+                <p style="font-size: 0.85rem; margin-top:6px; font-weight:600; color: var(--primary);">Class 10 Electricity Terminal Module: Level-1</p>
+            </div>
+
+            <h4 class="section-title">Core KPI Metric Matrix</h4>
+            <div class="matrix-grid">
+                <div class="matrix-card"><p>Total Questions</p><h5 id="kpi-total">0</h5></div>
+                <div class="matrix-card"><p>Correct Responses</p><h5 id="kpi-correct" style="color:var(--success);">0</h5></div>
+                <div class="matrix-card"><p>Incorrect Answers</p><h5 id="kpi-wrong" style="color:var(--error);">0</h5></div>
+                <div class="matrix-card"><p>Final Accuracy</p><h5 id="kpi-accuracy" style="color:var(--primary);">0%</h5></div>
+            </div>
+
+            <h4 class="section-title">Granular Competency Assessment Profile</h4>
+            <div class="radar-box" id="radar-metrics-container"></div>
+
+            <h4 class="section-title">Topic Performance Analytics Table</h4>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Domain/Topic</th>
+                            <th>Correct</th>
+                            <th>Wrong</th>
+                            <th>Accuracy</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analytics-table-rows"></tbody>
+                </table>
+            </div>
+
+            <h4 class="section-title">Dynamic Diagnostic Zones</h4>
+            <div class="dynamic-zones" id="diagnostic-zones-box"></div>
+
+            <h4 class="section-title">Adaptive Prescriptive Remediation Strategy</h4>
+            <div class="plan-stack" id="remediation-strategy-box"></div>
+
+            <div class="action-row" style="margin-top: 24px;">
+                <button class="btn btn-secondary" onclick="restartQuiz()">Reset Profile & Restart</button>
+            </div>
+        </div>
+
+    </div>
+
+    <canvas id="confetti-layer"></canvas>
+
+    <script>
+        /* --- DYNAMIC 40-QUESTION COMPREHENSIVE REPOSITORY --- */
+        const quizData = [
+            {
+                topic: "Basic Charge Mechanics",
+                question: "Q1. The SI unit of electric charge is:",
+                options: ["Volt", "Ampere", "Coulomb", "Ohm"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. The Volt is the SI unit assigned to measure electrical potential difference.",
+                    "Incorrect. The Ampere represents the rate metric of physical electric current parameters.",
+                    "Correct. Electric charge is measured in coulombs (C). One coulomb represents the net package of charge passing any arbitrary boundary cross-section when a current stream of 1 A flows steadily for 1 second.",
+                    "Incorrect. The Ohm is structural resistance metric formatting."
+                ],
+                concept: "<strong>Concept Tested:</strong> Fundamental Quantities and Charge Quantization Base Units.",
+                revision: "<strong>Quick Revision:</strong> Q = I x t. Basic parameters anchor on the coulomb (C) as a base composite calculation tier.",
+                examTip: "<strong>Exam Tip:</strong> One fundamental electron elementary charge scales identically to 1.6 x 10^-19 C."
+            },
+            {
+                topic: "Material Conductivity",
+                question: "Q2. Which of the following materials is the best conductor of electricity?",
+                options: ["Rubber", "Plastic", "Copper", "Wood"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. Rubber acts as a strong structural insulator with highly bound outer electrons.",
+                    "Incorrect. Polymers like plastic restrict electronic translation channels.",
+                    "Correct. Copper has a large density of free valence electrons configuration and offers very low intrinsic bulk resistance to electrical current parameters.",
+                    "Incorrect. Wood lacks free interstitial carrier matrices."
+                ],
+                concept: "<strong>Concept Tested:</strong> Free Electron Density and Atomic Valence Configurations.",
+                revision: "<strong>Quick Revision:</strong> Materials containing high mobile free-electron densities scale with superior conductivity expressions.",
+                examTip: "<strong>Exam Tip:</strong> Silver is technically the absolute highest room-temperature conductor, but copper remains the standard industrial premium selection."
+            },
+            {
+                topic: "Current and Charge Calculations",
+                question: "Q3. A current of 2 A flows through a conductor for 10 s. The charge flowing through it is:",
+                options: ["5 C", "10 C", "20 C", "40 C"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This mistake stems from invert-dividing time variables by current (10 / 2).",
+                    "Incorrect. This simply duplicates a single raw initial parameter constant.",
+                    "Correct. Using Q = I x t, we process the math directly: 2 A x 10 s = 20 C.",
+                    "Incorrect. This implies multiplying by a factor of 2 erroneously."
+                ],
+                concept: "<strong>Concept Tested:</strong> Linear Charge Transfer Rates.",
+                revision: "<strong>Quick Revision:</strong> Current is tracking total charge flowing per unit time (I = Q/t). Therefore, Q = It.",
+                examTip: "<strong>Exam Tip:</strong> Verify that time metrics always sit natively in seconds before executing computational work."
+            },
+            {
+                topic: "Circuit Instruments",
+                question: "Q4. The device used to measure potential difference across a conductor is:",
+                options: ["Ammeter", "Galvanometer", "Voltmeter", "Rheostat"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. Ammeters track structural current series values.",
+                    "Incorrect. Galvanometers indicate raw directional path presence and basic weak currents.",
+                    "Correct. A voltmeter is explicitly configured and connected in a parallel orientation topology to safely track potential difference drop characteristics between two distinct circuit coordinates.",
+                    "Incorrect. A rheostat is an adjustable external variable resistance track."
+                ],
+                concept: "<strong>Concept Tested:</strong> Electrical Potential Shunt Topologies.",
+                revision: "<strong>Quick Revision:</strong> Voltmeters require parallel routing, whereas Ammeters must use standard series configurations.",
+                examTip: "<strong>Exam Tip:</strong> Ideal voltmeters possess infinite internal structural resistance bounds to prevent drawing path current away from structural targets."
+            },
+            {
+                topic: "Potential Difference & Current Flow",
+                question: "Q5. Which statement is correct?",
+                options: [
+                    "Current flows from low potential to high potential",
+                    "Current flows from high potential to low potential",
+                    "Current does not require potential difference",
+                    "Potential difference opposes current"
+                ],
+                correct: 1,
+                explanations: [
+                    "Incorrect. Negative electrons move this way, but standard conventional current is tracked oppositely.",
+                    "Correct. Conventional electric current parameters flow systematically from a state of higher electric potential downward to lower electric potential boundaries.",
+                    "Incorrect. Zero potential difference results in zero steady-state directional electron translation.",
+                    "Incorrect. Potential difference is the core structural driver, not an opposition force."
+                ],
+                concept: "<strong>Concept Tested:</strong> Conventional Current Vector Vectors vs Electron Drift Trends.",
+                revision: "<strong>Quick Revision:</strong> Current tracking stems from historical conventions observing positive charge mechanics (High to Low).",
+                examTip: "<strong>Exam Tip:</strong> Remember: Electrons drift from (-) to (+), meaning conventional current is modeled from (+) to (-)."
+            },
+            {
+                topic: "Circuit Instruments",
+                question: "Q6. Assertion (A): An ammeter is connected in series in a circuit.\nReason (R): An ammeter measures the current flowing through the circuit.",
+                options: [
+                    "Both A and R are true and R is the correct explanation of A",
+                    "Both A and R are true but R is not the correct explanation of A",
+                    "A is true but R is false",
+                    "A is false but R is true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct. Both statements hold true. To properly record the matching real-time charge flow stream without altering branch layouts, the ammeter must intercept the direct linear series track.",
+                    "Incorrect. The reason directly clarifies why series alignment is structurally required.",
+                    "Incorrect. Both logical claims are perfectly accurate.",
+                    "Incorrect. The assertion is completely correct."
+                ],
+                concept: "<strong>Concept Tested:</strong> Assertion-Reason Circuit Topology Evaluation.",
+                revision: "<strong>Quick Revision:</strong> Series components share identical current. Hence, an ammeter must sit inline (in series).",
+                examTip: "<strong>Exam Tip:</strong> Ammeters are manufactured with exceptionally low internal resistance to prevent reducing the target circuit current."
+            },
+            {
+                topic: "Ohm's Law",
+                question: "Q7. According to Ohm's law, if voltage is doubled and resistance remains constant, current becomes:",
+                options: ["Half", "Double", "Four times", "Unchanged"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This implies an inverse proportional relationship with voltage, which is incorrect.",
+                    "Correct. According to Ohm's law, I = V / R. If V shifts by a factor of 2 while R is locked constant, current values scale proportionally, doubling.",
+                    "Incorrect. This assumes a quadratic dependencies vector.",
+                    "Incorrect. Constant resistance requires a current adjustment to balance potential shifts."
+                ],
+                concept: "<strong>Concept Tested:</strong> Ohm's Proportionality (V directly proportional to I).",
+                revision: "<strong>Quick Revision:</strong> Linear relationship models imply that changing potential inputs causes matching changes in overall current.",
+                examTip: "<strong>Exam Tip:</strong> Ensure the physical conditions (like temperature) remain constant for Ohm's law to apply flawlessly."
+            },
+            {
+                topic: "Resistance Frameworks",
+                question: "Q8. The resistance of a conductor depends on:",
+                options: ["Length", "Area of cross-section", "Nature of material", "All of these"],
+                correct: 3,
+                explanations: [
+                    "Incorrect. While length alters resistance, it is not the sole factor.",
+                    "Incorrect. Cross-sectional area adjustments alter path metrics, but other variables apply.",
+                    "Incorrect. Intrinsic resistivity matters, but shape dimensions dominate geometry impacts.",
+                    "Correct. Total resistance integrates all three properties simultaneously as defined by the structural equation: R = resistivity x (L / A)."
+                ],
+                concept: "<strong>Concept Tested:</strong> Physical Geometric and Material Predictors of Resistance.",
+                revision: "<strong>Quick Revision:</strong> Resistance scales directly with length (L), inversely with cross-sectional area (A), and depends on intrinsic material resistivity.",
+                examTip: "<strong>Exam Tip:</strong> If a wire is melted down and restretched, its volume stays locked, meaning changing length will inherently alter cross-sectional area too!"
+            },
+            {
+                topic: "Resistance Frameworks",
+                question: "Q9. A wire has resistance 5 Ohm. What will be its resistance if its length is doubled?",
+                options: ["2.5 Ohm", "5 Ohm", "10 Ohm", "20 Ohm"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This represents a reduction path rather than a linear scaling increase.",
+                    "Incorrect. Resistance cannot remain static when physical dimensions change.",
+                    "Correct. Resistance scales directly with length. Doubling the length dimension means the resistance scales from 5 Ohm to 10 Ohm.",
+                    "Incorrect. This overcompensates by factoring a quadratic scaling change."
+                ],
+                concept: "<strong>Concept Tested:</strong> Proportional Geometric Resistance Scaling.",
+                revision: "<strong>Quick Revision:</strong> R_new = resistivity x (2L / A) = 2 x R_old. Simple dimension shifts match directly.",
+                examTip: "<strong>Exam Tip:</strong> Watch out for phrasing! If a question says a wire is 'stretched to double its length', you must account for the area shrinking as well."
+            },
+            {
+                topic: "Ohm's Law",
+                question: "Q10. The V-I graph of an ohmic conductor is:",
+                options: ["Circular", "Curved", "Straight line through origin", "Horizontal line"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. Circular paths represent completely non-linear cyclic behaviors.",
+                    "Incorrect. Curved lines are typical for non-ohmic components like diodes or incandescent bulbs.",
+                    "Correct. Since Ohm's Law dictates that V scales linearly with I, tracking their parameters outputs a continuous straight line starting at the (0,0) origin coordinate.",
+                    "Incorrect. A horizontal trace implies voltage stays static regardless of current changes."
+                ],
+                concept: "<strong>Concept Tested:</strong> Linear Graphical Modeling of Ohm's Law.",
+                revision: "<strong>Quick Revision:</strong> The slope of a V vs I graph yields the exact internal resistance value (Resistance = change in V / change in I).",
+                examTip: "<strong>Exam Tip:</strong> Pay close attention to the axes! If the chart plots I on the y-axis and V on the x-axis, the slope equals the inverse resistance (1/R)."
+            },
+            {
+                topic: "Heating Effects of Current",
+                question: "Q11. Assertion (A): Nichrome is commonly used in heating elements.\nReason (R): Nichrome has high resistance and high melting point.",
+                options: [
+                    "Both A and R are true and R is the correct explanation",
+                    "Both A and R are true but R is not the correct explanation",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct. Both statements are accurate. Nichrome's unique alloy properties give it high resistivity and robust structural stability against oxidation at elevated temperatures.",
+                    "Incorrect. The reason directly explains why the assertion makes sense for safety engineering.",
+                    "Incorrect. The reason statement is completely true.",
+                    "Incorrect. The assertion statement is safe and true."
+                ],
+                concept: "<strong>Concept Tested:</strong> High-Temperature Material Resistivity.",
+                revision: "<strong>Quick Revision:</strong> Heating elements require high resistance (Heat = I^2 x R x t) and a high melting point to avoid structural failure at glowing temperatures.",
+                examTip: "<strong>Exam Tip:</strong> Pure metals rarely serve as high-heat elements because their lower resistivity makes them prone to oxidizing and melting prematurely compared to alloys."
+            },
+            {
+                topic: "Resistor Combinations",
+                question: "Q12. Two resistors 4 Ohm and 6 Ohm are connected in series. Their equivalent resistance is:",
+                options: ["2.4 Ohm", "10 Ohm", "24 Ohm", "5 Ohm"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This is the calculated result if they were wired in parallel instead.",
+                    "Correct. For components wired in series, equivalent resistance is calculated by simple summation: R_series = R1 + R2 = 4 Ohm + 6 Ohm = 10 Ohm.",
+                    "Incorrect. This is the product of the values, not their sum.",
+                    "Incorrect. This represents a simple mathematical average."
+                ],
+                concept: "<strong>Concept Tested:</strong> Series Equivalence Laws.",
+                revision: "<strong>Quick Revision:</strong> Resistors in series string together to increase total path resistance by adding them directly.",
+                examTip: "<strong>Exam Tip:</strong> The total equivalent resistance of any series circuit will always be greater than the single largest individual resistor in that chain."
+            },
+            {
+                topic: "Resistor Combinations",
+                question: "Q13. Two resistors 6 Ohm and 3 Ohm are connected in parallel. Equivalent resistance is:",
+                options: ["2 Ohm", "3 Ohm", "4 Ohm", "9 Ohm"],
+                correct: 0,
+                explanations: [
+                    "Correct. Using the parallel reciprocal formula: 1/R_parallel = 1/6 + 1/3 = 3/6 = 1/2. Inverting yields 2 Ohm.",
+                    "Incorrect. The total resistance must drop below the smallest single branch contribution value.",
+                    "Incorrect. This value falls outside the accurate calculation parameters.",
+                    "Incorrect. This is the result of adding them in series."
+                ],
+                concept: "<strong>Concept Tested:</strong> Parallel Branch Equivalent Resistance.",
+                revision: "<strong>Quick Revision:</strong> Shortcut for two resistors: R_parallel = (Product / Sum) = (6 x 3) / (6 + 3) = 18 / 9 = 2 Ohm.",
+                examTip: "<strong>Exam Tip:</strong> Adding more parallel branches always lowers the total equivalent resistance because it opens up more alternative paths for current to flow."
+            },
+            {
+                topic: "Circuit Topologies",
+                question: "Q14. In a series circuit:",
+                options: [
+                    "Current is different in each resistor",
+                    "Voltage is same across each resistor",
+                    "Current remains same throughout",
+                    "Resistance decreases"
+                ],
+                correct: 2,
+                explanations: [
+                    "Incorrect. Current values cannot branch out or diverge along a single continuous wire path.",
+                    "Incorrect. Voltage drops divide proportionally across series components based on their individual resistance.",
+                    "Correct. In a series loop configuration, electric current has only one single path to travel, ensuring the current metric remains identical at every single point in the line.",
+                    "Incorrect. Series arrangements always increase the total resistance profile."
+                ],
+                concept: "<strong>Concept Tested:</strong> Charge Conservation Across Single-Path Networks.",
+                revision: "<strong>Quick Revision:</strong> Series circuits feature uniform current but divided voltages. Parallel circuits feature uniform voltage but divided currents.",
+                examTip: "<strong>Exam Tip:</strong> If one component fails or breaks in a series loop, the entire circuit immediately shuts down."
+            },
+            {
+                topic: "Heating Effects of Current",
+                question: "Q15. Which appliance converts electrical energy mainly into heat energy?",
+                options: ["Fan", "Heater", "Motor", "Bell"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. A fan primarily converts electrical energy into mechanical kinetic energy.",
+                    "Correct. An electric heater is specifically engineered to utilize the Joule heating effect, maximizing the conversion of electrical energy into thermal energy.",
+                    "Incorrect. Motors convert electrical input into kinetic mechanical torque output.",
+                    "Incorrect. Electric bells redirect electrical currents into acoustic sound energy formats."
+                ],
+                concept: "<strong>Concept Tested:</strong> Applied Joule Heating Conversions.",
+                revision: "<strong>Quick Revision:</strong> High-resistance element wires maximize thermal heat generation when high current loads pass through them.",
+                examTip: "<strong>Exam Tip:</strong> Joule's Law states that heat production scales quadratically with current: Heat = I^2 x R x t."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q16. [CASE STUDY] Riya connects a 60 W bulb to a 220 V supply. The bulb glows normally.\n\nThe current drawn by the bulb is:",
+                options: ["0.27 A", "2.75 A", "1.1 A", "0.50 A"],
+                correct: 0,
+                explanations: [
+                    "Correct. Using P = V x I, we can isolate current: I = P / V = 60 / 220 = 0.27 A.",
+                    "Incorrect. This occurs if you invert the formula and divide voltage by power (220 / 60).",
+                    "Incorrect. This value represents an inaccurate calculation.",
+                    "Incorrect. This value does not match the parameters given in the problem."
+                ],
+                concept: "<strong>Concept Tested:</strong> Power-Current-Voltage Relationships.",
+                revision: "<strong>Quick Revision:</strong> Simple power relationships can be solved using I = P / V. Make sure your units align cleanly.",
+                examTip: "<strong>Exam Tip:</strong> Standard domestic utility lines in India are engineered to deliver a steady nominal target of 220V."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q17. [CASE STUDY CONTINUED] Riya connects a 60 W bulb to a 220 V supply. The bulb glows normally.\n\nThe operating resistance of the bulb is:",
+                options: ["806 Ohm", "100 Ohm", "60 Ohm", "220 Ohm"],
+                correct: 0,
+                explanations: [
+                    "Correct. Combining formulas gives P = V^2 / R, which isolates to R = V^2 / P. Calculation: 220^2 / 60 = 48400 / 60 = 806.67 Ohm.",
+                    "Incorrect. This is a generic round number that does not match the given values.",
+                    "Incorrect. This simply restates the power rating in ohms.",
+                    "Incorrect. This simply restates the voltage rating in ohms."
+                ],
+                concept: "<strong>Concept Tested:</strong> Power-Voltage-Resistance Interdependence.",
+                revision: "<strong>Quick Revision:</strong> R = V^2 / P. Higher power ratings for a fixed voltage source require a lower operational resistance.",
+                examTip: "<strong>Exam Tip:</strong> A 100W bulb has less resistance than a 60W bulb, allowing it to draw more current and glow brighter on the same voltage line."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q18. [CASE STUDY CONTINUED] Riya connects a 60 W bulb to a 220 V supply. The bulb glows normally.\n\nIf the bulb operates for 10 h, the electrical energy consumed is:",
+                options: ["0.06 kWh", "0.6 kWh", "6 kWh", "60 kWh"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This forgot to account for the full 10-hour duration multiplier.",
+                    "Correct. Energy = Power x Time. First, convert power to kilowatts: 60 W = 0.06 kW. Then multiply by time: 0.06 kW x 10 h = 0.6 kWh.",
+                    "Incorrect. This error comes from failing to divide the wattage by 1000 to convert it to kilowatts.",
+                    "Incorrect. This value is a calculation error that overstates the energy use."
+                ],
+                concept: "<strong>Concept Tested:</strong> Commercial Electrical Energy Units (kWh).",
+                revision: "<strong>Quick Revision:</strong> 1 kWh = 1 Commercial Unit = 3.6 x 10^6 Joules.",
+                examTip: "<strong>Exam Tip:</strong> Always convert raw power watts to kilowatts (divide by 1000) before calculating commercial energy consumption."
+            },
+            {
+                topic: "Circuit Instruments",
+                question: "Q19. Assertion (A): A voltmeter is connected in parallel with the component.\nReason (R): A voltmeter has very high resistance.",
+                options: [
+                    "Both A and R are true and R is the correct explanation",
+                    "Both A and R are true but R is not the correct explanation",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct. Both statements are true. A voltmeter needs high internal resistance so that when it is placed in parallel, it doesn't draw current away from the component it is measuring.",
+                    "Incorrect. The high internal resistance is the exact engineering reason why parallel installation works safely.",
+                    "Incorrect. The reason statement is completely true.",
+                    "Incorrect. The assertion statement is safe and true."
+                ],
+                concept: "<strong>Concept Tested:</strong> Measuring Instrument Influence and Safety Topologies.",
+                revision: "<strong>Quick Revision:</strong> High resistance keeps the voltmeter from drawing current, ensuring accurate voltage readings across the test component.",
+                examTip: "<strong>Exam Tip:</strong> An ideal ammeter has zero resistance, while an ideal voltmeter has infinite resistance."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q20. A 100 W appliance works for 5 hours. The energy consumed is:",
+                options: ["0.05 kWh", "0.5 kWh", "5 kWh", "50 kWh"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This value is a conversion decimal error.",
+                    "Correct. Energy = Power x Time. Convert power to kilowatts: 100 W = 0.1 kW. Multiply by time: 0.1 kW x 5 h = 0.5 kWh.",
+                    "Incorrect. This calculation forgot to convert watts to kilowatts.",
+                    "Incorrect. This value misplaces the decimal point during calculation."
+                ],
+                concept: "<strong>Concept Tested:</strong> Commercial Energy Calculation.",
+                revision: "<strong>Quick Revision:</strong> Energy (kWh) = (Power in Watts x Time in Hours) / 1000.",
+                examTip: "<strong>Exam Tip:</strong> Utility bills are calculated directly from total accumulated kilowatt-hour (kWh) metrics."
+            },
+            {
+                topic: "Resistance Frameworks",
+                question: "Q21. The resistance of a wire depends on:",
+                options: ["Length only", "Area of cross-section only", "Material only", "Length, area and material"],
+                correct: 3,
+                explanations: [
+                    "Incorrect. Length is a key scaling element, but it is not the sole factor determining overall resistance.",
+                    "Incorrect. Cross-sectional geometry defines path limits, but other physical constraints must balance out.",
+                    "Incorrect. Intrinsic resistivity matters, but macroscopic dimensions dominate physical configuration traces.",
+                    "Correct. Total resistance integrates all three parameters simultaneously as defined by the geometric formula: R = ρ(L / A)."
+                ],
+                concept: "<strong>Concept Tested:</strong> Macroscopic Geometric and Material Predictors of Resistance.",
+                revision: "<strong>Quick Revision:</strong> Resistance tracks directly with length (L), inversely with area (A), and depends on material type (ρ).",
+                examTip: "<strong>Exam Tip:</strong> Resistivity (ρ) depends purely on material composition and temperature—not on the wire's length or area!"
+            },
+            {
+                topic: "Potential Difference & Current Flow",
+                question: "Q22. A conductor has resistance 8 Ohm and carries a current of 2 A. The potential difference across it is:",
+                options: ["4 V", "8 V", "16 V", "10 V"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This stems from a calculation error, dividing resistance by current metrics incorrectly.",
+                    "Incorrect. This simply restates one of the initial constant tracking variables.",
+                    "Correct. Applying Ohm's Law directly: V = I x R. Calculation: 2 A x 8 Ohm = 16 V.",
+                    "Incorrect. This values error introduces an incorrect mathematical sum step instead of multiplying."
+                ],
+                concept: "<strong>Concept Tested:</strong> Linear Application of Ohm's Law (V = IR).",
+                revision: "<strong>Quick Revision:</strong> Potential drop scales cleanly as a direct product of current rate vectors and channel resistance.",
+                examTip: "<strong>Exam Tip:</strong> Double check that current is in Amperes and resistance is in Ohms before performing evaluation tasks."
+            },
+            {
+                topic: "Potential Difference & Current Flow",
+                question: "Q23. Assertion (A): Current can flow through a conductor only when there is a potential difference across its ends.\nReason (R): Potential difference causes the movement of charges.",
+                options: [
+                    "Both A and R are true and R is the correct explanation of A",
+                    "Both A and R are true but R is not the correct explanation of A",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct. Both parameters align perfectly. Potential difference establishes the specific electric field gradient required to force mobile charges into a uniform drift direction.",
+                    "Incorrect. The reason directly clarifies the driving mechanism that justifies the assertion statement.",
+                    "Incorrect. The reasoning parameter is sound and entirely valid.",
+                    "Incorrect. The assertion statement represents a foundational rule of circuit dynamics."
+                ],
+                concept: "<strong>Concept Tested:</strong> Driving Potentials and Charge Drift Causation Mechanics.",
+                revision: "<strong>Quick Revision:</strong> Without an electric potential gradient, free electrons move randomly in all directions, yielding zero net current.",
+                examTip: "<strong>Exam Tip:</strong> Think of potential difference as an electrical pressure that pushes charge vectors from high energy bounds to low states."
+            },
+            {
+                topic: "Resistor Combinations",
+                question: "Q24. Three resistors of 2 Ohm each are connected in series. Equivalent resistance is:",
+                options: ["2 Ohm", "4 Ohm", "6 Ohm", "8 Ohm"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This value indicates no additive path metric calculation was performed.",
+                    "Incorrect. This accounts for only two elements in the continuous line path.",
+                    "Correct. For series strings, sum all components sequentially: R_eq = 2 + 2 + 2 = 6 Ohm.",
+                    "Incorrect. This is an incorrect computational summation trajectory."
+                ],
+                concept: "<strong>Concept Tested:</strong> Series Equivalent Cumulative Resistance Law.",
+                revision: "<strong>Quick Revision:</strong> R_total = R1 + R2 + R3 + ... + Rn. Every series element added blocks paths linearly.",
+                examTip: "<strong>Exam Tip:</strong> In series structures, the same continuous current passes identically through each resistive element."
+            },
+            {
+                topic: "Resistor Combinations",
+                question: "Q25. Three resistors of 6 Ohm each are connected in parallel. Equivalent resistance is:",
+                options: ["2 Ohm", "3 Ohm", "6 Ohm", "18 Ohm"],
+                correct: 0,
+                explanations: [
+                    "Correct. Using reciprocal parallel routing structures: 1/R = 1/6 + 1/6 + 1/6 = 3/6 = 1/2. Inverting gives 2 Ohm.",
+                    "Incorrect. This value represents an incorrect fractional solution.",
+                    "Incorrect. Total combined parallel resistance must measure strictly lower than any individual path factor.",
+                    "Incorrect. This represents a simple series sum calculation instead of a parallel framework."
+                ],
+                concept: "<strong>Concept Tested:</strong> Parallel Branch Scaling and Reciprocal Equivalence Rules.",
+                revision: "<strong>Quick Revision:</strong> For identical parallel elements: R_equivalent = R_value / n_branches. Calculation: 6 / 3 = 2 Ohm.",
+                examTip: "<strong>Exam Tip:</strong> Connecting more channels in parallel reduces total resistance profile because it widens alternative paths."
+            },
+            {
+                topic: "Resistance Frameworks",
+                question: "Q26. A wire is stretched to double its original length. Assuming volume remains constant, its resistance becomes approximately:",
+                options: ["R/2", "R", "2R", "4R"],
+                correct: 3,
+                explanations: [
+                    "Incorrect. Stretching increases length, meaning resistance values cannot drop below original parameters.",
+                    "Incorrect. Changing physical geometries alters physical obstruction profiles.",
+                    "Incorrect. This targets length extension but omits the mandatory area compression factor.",
+                    "Correct. Since volume is constant, doubling length forces cross-sectional area to decrease to exactly half. R = ρ(2L / (A/2)) = 4R."
+                ],
+                concept: "<strong>Concept Tested:</strong> Volume Conservation and Geometric Scaling Dependencies.",
+                revision: "<strong>Quick Revision:</strong> When a wire is stretched cleanly by a factor of n, new resistance scales quadratically as: R_new = n^2 x R_old.",
+                examTip: "<strong>Exam Tip:</strong> Watch carefully for statements like 'stretched to' vs 'added to' to detect internal layout adjustments."
+            },
+            {
+                topic: "Circuit Topologies",
+                question: "Q27. Which combination is generally used in household wiring?",
+                options: ["Series", "Parallel", "Mixed only", "Series-parallel only"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. Series links mean turning off one appliance kills power across the entire home layout.",
+                    "Correct. Household systems use parallel configurations so each load receives the same 220 V line potential and acts fully independently.",
+                    "Incorrect. Standard domestic wall outlets feed purely independent branch topologies.",
+                    "Incorrect. Mixed matrix styles are restricted to localized electronic circuit boards."
+                ],
+                concept: "<strong>Concept Tested:</strong> Industrial Shunt Allocation and Independent Node Operation.",
+                revision: "<strong>Quick Revision:</strong> Parallel layouts guarantee uniform voltage across loads and keep whole lines alive if single paths open up.",
+                examTip: "<strong>Exam Tip:</strong> Parallel routing is why blowing an individual appliance fuse doesn't trigger a total black out."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q28. The commercial unit of electrical energy is:",
+                options: ["Joule", "Watt", "Kilowatt-hour", "Volt"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. The Joule is the metric standard unit but maps too micro-scale for structural utility logging.",
+                    "Incorrect. The Watt represents the raw time-rate parameter of energy conversion, meaning power.",
+                    "Correct. Utility companies calculate billing profiles around the Kilowatt-hour (kWh), commonly tracked as a standard 'unit'.",
+                    "Incorrect. The Volt measures electrical pressure limits."
+                ],
+                concept: "<strong>Concept Tested:</strong> Large-Scale Commercial Unit Quantifications.",
+                revision: "<strong>Quick Revision:</strong> Energy tracks total conversion consumption metrics. Product metrics calculate via: Power (kW) x Time (hours).",
+                examTip: "<strong>Exam Tip:</strong> Keep power formatted in kW and time in hours whenever commercial utility parameters are requested."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q29. One kilowatt-hour is equal to:",
+                options: ["3600 J", "36000 J", "3.6 x 10^6 J", "3.6 x 10^5 J"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This represents the basic count of time seconds within a standard hour framework.",
+                    "Incorrect. This math lacks the full conversion multiplier for the kilo scale prefix.",
+                    "Correct. Convert units: 1 kWh = 1000 W x 3600 s = 3,600,000 Joules, or 3.6 x 10^6 Joules.",
+                    "Incorrect. This value misses the correct exponential decimal position profile."
+                ],
+                concept: "<strong>Concept Tested:</strong> SI Conversion Profiles for Fundamental Energy Quantities.",
+                revision: "<strong>Quick Revision:</strong> 1 kWh = 1000 Joules/second x 3600 seconds = 3.6 x 10^6 J.",
+                examTip: "<strong>Exam Tip:</strong> Remember that the exponential power is positive 6. This is a very common trick point on board evaluations."
+            },
+            {
+                topic: "Resistor Combinations",
+                question: "Q30. Assertion (A): The equivalent resistance of resistors connected in parallel is less than the smallest resistance.\nReason (R): Parallel connection provides more paths for current.",
+                options: [
+                    "Both A and R are true and R is the correct explanation",
+                    "Both A and R are true but R is not the correct explanation",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct. Both parameters hold perfectly true. Opening multi-channel paths scales down the system restriction profile, making total equivalent resistance less than the lowest single branch.",
+                    "Incorrect. The reason directly explains the physics behind path aggregation drops.",
+                    "Incorrect. The reason statement is perfectly verifiable and structurally correct.",
+                    "Incorrect. The assertion statement represents an absolute property of parallel circuitry."
+                ],
+                concept: "<strong>Concept Tested:</strong> Circuit Routing Realities and Net Impedance Reduction Profiles.",
+                revision: "<strong>Quick Revision:</strong> Adding parallel options creates a larger composite effective surface channel cross-section for charges to traverse.",
+                examTip: "<strong>Exam Tip:</strong> If you verify a parallel problem and your equivalent calculation exceeds any single branch value, pause and recalculate!"
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q31. [CASE STUDY] An electric iron is rated 1000 W, 220 V and is used daily for 2 hours.\n\nCurrent drawn by the iron is:",
+                options: ["2.27 A", "4.55 A", "5 A", "10 A"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This error comes from dividing voltage by raw power parameters instead of the reverse configuration.",
+                    "Correct. Using P = V x I, isolate current: I = P / V. Calculation: 1000 W / 220 V = 4.545 A, rounding up safely to 4.55 A.",
+                    "Incorrect. This indicates an approximate rounding value that misses precision limits.",
+                    "Incorrect. This represents a misplaced decimal error during numeric execution."
+                ],
+                concept: "<strong>Concept Tested:</strong> Steady State Power Dissipation Rates and Current Inversion.",
+                revision: "<strong>Quick Revision:</strong> I = P / V. Ensure variables map natively to basic parameter states prior to division steps.",
+                examTip: "<strong>Exam Tip:</strong> Keep precision tracking sharp. High-power thermal units typically draw larger stable currents."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q32. [CASE STUDY CONTINUED] An electric iron is rated 1000 W, 220 V and is used daily for 2 hours.\n\nElectrical energy consumed in one day is:",
+                options: ["0.2 kWh", "2 kWh", "20 kWh", "2000 kWh"],
+                correct: 1,
+                explanations: [
+                    "Incorrect. This calculation misplaced internal decimal values when shifting scale prefixes.",
+                    "Correct. Energy = Power x Time. Convert power to kW: 1000 W = 1 kW. Daily tracking gives: 1 kW x 2 h = 2 kWh.",
+                    "Incorrect. This scalar overstates consumption values by an extra factor of ten.",
+                    "Incorrect. This error processes raw unadjusted watts straight through without scaling to kilowatts."
+                ],
+                concept: "<strong>Concept Tested:</strong> Daily Commercial Energy Scaling Factor Identification.",
+                revision: "<strong>Quick Revision:</strong> Energy = Power (kW) x Time (h). Simple scalar processing yields immediate product metrics.",
+                examTip: "<strong>Exam Tip:</strong> A 1000 W load matching a continuous 1 hour runtime tracks as exactly 1 unit of electricity usage."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q33. [CASE STUDY CONTINUED] An electric iron is rated 1000 W, 220 V and is used daily for 2 hours.\n\nEnergy consumed in 30 days is:",
+                options: ["20 kWh", "40 kWh", "60 kWh", "120 kWh"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This values configuration tracks a mismatched monthly timeline tracking step.",
+                    "Incorrect. This tracks an incorrect scalar calculation trace.",
+                    "Correct. Build from previous daily metrics step: Monthly consumption = 2 kWh/day x 30 days = 60 kWh total.",
+                    "Incorrect. This calculations trace misapplies an error factor multiplier step."
+                ],
+                concept: "<strong>Concept Tested:</strong> Time Series Compounding Metrics for Consolidated Energy Logs.",
+                revision: "<strong>Quick Revision:</strong> Compute daily profile first, then scale linearly up to match target window parameters.",
+                examTip: "<strong>Exam Tip:</strong> Keep your monthly baseline fixed at exactly 30 days unless specific calendar conditions are explicitly provided."
+            },
+            {
+                topic: "Heating Effects of Current",
+                question: "Q34. The heating effect of current is used in:",
+                options: ["Electric bulb", "Electric iron", "Heater", "All of these"],
+                correct: 3,
+                explanations: [
+                    "Incorrect. While an incandescent filament uses Joule heating to glow, it is not the only option listed.",
+                    "Incorrect. An electric iron is a classic thermal appliance, but other selections share this system architecture.",
+                    "Incorrect. Heaters route inputs straight to element loops, but this factor applies broader across options.",
+                    "Correct. Every single selection listed relies explicitly on driving current across high resistance elements to generate thermal energy outputs."
+                ],
+                concept: "<strong>Concept Tested:</strong> Applied Engineering Profiles for Joule Heating Effects.",
+                revision: "<strong>Quick Revision:</strong> Practical implementations exploit structural resistance to force energy transitions from current streams into localized heat values.",
+                examTip: "<strong>Exam Tip:</strong> High-resistance element choices with robust high melting points are standard selections for heating components."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q35. The power of an appliance operating at 220 V and drawing 5 A current is:",
+                options: ["44 W", "225 W", "1100 W", "2200 W"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This error divides components (220 / 5) instead of running multiplication arrays.",
+                    "Incorrect. This is an incorrect mathematical tracking calculation trace.",
+                    "Correct. Power maps as a direct product of across-voltage and current entry: P = V x I = 220 V x 5 A = 1100 W.",
+                    "Incorrect. This calculations path oversteps parameters by an extra error multiplier trace."
+                ],
+                concept: "<strong>Concept Tested:</strong> Power Consumption Quantifications via Voltage-Current Vectors.",
+                revision: "<strong>Quick Revision:</strong> P = V x I. Simple math integration tracking handles core execution safely.",
+                examTip: "<strong>Exam Tip:</strong> If target answers frame components in kW, divide your final calculated output value by 1000 cleanly."
+            },
+            {
+                topic: "Material Conductivity",
+                question: "Q36. Assertion (A): Copper is preferred for household wiring.\nReason (R): Copper has low resistivity.",
+                options: [
+                    "Both A and R are true and R is the correct explanation",
+                    "Both A and R are true but R is not the correct explanation",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct. Both parameters hold perfectly true. Low internal material resistivity blocks loss channels, protecting systems from generating parasitic drop currents and unnecessary heating during transmission tasks.",
+                    "Incorrect. Low internal resistivity is the absolute physical factor why copper provides such efficient grid conduits.",
+                    "Incorrect. The analytical reasoning line is perfectly verified and structurally correct.",
+                    "Incorrect. The assertion step represents a fundamental standard across safety engineering profiles."
+                ],
+                concept: "<strong>Concept Tested:</strong> Intrinsic Material Predictors and Transmission Safety System Architectures.",
+                revision: "<strong>Quick Revision:</strong> Minimizing target material resistivity limits physical heat losses according to the formula: P = I^2 x R.",
+                examTip: "<strong>Exam Tip:</strong> Copper offers an excellent compromise balance between superior electrical conductivity values and manufacturing cost reality parameters."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q37. [CASE STUDY] A household electricity meter shows:\nPrevious Reading = 12480 units, Current Reading = 12620 units, Rate = Rs 7 per unit.\n\nNumber of units consumed:",
+                options: ["120", "130", "140", "150"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This error drops 20 units away from accurate tracking differentials.",
+                    "Incorrect. This tracks an incorrect numerical calculation difference step.",
+                    "Correct. Consumption loops require clear tracking delta subtraction: 12620 - 12480 = 140 commercial units total.",
+                    "Incorrect. This estimation steps past correct metric bounds parameters."
+                ],
+                concept: "<strong>Concept Tested:</strong> Delta Processing Logic for Accumulating Meter Terminals.",
+                revision: "<strong>Quick Revision:</strong> Net metrics consumed equal current reading markers minus verified base previous reading baselines.",
+                examTip: "<strong>Exam Tip:</strong> Meter tracking units correspond strictly on a 1-to-1 conversion balance layout directly against verified kWh parameters."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q38. [CASE STUDY CONTINUED] Meter Profile: Delta = 140 units, Utility Rate Configuration = Rs 7 per unit.\n\nTotal bill amount is:",
+                options: ["Rs 840", "Rs 910", "Rs 980", "Rs 1120"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This traces a missing product multiplier configuration error.",
+                    "Incorrect. This results from checking incorrect calculation steps.",
+                    "Correct. Calculate total processing fee: 140 consolidated units x Rs 7 rate parameters = Rs 980 financial total.",
+                    "Incorrect. This calculation overshoots target financial data matrices parameters."
+                ],
+                concept: "<strong>Concept Tested:</strong> Commercial Cost Projections for Metric Energy Aggregation Profiles.",
+                revision: "<strong>Quick Revision:</strong> Total Financial Charge = Consumed Units Matrix Delta x Verified Tariff Scaling Constants.",
+                examTip: "<strong>Exam Tip:</strong> Keep core product pairs isolated cleanly before jumping into multi-factor optimization runs."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q39. [CASE STUDY CONTINUED] Meter Profile: Baseline Delta = 140 units.\n\nIf consumption is reduced by 20 units next month, units consumed will be:",
+                options: ["100", "110", "120", "130"],
+                correct: 2,
+                explanations: [
+                    "Incorrect. This indicates an over-subtraction math calculation error path trace.",
+                    "Incorrect. This steps away from base target profile parameters numbers data.",
+                    "Correct. Running basic scalar subtraction tracking across baselines yields: 140 original units - 20 optimization units = 120 adjusted units.",
+                    "Incorrect. This values tracking step stops short of running full metrics optimization actions."
+                ],
+                concept: "<strong>Concept Tested:</strong> Adaptive Optimization Tracking via Predictive Step Variables.",
+                revision: "<strong>Quick Revision:</strong> Next Month Evaluation Target = Current Base Metric Level - Reduction Adjustment Constrains.",
+                examTip: "<strong>Exam Tip:</strong> Isolate baseline outputs completely before trying to parse prospective variance offsets."
+            },
+            {
+                topic: "Electrical Power & Energy",
+                question: "Q40. Assertion (A): Electrical energy consumption can be reduced by switching off unused appliances.\nReason (R): Energy consumed depends on power and duration of use.",
+                options: [
+                    "Both A and R are true and R is the correct explanation",
+                    "Both A and R are true but R is not the correct explanation",
+                    "A true, R false",
+                    "A false, R true"
+                ],
+                correct: 0,
+                explanations: [
+                    "Correct. Both parameters map perfectly. Dropping time durations to zero prevents active energy calculations from accumulating running units across current lines.",
+                    "Incorrect. The reason clarifies how manipulating operational time variables reduces the final energy equation product.",
+                    "Incorrect. The underlying reason statement outlines a fundamental property of physics.",
+                    "Incorrect. The assertion path represents an actionable real-world strategy for efficiency paths."
+                ],
+                concept: "<strong>Concept Tested:</strong> Power-Time Dependencies and Resource Preservation Strategies.",
+                revision: "<strong>Quick Revision:</strong> Since Energy = Power x Time, minimizing continuous active runtime intervals causes proportional drops in total energy output.",
+                examTip: "<strong>Exam Tip:</strong> Energy reduction loops require optimizing appliance conversion capacities or restricting operational cycles."
+            }
+        ];
+
+        /* --- STATE ENGINE MANAGEMENT --- */
+        let state = {
+            currentIndex: 0,
+            userResponses: {}, 
+            isPaletteVisible: false,
+            theme: 'light'
+        };
+
+        /* --- INITIALIZATION --- */
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProgressFromStorage();
+            applyThemeSystem();
+            renderQuestionPalette();
+            updateLiveMetricsHub();
+            setupTouchSupport();
+        });
+
+        /* --- ACTIVATE TIMELINE LINK --- */
+        function startQuizPortal() {
+            document.getElementById('intro-screen-panel').classList.add('hidden');
+            document.getElementById('live-metrics-panel').classList.remove('hidden');
+            document.getElementById('quiz-workspace').classList.remove('hidden');
+            displayCurrentQuestion();
+        }
+
+        function saveProgressToStorage() {
+            localStorage.setItem('portal_quiz_state_2026_elec', JSON.stringify({
+                currentIndex: state.currentIndex,
+                userResponses: state.userResponses,
+                theme: state.theme
+            }));
+        }
+
+        function loadProgressFromStorage() {
+            const raw = localStorage.getItem('portal_quiz_state_2026_elec');
+            if (raw) {
+                try {
+                    const parsed = JSON.parse(raw);
+                    state.currentIndex = parsed.currentIndex || 0;
+                    state.userResponses = parsed.userResponses || {};
+                    state.theme = parsed.theme || 'light';
+                } catch(e) {
+                    state.currentIndex = 0;
+                    state.userResponses = {};
+                    state.theme = 'light';
+                }
+            } else {
+                state.theme = 'light'; 
+            }
+        }
+
+        function restartQuiz() {
+            if(confirm("Are you sure you want to clear your current progress and restart the module?")) {
+                state.currentIndex = 0;
+                state.userResponses = {};
+                saveProgressToStorage();
+                
+                document.getElementById('report-card-dashboard').classList.add('hidden');
+                document.getElementById('intro-screen-panel').classList.remove('hidden');
+                
+                renderQuestionPalette();
+                updateLiveMetricsHub();
+            }
+        }
+
+        /* --- VISUAL DISPLAY ENGINE --- */
+        function displayCurrentQuestion() {
+            const currentQuestion = quizData[state.currentIndex];
+            
+            document.getElementById('question-index-label').innerText = `Question ${state.currentIndex + 1} of ${quizData.length}`;
+            document.getElementById('runtime-topic-tag').innerText = currentQuestion.topic;
+            document.getElementById('question-text-box').innerText = currentQuestion.question;
+            
+            const optionsBox = document.getElementById('options-box');
+            optionsBox.innerHTML = '';
+            
+            const hasAnswered = state.userResponses.hasOwnProperty(state.currentIndex);
+            const savedAnswer = state.userResponses[state.currentIndex];
+
+            currentQuestion.options.forEach((optText, idx) => {
+                const optBtn = document.createElement('button');
+                optBtn.className = 'option-item';
+                optBtn.setAttribute('role', 'radio');
+                optBtn.setAttribute('aria-checked', hasAnswered && savedAnswer === idx ? 'true' : 'false');
+                optBtn.tabIndex = 0;
+                
+                const prefixChar = String.fromCharCode(97 + idx); 
+                optBtn.innerHTML = `<span class="option-prefix">${prefixChar}</span><span class="option-string"></span>`;
+                optBtn.querySelector('.option-string').innerText = optText;
+
+                if (hasAnswered) {
+                    optBtn.classList.add('locked');
+                    if (idx === currentQuestion.correct) {
+                        optBtn.classList.add('state-correct');
+                    } else if (idx === savedAnswer) {
+                        optBtn.classList.add('state-wrong');
+                    }
+                } else {
+                    optBtn.onclick = () => selectOption(idx);
+                }
+                optionsBox.appendChild(optBtn);
+            });
+
+            const actionBtn = document.getElementById('action-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            
+            if (state.currentIndex > 0) {
+                prevBtn.classList.remove('hidden');
+            } else {
+                prevBtn.classList.add('hidden');
+            }
+
+            if (hasAnswered) {
+                showFeedbackPanel(currentQuestion, savedAnswer);
+                actionBtn.innerText = (state.currentIndex === quizData.length - 1) ? "Finish & View Analytics" : "Next Question";
+            } else {
+                hideFeedbackPanel();
+                actionBtn.innerText = "Submit Answer";
+            }
+
+            updateProgressBar();
+            syncPaletteNodes();
+        }
+
+        function selectOption(selectedIdx) {
+            state.userResponses[state.currentIndex] = selectedIdx;
+            saveProgressToStorage();
+            updateLiveMetricsHub();
+            displayCurrentQuestion();
+        }
+
+        function evaluateOrProgress() {
+            const hasAnswered = state.userResponses.hasOwnProperty(state.currentIndex);
+            
+            if (!hasAnswered) {
+                alert("Please select an option to submit your answer.");
+                return;
+            }
+
+            if (state.currentIndex < quizData.length - 1) {
+                state.currentIndex++;
+                saveProgressToStorage();
+                displayCurrentQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                generateReportCard();
+            }
+        }
+
+        function navigatePrevious() {
+            if (state.currentIndex > 0) {
+                state.currentIndex--;
+                saveProgressToStorage();
+                displayCurrentQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        /* --- FEEDBACK SYSTEMS --- */
+        function showFeedbackPanel(question, savedAnswer) {
+            const feedbackSubpanel = document.getElementById('feedback-expansion-subpanel');
+            const alertBanner = document.getElementById('feedback-alert-banner');
+            const expSpace = document.getElementById('explanation-space');
+            
+            feedbackSubpanel.classList.remove('hidden');
+            
+            const isCorrect = (savedAnswer === question.correct);
+            if (isCorrect) {
+                alertBanner.className = "feedback-box correct";
+                alertBanner.innerHTML = "<span>✅</span> Correct Response! Parameters successfully updated.";
+            } else {
+                alertBanner.className = "feedback-box wrong";
+                alertBanner.innerHTML = "<span>❌</span> Incorrect Response. Review metric logs below.";
+            }
+
+            expSpace.innerHTML = '';
+            question.options.forEach((_, idx) => {
+                const line = document.createElement('div');
+                line.className = 'opt-exp-line';
+                const prefix = String.fromCharCode(97 + idx);
+                
+                let checkMarker = "❌";
+                if (idx === question.correct) checkMarker = "✅";
+                
+                line.innerHTML = `<strong>(${prefix}) ${checkMarker}:</strong> <span class="exp-text-node"></span>`;
+                line.querySelector('.exp-text-node').innerText = question.explanations[idx];
+                expSpace.appendChild(line);
+            });
+
+            document.getElementById('concept-tested-box').innerHTML = question.concept;
+            document.getElementById('quick-revision-box').innerHTML = question.revision;
+            document.getElementById('exam-tip-box').innerHTML = question.examTip;
+        }
+
+        function hideFeedbackPanel() {
+            document.getElementById('feedback-expansion-subpanel').classList.add('hidden');
+        }
+
+        /* --- PROGRESS TRACKING & PALETTE --- */
+        function updateProgressBar() {
+            const total = quizData.length;
+            const filled = ((state.currentIndex + 1) / total) * 100;
+            document.getElementById('progress-bar-fill').style.width = `${filled}%`;
+        }
+
+        function togglePalette() {
+            state.isPaletteVisible = !state.isPaletteVisible;
+            const container = document.getElementById('palette-container');
+            const btn = document.getElementById('palette-btn');
+            
+            if (state.isPaletteVisible) {
+                container.classList.remove('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+            } else {
+                container.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        function renderQuestionPalette() {
+            const container = document.getElementById('palette-container');
+            container.innerHTML = '';
+            quizData.forEach((_, idx) => {
+                const node = document.createElement('div');
+                node.className = 'palette-node';
+                node.innerText = idx + 1;
+                node.onclick = () => {
+                    document.getElementById('intro-screen-panel').classList.add('hidden');
+                    document.getElementById('live-metrics-panel').classList.remove('hidden');
+                    document.getElementById('quiz-workspace').classList.remove('hidden');
+                    
+                    state.currentIndex = idx;
+                    saveProgressToStorage();
+                    displayCurrentQuestion();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+                container.appendChild(node);
+            });
+        }
+
+        /* --- SYNC GRAPHICAL MAPS --- */
+        function syncPaletteNodes() {
+            const nodes = document.getElementById('palette-container').children;
+            if(nodes.length !== quizData.length) return;
+            
+            quizData.forEach((q, idx) => {
+                const node = nodes[idx];
+                node.className = 'palette-node';
+                
+                if (idx === state.currentIndex) {
+                    node.classList.add('current');
+                }
+                
+                if (state.userResponses.hasOwnProperty(idx)) {
+                    if (state.userResponses[idx] === q.correct) {
+                        node.classList.add('correct');
+                    } else {
+                        node.classList.add('wrong');
+                    }
+                }
+            });
+        }
+
+        function updateLiveMetricsHub() {
+            const total = quizData.length;
+            const attempted = Object.keys(state.userResponses).length;
+            
+            let correct = 0;
+            let wrong = 0;
+            
+            quizData.forEach((q, idx) => {
+                if (state.userResponses.hasOwnProperty(idx)) {
+                    if (state.userResponses[idx] === q.correct) correct++;
+                    else wrong++;
+                }
+            });
+
+            const accuracy = attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
+
+            document.getElementById('mini-progress').innerText = `${attempted}/${total}`;
+            document.getElementById('mini-correct').innerText = correct;
+            document.getElementById('mini-wrong').innerText = wrong;
+            document.getElementById('mini-accuracy').innerText = `${accuracy}%`;
+        }
+
+        /* --- THEME SYSTEM ENGINE --- */
+        function toggleTheme() {
+            state.theme = state.theme === 'light' ? 'dark' : 'light';
+            saveProgressToStorage();
+            applyThemeSystem();
+        }
+
+        function applyThemeSystem() {
+            document.documentElement.setAttribute('data-theme', state.theme);
+            const btn = document.getElementById('theme-toggle');
+            btn.innerText = state.theme === 'light' ? '🌙 DARK MODE' : '☀️ LIGHT MODE';
+        }
+
+        /* --- MOBILE GESTURE SUPPORT --- */
+        function setupTouchSupport() {
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const workspace = document.getElementById('interactive-presentation-zone');
+
+            workspace.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            workspace.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipeGesture();
+            }, { passive: true });
+
+            function handleSwipeGesture() {
+                const threshold = 60;
+                if (touchStartX - touchEndX > threshold) {
+                    if (state.userResponses.hasOwnProperty(state.currentIndex) && state.currentIndex < quizData.length - 1) {
+                        state.currentIndex++;
+                        saveProgressToStorage();
+                        displayCurrentQuestion();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                }
+                if (touchEndX - touchStartX > threshold) {
+                    navigatePrevious();
+                }
+            }
+        }
+
+        /* --- ADVANCED ANALYTICS REPORT ENGINE --- */
+        function generateReportCard() {
+            document.getElementById('quiz-workspace').classList.add('hidden');
+            document.getElementById('live-metrics-panel').classList.add('hidden');
+            
+            const dashboard = document.getElementById('report-card-dashboard');
+            dashboard.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            const total = quizData.length;
+            let totalCorrect = 0;
+            let totalWrong = 0;
+            let topicMetrics = {};
+
+            quizData.forEach((q, idx) => {
+                const t = q.topic;
+                if (!topicMetrics[t]) {
+                    topicMetrics[t] = { correct: 0, total: 0 };
+                }
+                topicMetrics[t].total++;
+
+                if (state.userResponses.hasOwnProperty(idx)) {
+                    if (state.userResponses[idx] === q.correct) {
+                        totalCorrect++;
+                        topicMetrics[t].correct++;
+                    } else {
+                        totalWrong++;
+                    }
+                } else {
+                    totalWrong++; 
+                }
+            });
+
+            const generalAccuracy = total > 0 ? Math.round((totalCorrect / total) * 100) : 0;
+
+            let grade = "D";
+            if (generalAccuracy >= 90) grade = "A+";
+            else if (generalAccuracy >= 80) grade = "A";
+            else if (generalAccuracy >= 70) grade = "B";
+            else if (generalAccuracy >= 60) grade = "C";
+
+            document.getElementById('grade-badge').innerText = grade;
+            document.getElementById('kpi-total').innerText = total;
+            document.getElementById('kpi-correct').innerText = totalCorrect;
+            document.getElementById('kpi-wrong').innerText = totalWrong;
+            document.getElementById('kpi-accuracy').innerText = `${generalAccuracy}%`;
+
+            const tbody = document.getElementById('analytics-table-rows');
+            tbody.innerHTML = '';
+            
+            const radarContainer = document.getElementById('radar-metrics-container');
+            radarContainer.innerHTML = '';
+
+            let strongAreas = [];
+            let weakAreas = [];
+            let remediationStrategyHTML = '';
+
+            for (let topic in topicMetrics) {
+                const metrics = topicMetrics[topic];
+                const topicWrong = metrics.total - metrics.correct;
+                const topicAcc = Math.round((metrics.correct / metrics.total) * 100);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight:600;">${topic}</td>
+                    <td style="color:var(--success); font-weight:700;">${metrics.correct}</td>
+                    <td style="color:var(--error); font-weight:700;">${topicWrong}</td>
+                    <td style="font-weight:700;">${topicAcc}%</td>
+                `;
+                tbody.appendChild(tr);
+
+                const radarLine = document.createElement('div');
+                radarLine.className = 'radar-line';
+                radarLine.innerHTML = `
+                    <div class="radar-info">
+                        <span>${topic} Focus Mastery</span>
+                        <span>${topicAcc}%</span>
+                    </div>
+                    <div class="radar-track">
+                        <div class="radar-fill" style="width: ${topicAcc}%;"></div>
+                    </div>
+                `;
+                radarContainer.appendChild(radarLine);
+
+                if (topicAcc >= 80) {
+                    strongAreas.push(topic);
+                } else if (topicAcc < 70) {
+                    weakAreas.push(topic);
+                }
+
+                if (topicAcc < 100) {
+                    let suggestions = "Review core board exam textbook patterns and practice multi-tier variations.";
+                    if(topic.includes("Calculations") || topic.includes("Power")) {
+                        suggestions = "Revise Commercial Power units (1 kWh = 3.6 x 10^6 J), P = VI = V^2 / R formulas, and practice 10 written text examples.";
+                    } else if (topic.includes("Combinations") || topic.includes("Law")) {
+                        suggestions = "Re-verify series/parallel equivalence configurations (R_series = sum of R and 1/R_parallel = sum of 1/R). Work out 5 circuit maps.";
+                    }
+                    remediationStrategyHTML += `
+                        <div class="plan-item">
+                            <div class="plan-topic">Target Domain: ${topic}</div>
+                            <div class="plan-details">
+                                <strong>Prescription Plan:</strong> ${suggestions}<br/>
+                                <strong>Practice Goal:</strong> Attempt 10 numerical boards-style sample worksheets to reinforce accuracy.
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            const zonesBox = document.getElementById('diagnostic-zones-box');
+            zonesBox.innerHTML = '';
+
+            if (strongAreas.length > 0) {
+                zonesBox.innerHTML += `
+                    <div class="zone-card strong">
+                        <div class="zone-title">✅ Strong Areas</div>
+                        <div class="zone-body">Excellent conceptual understanding established in: <strong>${strongAreas.join(', ')}</strong>. Keep leveraging this foundation.</div>
+                    </div>
+                `;
+            }
+            if (weakAreas.length > 0) {
+                zonesBox.innerHTML += `
+                    <div class="zone-card weak">
+                        <div class="zone-title">⚠️ Needs Improvement</div>
+                        <div class="zone-body">Analytical tracking detects room for growth in: <strong>${weakAreas.join(', ')}</strong>. Prioritize reading notes on these subtopics.</div>
+                    </div>
+                `;
+            } else if (generalAccuracy === 100) {
+                zonesBox.innerHTML += `
+                    <div class="zone-card strong">
+                        <div class="zone-title">🏅 Absolute Syllabus Mastery</div>
+                        <div class="zone-body">Perfect evaluation score. Academic performance metrics reflect solid board examination readiness.</div>
+                    </div>
+                `;
+            }
+
+            const strategyBox = document.getElementById('remediation-strategy-box');
+            if (remediationStrategyHTML !== '') {
+                strategyBox.innerHTML = remediationStrategyHTML;
+            } else {
+                strategyBox.innerHTML = `
+                    <div class="plan-item" style="border-left: 4px solid var(--success);">
+                        <div class="plan-topic" style="color: var(--success);">Remediation Not Required</div>
+                        <div class="plan-details">Excellent retention metrics. Maintain your study routine to preserve performance high levels.</div>
+                    </div>
+                `;
+            }
+
+            if (generalAccuracy >= 70) {
+                triggerConfettiAnimation();
+            }
+        }
+
+        /* --- CONFETTI ANIMATION ENGINE --- */
+        function triggerConfettiAnimation() {
+            const canvas = document.getElementById('confetti-layer');
+            const ctx = canvas.getContext('2d');
+            
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+            
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }, { passive: true });
+
+            const colors = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#06b6d4'];
+            let particles = [];
+
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height - height,
+                    r: Math.random() * 6 + 4,
+                    d: Math.random() * height,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.random() * 10 - 5,
+                    tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+                    tiltAngle: 0
+                });
+            }
+
+            let durationCounter = 0;
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                
+                particles.forEach((p, idx) => {
+                    p.tiltAngle += p.tiltAngleIncremental;
+                    p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                    p.x += Math.sin(p.tiltAngle);
+                    p.tilt = Math.sin(p.tiltAngle - idx / 3) * 15;
+
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r;
+                    ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                    ctx.stroke();
+
+                    if (p.y > height) {
+                        particles[idx] = {
+                            x: Math.random() * width,
+                            y: -20,
+                            r: p.r,
+                            d: p.d,
+                            color: p.color,
+                            tilt: p.tilt,
+                            tiltAngleIncremental: p.tiltAngleIncremental,
+                            tiltAngle: p.tiltAngle
+                        };
+                    }
+                });
+
+                durationCounter++;
+                if (durationCounter < 250) { 
+                    requestAnimationFrame(draw);
+                } else {
+                    ctx.clearRect(0, 0, width, height);
+                }
+            }
+            draw();
+        }
+    </script>
+</body>
+</html>
