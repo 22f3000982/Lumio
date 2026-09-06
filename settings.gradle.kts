@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "VidyaSetu 10"
+rootProject.name = "Lumio"
 include(":app")

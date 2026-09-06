@@ -32,6 +32,7 @@
         android:pathData="M16,14 A2.5,2.5 0 0,1 21,14 L21,29 Q21,31 23,31 L32,31 A2.5,2.5 0 0,1 32,36 L22,36 Q16,36 16,30 Z" />
 
     <!-- 4-Point Radiant Light Spark (Warm Golden) -->
+    <!-- Center at (28, 20), tips extend 6 units -->
     <path
         android:fillColor="#FACC15"
         android:pathData="M28,14 Q28,20 34,20 Q28,20 28,26 Q28,20 22,20 Q28,20 28,14 Z" />
@@ -46,4 +47,3 @@
         android:fillColor="#FDE047"
         android:pathData="M34,13.5 Q34,15 35.5,15 Q34,15 34,16.5 Q34,15 32.5,15 Q34,15 34,13.5 Z" />
 </vector>
-

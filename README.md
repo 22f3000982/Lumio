@@ -1,14 +1,27 @@
-# VidyaSetu 10 (विद्यासेतु 10) - Version 2.0
+# Lumio (ल्यूमियो) - Class 10 Learning Suite
 
-A modern, offline-first native Android educational platform built for Class 10 students and educators. Developed with Kotlin and Jetpack Compose, **VidyaSetu 10** provides organized chapter resources, revision notes, daily practice problems (DPP), interactive offline MCQ tests, and full data management.
+A modern, minimal, offline-first native Android educational platform built for Class 10 students and educators. Developed with Kotlin and Jetpack Compose, **Lumio** provides organized chapter resources, 2026 revision notes, daily practice problems (DPP), interactive offline MCQ tests with timer and instant feedback, direct PDF uploads, and a comprehensive JSON backup/restore engine.
 
 ---
 
-## 📱 What's New in Version 2.0 (v2.0)
+## ✦ Brand Identity & Logo Design
 
-1. **Unique Branding & Identity**:
-   - Rebranded as **VidyaSetu 10** with custom vector logo and adaptive launcher icon.
-   - Elegant dark/light Material Design 3 theme with smooth animated transitions.
+- **App Name**: **Lumio**
+- **Icon Symbol**: Stylized, modern rounded flat **"L"** combined with a radiant, soft-glowing **light beam & 4-point spark (`✦`)**.
+- **Visual Style**: Minimal, flat geometry with smooth rounded terminals and subtle, translucent luminescence.
+- **Color Palette**:
+  - Background: Deep midnight navy / indigo canvas (`#090D1E`, `#121833`, `#1B234B`).
+  - Letterform: Crisp, modern rounded pure white (`#FFFFFF`).
+  - Glow & Spark: Warm golden-yellow flare (`#FACC15`, `#FDE047`) with a radiant warm-white core (`#FFFFFF`).
+- **Wordmark**: Clean, modern rounded sans-serif wordmark with balanced letter spacing.
+- **Design Persona**: Intelligent, youthful, and premium — avoiding childish cartoonish clip-art in favor of high-end, clean architectural minimalism.
+
+---
+
+## 📱 Core Features
+
+1. **Intelligent Curriculum Organization**:
+   - Filter materials by All, Notes, PYQ, and Chapters with search indexing.
 2. **Direct PDF Upload & Drive Link Support**:
    - Teachers can either provide a Google Drive link **OR** upload PDF files directly from phone storage.
    - Uploaded PDFs are stored in the app's internal sandboxed directory and opened seamlessly via Android's native `FileProvider`.
@@ -17,15 +30,16 @@ A modern, offline-first native Android educational platform built for Class 10 s
    - Restore database anytime from any saved JSON backup file.
    - One-tap reset to original default curriculum.
 4. **Secure Admin Login**:
-   - Fixed password visibility during admin login; added a toggleable show/hide eye icon. Default admin password is `4129`.
-5. **Database Upgrade to Schema v2**:
-   - Enhanced Room database with multi-format attachments and complete DAO controls.
+   - Masked password input with toggleable show/hide eye icon. Default admin password is `4129`.
+5. **Interactive Offline MCQ Quizzes**:
+   - 7 full chapter tests covering Electricity, Light Reflection/Refraction, and Human Eye with immediate scoring and step-by-step explanations.
 
 ---
 
 ## 🗄️ Database Architecture & Usage (डेटाबेस का पूरा विवरण)
 
-VidyaSetu 10 uses **Android Jetpack Room** over an embedded **SQLite** engine. Below is a detailed breakdown of how and why the database is used:
+Lumio uses **Android Jetpack Room** over an embedded **SQLite** engine:
+
 
 ### 1. Which Database Engine is Used?
 - **Core Engine:** **SQLite** (the industry-standard ACID-compliant relational SQL engine built into Android OS).

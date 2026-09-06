@@ -30,7 +30,7 @@ object BackupManager {
             val owner = database.ownerInfoDao().getOwnerInfoDirect()
 
             val rootJson = JSONObject()
-            rootJson.put("appName", "VidyaSetu 10")
+            rootJson.put("appName", "Lumio")
             rootJson.put("version", 2)
             rootJson.put("exportDate", SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()))
 

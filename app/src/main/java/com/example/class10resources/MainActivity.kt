@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.class10resources.data.model.McqQuizItem
 import com.example.class10resources.ui.MainViewModel
@@ -73,30 +74,32 @@ class MainActivity : ComponentActivity() {
                                     title = {
                                         Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                                             Icon(
-                                                painter = androidx.compose.ui.res.painterResource(R.drawable.ic_vidyasetu_logo),
-                                                contentDescription = "VidyaSetu Logo",
-                                                modifier = Modifier.size(28.dp),
+                                                painter = androidx.compose.ui.res.painterResource(R.drawable.ic_lumio_logo),
+                                                contentDescription = "Lumio Logo",
+                                                modifier = Modifier.size(32.dp),
                                                 tint = androidx.compose.ui.graphics.Color.Unspecified
                                             )
-                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Spacer(modifier = Modifier.width(10.dp))
                                             Column {
                                                 Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                                                     Text(
-                                                        text = "VidyaSetu 10",
+                                                        text = "Lumio",
                                                         fontWeight = FontWeight.Bold,
-                                                        style = MaterialTheme.typography.titleMedium
+                                                        style = MaterialTheme.typography.titleLarge.copy(
+                                                            letterSpacing = 0.5.sp
+                                                        )
                                                     )
                                                     Spacer(modifier = Modifier.width(6.dp))
                                                     Surface(
-                                                        color = MaterialTheme.colorScheme.primaryContainer,
-                                                        shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                                                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
+                                                        shape = androidx.compose.foundation.shape.RoundedCornerShape(6.dp)
                                                     ) {
                                                         Text(
-                                                            text = "v2.0",
+                                                            text = "Class 10",
                                                             style = MaterialTheme.typography.labelSmall,
                                                             color = MaterialTheme.colorScheme.primary,
-                                                            fontWeight = FontWeight.Bold,
-                                                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                                                            fontWeight = FontWeight.SemiBold,
+                                                            modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
                                                         )
                                                     }
                                                 }
@@ -106,7 +109,7 @@ class MainActivity : ComponentActivity() {
                                                         1 -> "2026 Batch Notes"
                                                         2 -> "Daily Practice (DPP)"
                                                         3 -> "Practice MCQs"
-                                                        else -> "Teacher & System Data"
+                                                        else -> "Educator & System"
                                                     },
                                                     style = MaterialTheme.typography.labelSmall,
                                                     color = MaterialTheme.colorScheme.onSurfaceVariant

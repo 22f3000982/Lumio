@@ -379,7 +379,7 @@ fun AboutOwnerScreen(
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = "VidyaSetu 10 uses an embedded SQLite database powered by Android Jetpack Room. All resources, DPPs, tests, and uploaded PDFs are stored locally on your device with full offline capability.",
+                    text = "Lumio uses an embedded SQLite database powered by Android Jetpack Room. All resources, DPPs, tests, and uploaded PDFs are stored locally on your device with full offline capability.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

@@ -730,7 +730,7 @@ fun BackupRestoreDialog(
                         Button(
                             onClick = {
                                 val timestamp = System.currentTimeMillis()
-                                createBackupLauncher.launch("VidyaSetu10_Backup_$timestamp.json")
+                                createBackupLauncher.launch("Lumio_Backup_$timestamp.json")
                             },
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -756,7 +756,7 @@ fun BackupRestoreDialog(
                         }
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            "Restores content from a previously generated VidyaSetu backup JSON.",
+                            "Restores content from a previously generated Lumio backup JSON.",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
