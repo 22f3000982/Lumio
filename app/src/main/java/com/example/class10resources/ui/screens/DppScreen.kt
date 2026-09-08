@@ -285,7 +285,7 @@ fun DppScreen(
     if (showAddDialog) {
         AddEditDppDialog(
             onDismiss = { showAddDialog = false },
-            onConfirm = { title, link, filename ->
+            onConfirm = { title, link, filename, _ ->
                 onAddDpp(title, link, filename)
                 showAddDialog = false
             }
@@ -296,8 +296,8 @@ fun DppScreen(
         AddEditDppDialog(
             initialDpp = dpp,
             onDismiss = { dppToEdit = null },
-            onConfirm = { title, link, filename ->
-                onEditDpp(dpp.copy(title = title, driveLink = link, filename = filename))
+            onConfirm = { title, link, filename, subject ->
+                onEditDpp(dpp.copy(title = title, driveLink = link, filename = filename, subject = subject))
                 dppToEdit = null
             }
         )

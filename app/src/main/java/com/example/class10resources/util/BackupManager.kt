@@ -27,12 +27,28 @@ object BackupManager {
             val notes = database.note2026Dao().getAllNotesList()
             val dpps = database.dppDao().getAllDppsList()
             val quizzes = database.mcqQuizDao().getAllQuizzesList()
+            val subjects = database.subjectDao().getAllSubjectsList()
             val owner = database.ownerInfoDao().getOwnerInfoDirect()
 
             val rootJson = JSONObject()
             rootJson.put("appName", "Lumio")
-            rootJson.put("version", 2)
+            rootJson.put("version", 3)
             rootJson.put("exportDate", SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()))
+
+            // Subjects
+            val subjArray = JSONArray()
+            subjects.forEach { item ->
+                val obj = JSONObject()
+                obj.put("id", item.id)
+                obj.put("name", item.name)
+                obj.put("description", item.description)
+                obj.put("iconType", item.iconType)
+                obj.put("colorHex", item.colorHex)
+                obj.put("chapters", item.chapters)
+                obj.put("displayOrder", item.displayOrder)
+                subjArray.put(obj)
+            }
+            rootJson.put("subjects", subjArray)
 
             // Resources
             val resArray = JSONArray()
@@ -42,6 +58,7 @@ object BackupManager {
                 obj.put("name", item.name)
                 obj.put("link", item.link ?: "")
                 obj.put("filename", item.filename ?: "")
+                obj.put("subject", item.subject)
                 obj.put("createdAt", item.createdAt)
                 resArray.put(obj)
             }
@@ -55,6 +72,7 @@ object BackupManager {
                 obj.put("name", item.name)
                 obj.put("link", item.link ?: "")
                 obj.put("filename", item.filename ?: "")
+                obj.put("subject", item.subject)
                 obj.put("createdAt", item.createdAt)
                 notesArray.put(obj)
             }
@@ -68,6 +86,7 @@ object BackupManager {
                 obj.put("title", item.title)
                 obj.put("driveLink", item.driveLink)
                 obj.put("filename", item.filename ?: "")
+                obj.put("subject", item.subject)
                 obj.put("createdAt", item.createdAt)
                 dppArray.put(obj)
             }
@@ -82,6 +101,7 @@ object BackupManager {
                 obj.put("details", item.details ?: "")
                 obj.put("filename", item.filename)
                 obj.put("fileType", item.fileType)
+                obj.put("subject", item.subject)
                 obj.put("createdAt", item.createdAt)
                 quizArray.put(obj)
             }
@@ -93,7 +113,6 @@ object BackupManager {
                 ownerObj.put("name", owner.name)
                 ownerObj.put("description", owner.description)
                 ownerObj.put("contact", owner.contact)
-                ownerObj.put("telegramLink", owner.telegramLink)
                 ownerObj.put("instagramLink", owner.instagramLink)
                 ownerObj.put("mcqLink", owner.mcqLink)
                 rootJson.put("owner", ownerObj)
@@ -105,7 +124,7 @@ object BackupManager {
                 }
             }
 
-            Result.success("Exported ${resources.size} resources, ${notes.size} notes, ${dpps.size} DPPs, and ${quizzes.size} quizzes successfully!")
+            Result.success("Exported ${subjects.size} subjects, ${resources.size} resources, ${notes.size} notes, ${dpps.size} DPPs, and ${quizzes.size} quizzes successfully!")
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e)
@@ -134,6 +153,26 @@ object BackupManager {
 
             val rootJson = JSONObject(jsonString.toString())
 
+            // Parse Subjects
+            val subjList = mutableListOf<SubjectItem>()
+            if (rootJson.has("subjects")) {
+                val array = rootJson.getJSONArray("subjects")
+                for (i in 0 until array.length()) {
+                    val obj = array.getJSONObject(i)
+                    subjList.add(
+                        SubjectItem(
+                            id = if (obj.has("id")) obj.getLong("id") else 0,
+                            name = obj.optString("name", "Subject"),
+                            description = obj.optString("description", ""),
+                            iconType = obj.optString("iconType", "physics"),
+                            colorHex = obj.optString("colorHex", "#2563EB"),
+                            chapters = obj.optString("chapters", ""),
+                            displayOrder = obj.optInt("displayOrder", 0)
+                        )
+                    )
+                }
+            }
+
             // Parse Resources
             val resList = mutableListOf<ResourceItem>()
             if (rootJson.has("resources")) {
@@ -146,6 +185,7 @@ object BackupManager {
                             name = obj.optString("name", "Resource"),
                             link = obj.optString("link").ifBlank { null },
                             filename = obj.optString("filename").ifBlank { null },
+                            subject = obj.optString("subject", "Physics"),
                             createdAt = obj.optString("createdAt", "2026-09-06")
                         )
                     )
@@ -164,6 +204,7 @@ object BackupManager {
                             name = obj.optString("name", "Note"),
                             link = obj.optString("link").ifBlank { null },
                             filename = obj.optString("filename").ifBlank { null },
+                            subject = obj.optString("subject", "Physics"),
                             createdAt = obj.optString("createdAt", "2026-09-06")
                         )
                     )
@@ -182,6 +223,7 @@ object BackupManager {
                             title = obj.optString("title", "DPP"),
                             driveLink = obj.optString("driveLink", ""),
                             filename = obj.optString("filename").ifBlank { null },
+                            subject = obj.optString("subject", "Physics"),
                             createdAt = obj.optString("createdAt", "2026-09-06")
                         )
                     )
@@ -201,6 +243,7 @@ object BackupManager {
                             details = obj.optString("details").ifBlank { null },
                             filename = obj.optString("filename", ""),
                             fileType = obj.optString("fileType", "json"),
+                            subject = obj.optString("subject", "Physics"),
                             createdAt = obj.optString("createdAt", "2026-09-06")
                         )
                     )
@@ -208,6 +251,11 @@ object BackupManager {
             }
 
             // Replace data in Room database
+            if (subjList.isNotEmpty()) {
+                database.subjectDao().deleteAll()
+                database.subjectDao().insertAll(subjList)
+            }
+
             if (resList.isNotEmpty()) {
                 database.resourceDao().deleteAll()
                 database.resourceDao().insertAll(resList)
@@ -237,21 +285,19 @@ object BackupManager {
                     description = "",
                     contact = "",
                     photoFilename = "mee.jpeg",
-                    telegramLink = "",
-                    instagramLink = "",
+                    instagramLink = "https://www.instagram.com/ashraj7777/",
                     mcqLink = ""
                 )).copy(
                     name = ownerObj.optString("name", current?.name ?: "Ashish Maurya"),
                     description = ownerObj.optString("description", current?.description ?: ""),
                     contact = ownerObj.optString("contact", current?.contact ?: ""),
-                    telegramLink = ownerObj.optString("telegramLink", current?.telegramLink ?: ""),
-                    instagramLink = ownerObj.optString("instagramLink", current?.instagramLink ?: ""),
+                    instagramLink = ownerObj.optString("instagramLink", current?.instagramLink ?: "https://www.instagram.com/ashraj7777/"),
                     mcqLink = ownerObj.optString("mcqLink", current?.mcqLink ?: "")
                 )
                 database.ownerInfoDao().insertOrUpdate(updated)
             }
 
-            Result.success("Backup Restored: ${resList.size} resources, ${notesList.size} notes, ${dppList.size} DPPs, ${quizList.size} quizzes!")
+            Result.success("Backup Restored: ${subjList.size} subjects, ${resList.size} resources, ${notesList.size} notes, ${dppList.size} DPPs, ${quizList.size} quizzes!")
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e)

@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.class10resources.data.model.McqQuizItem
+import com.example.class10resources.ui.components.AddEditQuizDialog
 import com.example.class10resources.ui.theme.AccentMcq
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,10 +28,14 @@ fun PracticeMcqScreen(
     quizzes: List<McqQuizItem>,
     isAdmin: Boolean,
     onStartQuiz: (McqQuizItem) -> Unit,
+    onAddQuiz: (title: String, details: String?, filename: String, fileType: String, subject: String) -> Unit = { _, _, _, _, _ -> },
+    onEditQuiz: (McqQuizItem) -> Unit = {},
     onDeleteQuiz: (Long) -> Unit
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedChapter by remember { mutableStateOf("All") }
+    var showAddDialog by remember { mutableStateOf(false) }
+    var editingQuiz by remember { mutableStateOf<McqQuizItem?>(null) }
 
     val filteredQuizzes = remember(quizzes, searchQuery, selectedChapter) {
         quizzes.filter { quiz ->
@@ -47,7 +52,20 @@ fun PracticeMcqScreen(
         }
     }
 
-    Scaffold { innerPadding ->
+    Scaffold(
+        floatingActionButton = {
+            if (isAdmin) {
+                FloatingActionButton(
+                    onClick = { showAddDialog = true },
+                    containerColor = AccentMcq,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.testTag("add_quiz_fab")
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = "Add Quiz")
+                }
+            }
+        }
+    ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -232,21 +250,55 @@ fun PracticeMcqScreen(
 
                         if (isAdmin) {
                             Spacer(modifier = Modifier.height(8.dp))
-                            OutlinedButton(
-                                onClick = { onDeleteQuiz(quiz.id) },
-                                colors = ButtonDefaults.outlinedButtonColors(
-                                    contentColor = MaterialTheme.colorScheme.error
-                                ),
-                                modifier = Modifier.fillMaxWidth()
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(16.dp))
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text("Delete Quiz")
+                                OutlinedButton(
+                                    onClick = { editingQuiz = quiz },
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Icon(Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text("Edit")
+                                }
+                                OutlinedButton(
+                                    onClick = { onDeleteQuiz(quiz.id) },
+                                    colors = ButtonDefaults.outlinedButtonColors(
+                                        contentColor = MaterialTheme.colorScheme.error
+                                    ),
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text("Delete")
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    if (showAddDialog) {
+        AddEditQuizDialog(
+            onDismiss = { showAddDialog = false },
+            onConfirm = { title, details, filename, fileType, subject ->
+                onAddQuiz(title, details, filename, fileType, subject)
+                showAddDialog = false
+            }
+        )
+    }
+
+    editingQuiz?.let { quiz ->
+        AddEditQuizDialog(
+            initialQuiz = quiz,
+            onDismiss = { editingQuiz = null },
+            onConfirm = { title, details, filename, fileType, subject ->
+                onEditQuiz(quiz.copy(title = title, details = details, filename = filename, fileType = fileType, subject = subject))
+                editingQuiz = null
+            }
+        )
     }
 }

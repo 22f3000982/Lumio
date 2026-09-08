@@ -117,22 +117,23 @@ fun ResourcesScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        // Telegram Button
+                        // Instagram Button
                         Button(
                             onClick = {
-                                val link = ownerInfo?.telegramLink ?: "https://t.me/chaipe_charcha"
+                                val link = ownerInfo?.instagramLink?.ifBlank { "https://www.instagram.com/ashraj7777/" }
+                                    ?: "https://www.instagram.com/ashraj7777/"
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
                                 context.startActivity(intent)
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = AccentTelegram),
+                            colors = ButtonDefaults.buttonColors(containerColor = AccentInstagram),
                             modifier = Modifier
                                 .weight(1f)
                                 .height(44.dp)
-                                .testTag("btn_telegram")
+                                .testTag("btn_instagram")
                         ) {
-                            Icon(Icons.Default.Send, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Icon(Icons.Default.CameraAlt, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text("Telegram", style = MaterialTheme.typography.labelMedium)
+                            Text("Instagram", style = MaterialTheme.typography.labelMedium)
                         }
 
                         // Share Button
@@ -478,7 +479,7 @@ fun ResourcesScreen(
     if (showAddDialog) {
         AddEditResourceDialog(
             onDismiss = { showAddDialog = false },
-            onConfirm = { name, link, filename ->
+            onConfirm = { name, link, filename, _ ->
                 onAddResource(name, link, filename)
                 showAddDialog = false
             }
@@ -489,8 +490,8 @@ fun ResourcesScreen(
         AddEditResourceDialog(
             initialResource = resource,
             onDismiss = { resourceToEdit = null },
-            onConfirm = { name, link, filename ->
-                onEditResource(resource.copy(name = name, link = link, filename = filename))
+            onConfirm = { name, link, filename, subject ->
+                onEditResource(resource.copy(name = name, link = link, filename = filename, subject = subject))
                 resourceToEdit = null
             }
         )

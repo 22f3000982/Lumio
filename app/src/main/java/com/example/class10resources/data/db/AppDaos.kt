@@ -138,3 +138,65 @@ interface OwnerInfoDao {
     @Query("SELECT COUNT(*) FROM owner_info")
     suspend fun getCount(): Int
 }
+
+@Dao
+interface SubjectDao {
+    @Query("SELECT * FROM subjects ORDER BY displayOrder ASC, id ASC")
+    fun getAllSubjects(): Flow<List<SubjectItem>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSubject(subject: SubjectItem): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(subjects: List<SubjectItem>)
+
+    @Update
+    suspend fun updateSubject(subject: SubjectItem)
+
+    @Delete
+    suspend fun deleteSubject(subject: SubjectItem)
+
+    @Query("DELETE FROM subjects WHERE id = :id")
+    suspend fun deleteById(id: Long): Int
+
+    @Query("DELETE FROM subjects")
+    suspend fun deleteAll(): Int
+
+    @Query("SELECT * FROM subjects ORDER BY displayOrder ASC, id ASC")
+    suspend fun getAllSubjectsList(): List<SubjectItem>
+
+    @Query("SELECT COUNT(*) FROM subjects")
+    suspend fun getCount(): Int
+}
+
+@Dao
+interface PyqDao {
+    @Query("SELECT * FROM pyqs ORDER BY year DESC, id DESC")
+    fun getAllPyqs(): Flow<List<PyqItem>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPyq(pyq: PyqItem): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(pyqs: List<PyqItem>)
+
+    @Update
+    suspend fun updatePyq(pyq: PyqItem)
+
+    @Delete
+    suspend fun deletePyq(pyq: PyqItem)
+
+    @Query("DELETE FROM pyqs WHERE id = :id")
+    suspend fun deleteById(id: Long): Int
+
+    @Query("DELETE FROM pyqs")
+    suspend fun deleteAll(): Int
+
+    @Query("SELECT * FROM pyqs ORDER BY year DESC, id DESC")
+    suspend fun getAllPyqsList(): List<PyqItem>
+
+    @Query("SELECT COUNT(*) FROM pyqs")
+    suspend fun getCount(): Int
+}
+
+

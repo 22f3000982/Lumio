@@ -264,7 +264,7 @@ fun Notes2026Screen(
     if (showAddDialog) {
         AddEditNoteDialog(
             onDismiss = { showAddDialog = false },
-            onConfirm = { name, link, filename ->
+            onConfirm = { name, link, filename, _ ->
                 onAddNote(name, link, filename)
                 showAddDialog = false
             }
@@ -275,8 +275,8 @@ fun Notes2026Screen(
         AddEditNoteDialog(
             initialNote = note,
             onDismiss = { noteToEdit = null },
-            onConfirm = { name, link, filename ->
-                onEditNote(note.copy(name = name, link = link, filename = filename))
+            onConfirm = { name, link, filename, subject ->
+                onEditNote(note.copy(name = name, link = link, filename = filename, subject = subject))
                 noteToEdit = null
             }
         )

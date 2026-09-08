@@ -3,6 +3,7 @@ package com.example.class10resources
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -13,6 +14,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -25,9 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.class10resources.data.model.McqQuizItem
+import com.example.class10resources.data.model.SubjectItem
 import com.example.class10resources.ui.MainViewModel
 import com.example.class10resources.ui.components.AdminLoginDialog
+import com.example.class10resources.ui.components.LumioIcon
+import com.example.class10resources.ui.components.ShareAppDialog
 import com.example.class10resources.ui.screens.*
+import com.example.class10resources.ui.theme.AccentSuccess
 import com.example.class10resources.ui.theme.Class10ResourcesTheme
 
 class MainActivity : ComponentActivity() {
@@ -42,19 +48,38 @@ class MainActivity : ComponentActivity() {
             val systemDark = isSystemInDarkTheme()
             var isDarkMode by remember { mutableStateOf(systemDark) }
 
-            val resources by viewModel.resources.collectAsStateWithLifecycle()
+            val subjects by viewModel.subjects.collectAsStateWithLifecycle()
             val notes by viewModel.notes.collectAsStateWithLifecycle()
             val dpps by viewModel.dpps.collectAsStateWithLifecycle()
             val quizzes by viewModel.quizzes.collectAsStateWithLifecycle()
+            val pyqs by viewModel.pyqs.collectAsStateWithLifecycle()
             val ownerInfo by viewModel.ownerInfo.collectAsStateWithLifecycle()
             val isAdmin by viewModel.isAdmin.collectAsStateWithLifecycle()
+            val isFirebaseConnected by viewModel.isFirebaseConnected.collectAsStateWithLifecycle()
+            val isFirebaseSyncing by viewModel.isFirebaseSyncing.collectAsStateWithLifecycle()
+            val firebaseStatusMessage by viewModel.firebaseStatusMessage.collectAsStateWithLifecycle()
+            val firebaseConfig by viewModel.firebaseConfig.collectAsStateWithLifecycle()
+            val appDownloadUrl by viewModel.appDownloadUrl.collectAsStateWithLifecycle()
 
             var selectedTab by remember { mutableIntStateOf(0) }
+            var activeSubject by remember { mutableStateOf<Pair<SubjectItem, String?>?>(null) }
             var activeQuiz by remember { mutableStateOf<McqQuizItem?>(null) }
+            var showOwnerScreen by remember { mutableStateOf(false) }
             var showLoginDialog by remember { mutableStateOf(false) }
+            var showShareDialog by remember { mutableStateOf(false) }
             var loginErrorMessage by remember { mutableStateOf<String?>(null) }
 
             val context = LocalContext.current
+
+            // Prevent direct app closure on system back press; navigate back within app hierarchy
+            BackHandler(enabled = activeQuiz != null || activeSubject != null || showOwnerScreen || selectedTab != 0) {
+                when {
+                    activeQuiz != null -> activeQuiz = null
+                    activeSubject != null -> activeSubject = null
+                    showOwnerScreen -> showOwnerScreen = false
+                    selectedTab != 0 -> selectedTab = 0
+                }
+            }
 
             Class10ResourcesTheme(darkTheme = isDarkMode) {
                 Surface(
@@ -66,6 +91,131 @@ class MainActivity : ComponentActivity() {
                             quiz = activeQuiz!!,
                             onBack = { activeQuiz = null }
                         )
+                    } else if (activeSubject != null) {
+                        SubjectDetailScreen(
+                            subject = activeSubject!!.first,
+                            allSubjects = subjects,
+                            notes = notes,
+                            dpps = dpps,
+                            quizzes = quizzes,
+                            pyqs = pyqs,
+                            initialChapterFilter = activeSubject!!.second,
+                            isAdmin = isAdmin,
+                            onBack = { activeSubject = null },
+                            onStartQuiz = { quiz -> activeQuiz = quiz },
+                            onAddNote = { name, link, filename, subj ->
+                                viewModel.addNote(name, link, filename, subj)
+                            },
+                            onUpdateNote = { note -> viewModel.updateNote(note) },
+                            onDeleteNote = { id -> viewModel.deleteNote(id) },
+                            onAddDpp = { title, link, filename, subj ->
+                                viewModel.addDpp(title, link, filename, subj)
+                            },
+                            onUpdateDpp = { dpp -> viewModel.updateDpp(dpp) },
+                            onDeleteDpp = { id -> viewModel.deleteDpp(id) },
+                            onAddQuiz = { title, details, filename, fileType, subj ->
+                                viewModel.addQuiz(title, details, filename, fileType, subj)
+                            },
+                            onUpdateQuiz = { quiz -> viewModel.updateQuiz(quiz) },
+                            onDeleteQuiz = { id -> viewModel.deleteQuiz(id) },
+                            onAddPyq = { title, year, link, filename, subj, chapter ->
+                                viewModel.addPyq(title, year, link, filename, subj, chapter)
+                            },
+                            onUpdatePyq = { pyq -> viewModel.updatePyq(pyq) },
+                            onDeletePyq = { id -> viewModel.deletePyq(id) }
+                        )
+                    } else if (showOwnerScreen) {
+                        Scaffold(
+                            topBar = {
+                                TopAppBar(
+                                    title = {
+                                        Column {
+                                            Text("Educator Profile", fontWeight = FontWeight.Bold)
+                                            Text(
+                                                "Ashish Maurya • System & Backup",
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    },
+                                    navigationIcon = {
+                                        IconButton(onClick = { showOwnerScreen = false }) {
+                                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                                        }
+                                    },
+                                    colors = TopAppBarDefaults.topAppBarColors(
+                                        containerColor = MaterialTheme.colorScheme.surface
+                                    )
+                                )
+                            }
+                        ) { innerPadding ->
+                            Box(modifier = Modifier.padding(innerPadding)) {
+                                AboutOwnerScreen(
+                                    ownerInfo = ownerInfo,
+                                    isAdmin = isAdmin,
+                                    onSaveOwner = { updated ->
+                                        viewModel.updateOwner(updated)
+                                    },
+                                    onLoginClick = {
+                                        loginErrorMessage = null
+                                        showLoginDialog = true
+                                    },
+                                    onLogoutClick = {
+                                        viewModel.logoutAdmin()
+                                        Toast.makeText(context, "Logged out of Admin mode", Toast.LENGTH_SHORT).show()
+                                    },
+                                    onExportBackup = { uri ->
+                                        viewModel.exportBackup(uri) { res ->
+                                            val msg = res.getOrElse { it.message ?: "Export failed" }
+                                            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                                        }
+                                    },
+                                    onRestoreBackup = { uri ->
+                                        viewModel.restoreBackup(uri) { res ->
+                                            val msg = res.getOrElse { it.message ?: "Restore failed" }
+                                            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                                        }
+                                    },
+                                    onResetData = {
+                                        viewModel.resetData()
+                                        Toast.makeText(context, "Database restored to default content.", Toast.LENGTH_SHORT).show()
+                                    },
+                                    isFirebaseConnected = isFirebaseConnected,
+                                    isFirebaseSyncing = isFirebaseSyncing,
+                                    firebaseStatusMessage = firebaseStatusMessage,
+                                    firebaseConfig = firebaseConfig,
+                                    onConnectFirebase = { projId, key, bucket, app ->
+                                        val res = viewModel.connectFirebase(projId, key, bucket, app)
+                                        if (res.isSuccess) {
+                                            Toast.makeText(context, "Connected to Firebase project: $projId", Toast.LENGTH_SHORT).show()
+                                        } else {
+                                            Toast.makeText(context, "Connection failed: ${res.exceptionOrNull()?.message}", Toast.LENGTH_LONG).show()
+                                        }
+                                    },
+                                    onDisconnectFirebase = {
+                                        viewModel.disconnectFirebase()
+                                        Toast.makeText(context, "Disconnected from Firebase", Toast.LENGTH_SHORT).show()
+                                    },
+                                    onSyncFromCloud = {
+                                        Toast.makeText(context, "Syncing from cloud...", Toast.LENGTH_SHORT).show()
+                                        viewModel.syncFromCloud { res ->
+                                            val msg = res.getOrElse { it.message ?: "Sync completed" }
+                                            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                                        }
+                                    },
+                                    onSyncToCloud = {
+                                        Toast.makeText(context, "Pushing all materials to cloud...", Toast.LENGTH_SHORT).show()
+                                        viewModel.syncToCloud { res ->
+                                            val msg = res.getOrElse { it.message ?: "Sync completed" }
+                                            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                                        }
+                                    },
+                                    onShareApp = {
+                                        showShareDialog = true
+                                    }
+                                )
+                            }
+                        }
                     } else {
                         Scaffold(
                             modifier = Modifier.fillMaxSize(),
@@ -73,11 +223,9 @@ class MainActivity : ComponentActivity() {
                                 TopAppBar(
                                     title = {
                                         Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                                            Icon(
-                                                painter = androidx.compose.ui.res.painterResource(R.drawable.ic_lumio_logo),
-                                                contentDescription = "Lumio Logo",
-                                                modifier = Modifier.size(32.dp),
-                                                tint = androidx.compose.ui.graphics.Color.Unspecified
+                                            LumioIcon(
+                                                size = 32.dp,
+                                                modifier = Modifier.testTag("app_logo_lumio")
                                             )
                                             Spacer(modifier = Modifier.width(10.dp))
                                             Column {
@@ -105,11 +253,12 @@ class MainActivity : ComponentActivity() {
                                                 }
                                                 Text(
                                                     text = when (selectedTab) {
-                                                        0 -> "Study Resources"
+                                                        0 -> "Subjects Hub"
                                                         1 -> "2026 Batch Notes"
                                                         2 -> "Daily Practice (DPP)"
                                                         3 -> "Practice MCQs"
-                                                        else -> "Educator & System"
+                                                        4 -> "Previous Year Questions"
+                                                        else -> "Lumio Learning"
                                                     },
                                                     style = MaterialTheme.typography.labelSmall,
                                                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -118,6 +267,43 @@ class MainActivity : ComponentActivity() {
                                         }
                                     },
                                     actions = {
+                                        // Cloud Sync status - only visible to admin
+                                        if (isAdmin) {
+                                            IconButton(
+                                                onClick = { showOwnerScreen = true },
+                                                modifier = Modifier.testTag("cloud_status_button")
+                                            ) {
+                                                Icon(
+                                                    imageVector = if (isFirebaseConnected) Icons.Default.CloudDone else Icons.Default.CloudQueue,
+                                                    contentDescription = if (isFirebaseConnected) "Cloud Synced" else "Cloud Setup",
+                                                    tint = if (isFirebaseConnected) AccentSuccess else MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
+                                            }
+                                        }
+
+                                        // Educator Profile action
+                                        IconButton(
+                                            onClick = { showOwnerScreen = true },
+                                            modifier = Modifier.testTag("educator_profile_action")
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Outlined.Person,
+                                                contentDescription = "Educator Profile"
+                                            )
+                                        }
+
+                                        // Direct Share App Action
+                                        IconButton(
+                                            onClick = { showShareDialog = true },
+                                            modifier = Modifier.testTag("topbar_share_app_action")
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Share,
+                                                contentDescription = "Share App with Students",
+                                                tint = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
+
                                         // Theme Toggle Button
                                         IconButton(
                                             onClick = { isDarkMode = !isDarkMode },
@@ -173,31 +359,40 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     NavigationBarItem(
                                         selected = selectedTab == 0,
-                                        onClick = { selectedTab = 0 },
+                                        onClick = {
+                                            selectedTab = 0
+                                            activeSubject = null
+                                        },
                                         icon = {
                                             Icon(
-                                                if (selectedTab == 0) Icons.Filled.MenuBook else Icons.Outlined.MenuBook,
-                                                contentDescription = "Resources"
+                                                if (selectedTab == 0) Icons.Filled.Dashboard else Icons.Outlined.Dashboard,
+                                                contentDescription = "Subjects"
                                             )
                                         },
-                                        label = { Text("Resources") },
-                                        modifier = Modifier.testTag("nav_resources")
+                                        label = { Text("Subjects") },
+                                        modifier = Modifier.testTag("nav_subjects")
                                     )
                                     NavigationBarItem(
                                         selected = selectedTab == 1,
-                                        onClick = { selectedTab = 1 },
+                                        onClick = {
+                                            selectedTab = 1
+                                            activeSubject = null
+                                        },
                                         icon = {
                                             Icon(
                                                 if (selectedTab == 1) Icons.Filled.Description else Icons.Outlined.Description,
-                                                contentDescription = "2026 Notes"
+                                                contentDescription = "Notes"
                                             )
                                         },
-                                        label = { Text("2026 Notes") },
+                                        label = { Text("Notes") },
                                         modifier = Modifier.testTag("nav_notes")
                                     )
                                     NavigationBarItem(
                                         selected = selectedTab == 2,
-                                        onClick = { selectedTab = 2 },
+                                        onClick = {
+                                            selectedTab = 2
+                                            activeSubject = null
+                                        },
                                         icon = {
                                             Icon(
                                                 if (selectedTab == 2) Icons.Filled.Assignment else Icons.Outlined.Assignment,
@@ -209,27 +404,33 @@ class MainActivity : ComponentActivity() {
                                     )
                                     NavigationBarItem(
                                         selected = selectedTab == 3,
-                                        onClick = { selectedTab = 3 },
+                                        onClick = {
+                                            selectedTab = 3
+                                            activeSubject = null
+                                        },
                                         icon = {
                                             Icon(
                                                 if (selectedTab == 3) Icons.Filled.Quiz else Icons.Outlined.Quiz,
-                                                contentDescription = "MCQs"
+                                                contentDescription = "Quiz"
                                             )
                                         },
-                                        label = { Text("MCQs") },
-                                        modifier = Modifier.testTag("nav_mcqs")
+                                        label = { Text("Quiz") },
+                                        modifier = Modifier.testTag("nav_quiz")
                                     )
                                     NavigationBarItem(
                                         selected = selectedTab == 4,
-                                        onClick = { selectedTab = 4 },
+                                        onClick = {
+                                            selectedTab = 4
+                                            activeSubject = null
+                                        },
                                         icon = {
                                             Icon(
-                                                if (selectedTab == 4) Icons.Filled.Person else Icons.Outlined.Person,
-                                                contentDescription = "Owner"
+                                                if (selectedTab == 4) Icons.Filled.School else Icons.Outlined.School,
+                                                contentDescription = "PYQ"
                                             )
                                         },
-                                        label = { Text("Owner") },
-                                        modifier = Modifier.testTag("nav_owner")
+                                        label = { Text("PYQ") },
+                                        modifier = Modifier.testTag("nav_pyq")
                                     )
                                 }
                             }
@@ -245,21 +446,29 @@ class MainActivity : ComponentActivity() {
                                     label = "tab_content"
                                 ) { tabIndex ->
                                     when (tabIndex) {
-                                        0 -> ResourcesScreen(
-                                            resources = resources,
+                                        0 -> SubjectsDashboardScreen(
+                                            subjects = subjects,
+                                            notes = notes,
+                                            dpps = dpps,
+                                            quizzes = quizzes,
+                                            pyqs = pyqs,
                                             ownerInfo = ownerInfo,
                                             isAdmin = isAdmin,
+                                            onSelectSubject = { subj, chapterFilter ->
+                                                activeSubject = Pair(subj, chapterFilter)
+                                            },
                                             onNavigateToDpp = { selectedTab = 2 },
                                             onNavigateToMcq = { selectedTab = 3 },
                                             onNavigateToNotes = { selectedTab = 1 },
-                                            onAddResource = { name, link, filename ->
-                                                viewModel.addResource(name, link, filename)
+                                            onNavigateToPyq = { selectedTab = 4 },
+                                            onAddSubject = { name, description, chapters, colorHex, iconType ->
+                                                viewModel.addSubject(name, description, chapters, colorHex, iconType)
                                             },
-                                            onEditResource = { resource ->
-                                                viewModel.updateResource(resource)
+                                            onDeleteSubject = { id ->
+                                                viewModel.deleteSubject(id)
                                             },
-                                            onDeleteResource = { id ->
-                                                viewModel.deleteResource(id)
+                                            onShareApp = {
+                                                showShareDialog = true
                                             }
                                         )
                                         1 -> Notes2026Screen(
@@ -294,39 +503,28 @@ class MainActivity : ComponentActivity() {
                                             onStartQuiz = { quiz ->
                                                 activeQuiz = quiz
                                             },
+                                            onAddQuiz = { title, details, filename, fileType, subj ->
+                                                viewModel.addQuiz(title, details, filename, fileType, subj)
+                                            },
+                                            onEditQuiz = { quiz ->
+                                                viewModel.updateQuiz(quiz)
+                                            },
                                             onDeleteQuiz = { id ->
                                                 viewModel.deleteQuiz(id)
                                             }
                                         )
-                                        4 -> AboutOwnerScreen(
-                                            ownerInfo = ownerInfo,
+                                        4 -> PyqScreen(
+                                            pyqs = pyqs,
+                                            subjects = subjects,
                                             isAdmin = isAdmin,
-                                            onSaveOwner = { updated ->
-                                                viewModel.updateOwner(updated)
+                                            onAddPyq = { title, year, link, filename, subj, chapter ->
+                                                viewModel.addPyq(title, year, link, filename, subj, chapter)
                                             },
-                                            onLoginClick = {
-                                                loginErrorMessage = null
-                                                showLoginDialog = true
+                                            onUpdatePyq = { pyq ->
+                                                viewModel.updatePyq(pyq)
                                             },
-                                            onLogoutClick = {
-                                                viewModel.logoutAdmin()
-                                                Toast.makeText(context, "Logged out of Admin mode", Toast.LENGTH_SHORT).show()
-                                            },
-                                            onExportBackup = { uri ->
-                                                viewModel.exportBackup(uri) { res ->
-                                                    val msg = res.getOrElse { it.message ?: "Export failed" }
-                                                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
-                                                }
-                                            },
-                                            onRestoreBackup = { uri ->
-                                                viewModel.restoreBackup(uri) { res ->
-                                                    val msg = res.getOrElse { it.message ?: "Restore failed" }
-                                                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
-                                                }
-                                            },
-                                            onResetData = {
-                                                viewModel.resetData()
-                                                Toast.makeText(context, "Database restored to default content.", Toast.LENGTH_SHORT).show()
+                                            onDeletePyq = { id ->
+                                                viewModel.deletePyq(id)
                                             }
                                         )
                                     }
@@ -352,6 +550,17 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                             errorMessage = loginErrorMessage
+                        )
+                    }
+
+                    if (showShareDialog) {
+                        ShareAppDialog(
+                            currentDownloadUrl = appDownloadUrl,
+                            isAdmin = isAdmin,
+                            onDismiss = { showShareDialog = false },
+                            onUpdateDownloadUrl = { newUrl ->
+                                viewModel.updateAppDownloadUrl(newUrl)
+                            }
                         )
                     }
                 }
