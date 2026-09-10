@@ -158,9 +158,12 @@ fun ShareAppDialog(
                                 color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.SemiBold
                             )
-                            if (isAdmin && !isEditing) {
+                            if (!isEditing) {
                                 TextButton(
-                                    onClick = { isEditing = true },
+                                    onClick = { 
+                                        editedUrl = activeUrl
+                                        isEditing = true 
+                                    },
                                     contentPadding = PaddingValues(horizontal = 6.dp, vertical = 2.dp),
                                     modifier = Modifier.height(28.dp)
                                 ) {
@@ -173,15 +176,30 @@ fun ShareAppDialog(
 
                         Spacer(modifier = Modifier.height(6.dp))
 
-                        if (isEditing && isAdmin) {
+                        if (isEditing) {
                             OutlinedTextField(
                                 value = editedUrl,
                                 onValueChange = { editedUrl = it },
-                                label = { Text("Paste Direct APK Link") },
-                                placeholder = { Text("https://drive.google.com/uc?export=download&id=...") },
+                                label = { Text("Paste GitHub / MediaFire / Direct APK Link") },
+                                placeholder = { Text("https://github.com/22f3000982/Lumio_/releases/download/...") },
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth()
                             )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                OutlinedButton(
+                                    onClick = {
+                                        editedUrl = "https://github.com/22f3000982/Lumio_/releases/download/v2.1/Lumio_Class10.apk"
+                                    },
+                                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
+                                    modifier = Modifier.height(30.dp)
+                                ) {
+                                    Text("Use GitHub v2.1 Link", fontSize = 11.sp)
+                                }
+                            }
                             Spacer(modifier = Modifier.height(8.dp))
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -201,9 +219,11 @@ fun ShareAppDialog(
                                         val fileId = cleaned.substringAfter("drive.google.com/file/d/").substringBefore("/")
                                         cleaned = "https://drive.google.com/uc?export=download&id=$fileId"
                                     }
-                                    onUpdateDownloadUrl(cleaned)
-                                    isEditing = false
-                                    Toast.makeText(context, "Direct APK Link saved!", Toast.LENGTH_SHORT).show()
+                                    if (cleaned.isNotBlank()) {
+                                        onUpdateDownloadUrl(cleaned)
+                                        isEditing = false
+                                        Toast.makeText(context, "New APK Download Link saved!", Toast.LENGTH_SHORT).show()
+                                    }
                                 }) {
                                     Text("Save Link")
                                 }

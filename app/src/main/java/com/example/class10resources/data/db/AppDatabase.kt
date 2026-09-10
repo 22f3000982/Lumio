@@ -38,36 +38,43 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context, scope: CoroutineScope): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+                var instance: AppDatabase? = null
+                val created = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "class10_resources.db"
                 )
                     .fallbackToDestructiveMigration(dropAllTables = true)
-                    .addCallback(DatabaseCallback(scope))
+                    .addCallback(DatabaseCallback(scope) { instance ?: INSTANCE })
                     .build()
-                INSTANCE = instance
-                instance
+                instance = created
+                INSTANCE = created
+                created
             }
         }
 
         private class DatabaseCallback(
-            private val scope: CoroutineScope
+            private val scope: CoroutineScope,
+            private val databaseProvider: () -> AppDatabase?
         ) : RoomDatabase.Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
-                INSTANCE?.let { database ->
-                    scope.launch(Dispatchers.IO) {
-                        populateInitialData(database)
+                scope.launch(Dispatchers.IO) {
+                    try {
+                        databaseProvider()?.let { populateInitialData(it) }
+                    } catch (e: Exception) {
+                        // Handled in repository init as well
                     }
                 }
             }
 
             override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
                 super.onDestructiveMigration(db)
-                INSTANCE?.let { database ->
-                    scope.launch(Dispatchers.IO) {
-                        populateInitialData(database)
+                scope.launch(Dispatchers.IO) {
+                    try {
+                        databaseProvider()?.let { populateInitialData(it) }
+                    } catch (e: Exception) {
+                        // Handled in repository init as well
                     }
                 }
             }
@@ -194,7 +201,7 @@ abstract class AppDatabase : RoomDatabase() {
             val initialOwner = OwnerInfo(
                 id = 1,
                 name = "Ashish Maurya",
-                description = "Class 10 Resource Manager | Pursuing BS in Data Science at IIT Madras | Web Developer & Physics Teacher | Passionate about technology and education",
+                description = "Physics Teacher & Educator | Pursuing BS in Data Science at IIT Madras | Full Stack & Web Developer | Dedicated to making Class 10 concepts intuitive, rigorous, and accessible.",
                 contact = "ashraj77777@gmail.com",
                 photoFilename = "mee.jpeg",
                 instagramLink = "https://www.instagram.com/ashraj7777/",

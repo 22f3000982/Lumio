@@ -21,17 +21,97 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val firebaseStatusMessage: StateFlow<String> = repository.firebaseSyncManager.statusMessage
     val firebaseConfig: StateFlow<FirebaseConfig?> = repository.firebaseSyncManager.config
 
+    val isAdmin: StateFlow<Boolean> = repository.isAdmin
+    val appDownloadUrl: StateFlow<String> = repository.appDownloadUrl
+    val appUpdateInfo: StateFlow<AppUpdateInfo?> = repository.appUpdateInfo
+    val isCheckingUpdate: StateFlow<Boolean> = repository.isCheckingUpdate
+    val versionStats: StateFlow<VersionStats> = repository.versionStats
+
+    val currentVersionName: String = repository.getCurrentVersionName()
+    val currentVersionCode: Int = repository.getCurrentVersionCode()
+
     init {
-        // Auto-fetch latest cloud materials on launch so all students get the latest updates
+        // Auto-fetch latest cloud materials & check for new app version updates on launch
         viewModelScope.launch {
             if (repository.firebaseSyncManager.isConnected.value) {
                 repository.firebaseSyncManager.syncFromCloud(repository.appDatabase)
+                repository.checkForAppUpdates()
             }
         }
     }
 
-    val isAdmin: StateFlow<Boolean> = repository.isAdmin
-    val appDownloadUrl: StateFlow<String> = repository.appDownloadUrl
+    fun checkForAppUpdates(onResult: ((String) -> Unit)? = null) {
+        viewModelScope.launch {
+            val status = repository.checkForAppUpdatesStatus()
+            onResult?.invoke(status)
+        }
+    }
+
+    fun previewUpdatePrompt() {
+        repository.previewUpdatePrompt()
+    }
+
+    fun dismissUpdatePrompt() {
+        repository.dismissUpdatePrompt()
+    }
+
+    fun publishNewVersion(
+        versionCode: Int,
+        versionName: String,
+        title: String,
+        notes: String,
+        downloadUrl: String,
+        forceUpdate: Boolean,
+        onComplete: (Result<Unit>) -> Unit
+    ) {
+        viewModelScope.launch {
+            val result = repository.publishNewVersion(
+                versionCode,
+                versionName,
+                title,
+                notes,
+                downloadUrl,
+                forceUpdate
+            )
+            onComplete(result)
+        }
+    }
+
+    fun triggerInstantUpdate(
+        versionCode: Int,
+        versionName: String,
+        title: String,
+        notes: String,
+        downloadUrl: String,
+        forceUpdate: Boolean,
+        onComplete: (Result<Unit>) -> Unit
+    ) {
+        viewModelScope.launch {
+            val result = repository.triggerInstantUpdate(
+                versionCode,
+                versionName,
+                title,
+                notes,
+                downloadUrl,
+                forceUpdate
+            )
+            onComplete(result)
+        }
+    }
+
+    fun setUpdateTriggerActive(active: Boolean, onComplete: (Result<Unit>) -> Unit = {}) {
+        viewModelScope.launch {
+            val result = repository.setUpdateTriggerActive(active)
+            repository.refreshVersionStats()
+            onComplete(result)
+        }
+    }
+
+    fun refreshVersionStats() {
+        viewModelScope.launch {
+            repository.refreshVersionStats()
+        }
+    }
 
     fun updateAppDownloadUrl(url: String) {
         repository.updateAppDownloadUrl(url)

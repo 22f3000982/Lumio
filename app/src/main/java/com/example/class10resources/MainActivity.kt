@@ -30,6 +30,7 @@ import com.example.class10resources.data.model.McqQuizItem
 import com.example.class10resources.data.model.SubjectItem
 import com.example.class10resources.ui.MainViewModel
 import com.example.class10resources.ui.components.AdminLoginDialog
+import com.example.class10resources.ui.components.AppUpdateDialog
 import com.example.class10resources.ui.components.LumioIcon
 import com.example.class10resources.ui.components.ShareAppDialog
 import com.example.class10resources.ui.screens.*
@@ -60,6 +61,9 @@ class MainActivity : ComponentActivity() {
             val firebaseStatusMessage by viewModel.firebaseStatusMessage.collectAsStateWithLifecycle()
             val firebaseConfig by viewModel.firebaseConfig.collectAsStateWithLifecycle()
             val appDownloadUrl by viewModel.appDownloadUrl.collectAsStateWithLifecycle()
+            val appUpdateInfo by viewModel.appUpdateInfo.collectAsStateWithLifecycle()
+            val isCheckingUpdate by viewModel.isCheckingUpdate.collectAsStateWithLifecycle()
+            val versionStats by viewModel.versionStats.collectAsStateWithLifecycle()
 
             var selectedTab by remember { mutableIntStateOf(0) }
             var activeSubject by remember { mutableStateOf<Pair<SubjectItem, String?>?>(null) }
@@ -212,6 +216,40 @@ class MainActivity : ComponentActivity() {
                                     },
                                     onShareApp = {
                                         showShareDialog = true
+                                    },
+                                    currentVersionCode = viewModel.currentVersionCode,
+                                    currentVersionName = viewModel.currentVersionName,
+                                    currentDownloadUrl = appDownloadUrl,
+                                    appUpdateInfo = appUpdateInfo,
+                                    versionStats = versionStats,
+                                    onRefreshStats = { viewModel.refreshVersionStats() },
+                                    onSetTriggerActive = { active ->
+                                        viewModel.setUpdateTriggerActive(active) { res ->
+                                            if (res.isSuccess) {
+                                                val msg = if (active) "Update popup active for students!" else "Update popup turned off."
+                                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                                            } else {
+                                                Toast.makeText(context, "Error: ${res.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    },
+                                    onPublishUpdate = { vCode, vName, title, notes, dlUrl, force ->
+                                        viewModel.triggerInstantUpdate(vCode, vName, title, notes, dlUrl, force) { res ->
+                                            if (res.isSuccess) {
+                                                Toast.makeText(context, "⚡ Update popup triggered instantly to all students!", Toast.LENGTH_LONG).show()
+                                            } else {
+                                                Toast.makeText(context, "Failed to broadcast update: ${res.exceptionOrNull()?.message}", Toast.LENGTH_LONG).show()
+                                            }
+                                        }
+                                    },
+                                    onCheckUpdateNow = {
+                                        Toast.makeText(context, "Checking cloud for latest app version...", Toast.LENGTH_SHORT).show()
+                                        viewModel.checkForAppUpdates { status ->
+                                            Toast.makeText(context, status, Toast.LENGTH_LONG).show()
+                                        }
+                                    },
+                                    onPreviewPopup = {
+                                        viewModel.previewUpdatePrompt()
                                     }
                                 )
                             }
@@ -469,6 +507,10 @@ class MainActivity : ComponentActivity() {
                                             },
                                             onShareApp = {
                                                 showShareDialog = true
+                                            },
+                                            appUpdateInfo = appUpdateInfo,
+                                            onOpenUpdateDialog = {
+                                                viewModel.checkForAppUpdates()
                                             }
                                         )
                                         1 -> Notes2026Screen(
@@ -560,6 +602,17 @@ class MainActivity : ComponentActivity() {
                             onDismiss = { showShareDialog = false },
                             onUpdateDownloadUrl = { newUrl ->
                                 viewModel.updateAppDownloadUrl(newUrl)
+                            }
+                        )
+                    }
+
+                    // Automatic In-App Update Prompt for existing users
+                    appUpdateInfo?.let { updateInfo ->
+                        AppUpdateDialog(
+                            updateInfo = updateInfo,
+                            currentVersionName = viewModel.currentVersionName,
+                            onDismiss = {
+                                viewModel.dismissUpdatePrompt()
                             }
                         )
                     }

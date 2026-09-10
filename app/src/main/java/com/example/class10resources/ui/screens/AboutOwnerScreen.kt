@@ -27,10 +27,15 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.class10resources.data.firebase.FirebaseConfig
+import com.example.class10resources.data.model.AppUpdateInfo
 import com.example.class10resources.data.model.OwnerInfo
+import com.example.class10resources.data.model.VersionStats
 import com.example.class10resources.ui.components.BackupRestoreDialog
 import com.example.class10resources.ui.components.EditOwnerDialog
+import com.example.class10resources.ui.components.PublishUpdateDialog
+import com.example.class10resources.ui.theme.AccentSuccess
 import com.example.class10resources.ui.theme.*
 
 @Composable
@@ -51,12 +56,23 @@ fun AboutOwnerScreen(
     onDisconnectFirebase: () -> Unit = {},
     onSyncFromCloud: () -> Unit = {},
     onSyncToCloud: () -> Unit = {},
-    onShareApp: () -> Unit = {}
+    onShareApp: () -> Unit = {},
+    currentVersionCode: Int = 3,
+    currentVersionName: String = "2.1",
+    currentDownloadUrl: String = "",
+    appUpdateInfo: AppUpdateInfo? = null,
+    versionStats: VersionStats = VersionStats(),
+    onRefreshStats: () -> Unit = {},
+    onSetTriggerActive: (Boolean) -> Unit = {},
+    onPublishUpdate: (versionCode: Int, versionName: String, title: String, notes: String, downloadUrl: String, forceUpdate: Boolean) -> Unit = { _, _, _, _, _, _ -> },
+    onCheckUpdateNow: () -> Unit = {},
+    onPreviewPopup: () -> Unit = {}
 ) {
     val context = LocalContext.current
     var showEditDialog by remember { mutableStateOf(false) }
     var showBackupDialog by remember { mutableStateOf(false) }
     var showFirebaseDialog by remember { mutableStateOf(false) }
+    var showPublishUpdateDialog by remember { mutableStateOf(false) }
 
     // Load owner photo from asset
     val ownerBitmap = remember {
@@ -71,7 +87,7 @@ fun AboutOwnerScreen(
 
     val info = ownerInfo ?: OwnerInfo(
         name = "Ashish Maurya",
-        description = "Class 10 Resource Manager | Pursuing BS in Data Science at IIT Madras | Web Developer & Physics Teacher",
+        description = "Physics Teacher & Educator | Pursuing BS in Data Science at IIT Madras | Full Stack & Web Developer | Dedicated to making Class 10 concepts intuitive, rigorous, and accessible.",
         contact = "ashraj77777@gmail.com",
         photoFilename = "mee.jpeg",
         instagramLink = "https://www.instagram.com/ashraj7777/",
@@ -125,17 +141,35 @@ fun AboutOwnerScreen(
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        // Badge
-        Surface(
-            color = MaterialTheme.colorScheme.primaryContainer,
-            shape = RoundedCornerShape(16.dp)
+        // Badges: Physics Teacher & IIT Madras Data Science
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Teacher & Resource Creator",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-            )
+            Surface(
+                color = MaterialTheme.colorScheme.primaryContainer,
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text(
+                    text = "⚡ Physics Teacher",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
+                )
+            }
+            Surface(
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text(
+                    text = "IIT Madras BS Scholar",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -543,7 +577,7 @@ fun AboutOwnerScreen(
                         ) {
                             Column(modifier = Modifier.padding(8.dp)) {
                                 Text("App Version", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
-                                Text("v2.0 (Enhanced)", style = MaterialTheme.typography.bodySmall)
+                                Text("v2.1 (Enhanced)", style = MaterialTheme.typography.bodySmall)
                             }
                         }
                     }
@@ -557,6 +591,260 @@ fun AboutOwnerScreen(
                         Icon(Icons.Default.Backup, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Open Backup & Restore System")
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // App Version & Remote Update Popup Trigger Card
+            val isPopupActive = appUpdateInfo != null && appUpdateInfo.isTriggerActive
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (isPopupActive) 
+                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+                    else 
+                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                ),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(modifier = Modifier.padding(18.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(
+                            Icons.Default.SystemUpdate,
+                            contentDescription = null,
+                            tint = if (isPopupActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "⚡ Instant Student Update Trigger",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Live Status Badge
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = if (isPopupActive) 
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.15f) 
+                        else 
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.12f),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = if (isPopupActive) "🟢 LIVE" else "⚪ INACTIVE",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp,
+                                color = if (isPopupActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = if (isPopupActive) 
+                                    "Students receive update popup (${appUpdateInfo?.latestVersionName ?: "v2.1"})"
+                                else 
+                                    "No update popup sent to students",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    // Real-Time Student Update Adoption Tracker
+                    Card(
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "📊 Student Adoption Status",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                IconButton(
+                                    onClick = onRefreshStats,
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Icon(
+                                        Icons.Default.Refresh,
+                                        contentDescription = "Refresh stats",
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround
+                            ) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text(
+                                        text = "${versionStats.updatedDevicesCount}",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                    Text(
+                                        text = "Updated App",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text(
+                                        text = "${versionStats.pendingDevicesCount}",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                        color = if (versionStats.pendingDevicesCount > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    Text(
+                                        text = "Pending (Older)",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text(
+                                        text = "${versionStats.updatePercentage}%",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                        color = AccentSuccess
+                                    )
+                                    Text(
+                                        text = "Adoption Rate",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+
+                            if (versionStats.totalActiveDevices > 0) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                LinearProgressIndicator(
+                                    progress = { (versionStats.updatePercentage / 100f).coerceIn(0f, 1f) },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(6.dp)
+                                        .clip(RoundedCornerShape(3.dp)),
+                                    color = AccentSuccess,
+                                    trackColor = MaterialTheme.colorScheme.surfaceVariant
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(modifier = Modifier.padding(10.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text("This Device:", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
+                                Text("v$currentVersionName (Code: $currentVersionCode)", style = MaterialTheme.typography.bodySmall)
+                            }
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text("Cloud Broadcast:", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
+                                Text(
+                                    if (isPopupActive && appUpdateInfo != null) "v${appUpdateInfo.latestVersionName} (Code: ${appUpdateInfo.latestVersionCode})" else "Inactive",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = if (isPopupActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "• जिन छात्रों के पास पुराना वर्ज़न है, केवल उन्हीं को अपडेट का पॉपअप जाएगा!\n• जिन्होंने नया ऐप अपडेट कर लिया है, उन्हें कोई पॉपअप नहीं दिखेगा।",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    // Action Buttons Row 1: Trigger & Toggle/Check
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Button(
+                            onClick = { showPublishUpdateDialog = true },
+                            modifier = Modifier.weight(1.2f)
+                        ) {
+                            Icon(Icons.Default.CloudUpload, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("⚡ Trigger Popup")
+                        }
+
+                        OutlinedButton(
+                            onClick = { onSetTriggerActive(false) },
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = MaterialTheme.colorScheme.error
+                            ),
+                            modifier = Modifier.weight(0.9f)
+                        ) {
+                            Text(if (isPopupActive) "Turn Off" else "Reset")
+                        }
+
+                        OutlinedButton(
+                            onClick = onCheckUpdateNow,
+                            modifier = Modifier.weight(0.9f)
+                        ) {
+                            Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(14.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("Check")
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Action Button Row 2: Test Preview Popup on this Device
+                    OutlinedButton(
+                        onClick = onPreviewPopup,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Icon(Icons.Default.Visibility, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("👁️ Preview Update Popup on this Phone")
                     }
                 }
             }
@@ -601,6 +889,19 @@ fun AboutOwnerScreen(
             onConnect = { projId, key, bucket, app ->
                 onConnectFirebase(projId, key, bucket, app)
                 showFirebaseDialog = false
+            }
+        )
+    }
+
+    if (showPublishUpdateDialog) {
+        PublishUpdateDialog(
+            currentVersionCode = currentVersionCode,
+            currentVersionName = currentVersionName,
+            currentDownloadUrl = currentDownloadUrl,
+            onDismiss = { showPublishUpdateDialog = false },
+            onPublish = { vCode, vName, title, notes, dlUrl, force ->
+                onPublishUpdate(vCode, vName, title, notes, dlUrl, force)
+                showPublishUpdateDialog = false
             }
         )
     }

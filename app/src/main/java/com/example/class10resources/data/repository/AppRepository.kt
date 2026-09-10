@@ -27,10 +27,253 @@ class AppRepository(
     private val _isAdmin = MutableStateFlow(prefs.getBoolean("is_admin", false))
     val isAdmin: StateFlow<Boolean> = _isAdmin.asStateFlow()
 
-    // Default download URL for sharing with direct APK download/install capability
-    val defaultAppDownloadUrl = "https://ais-pre-5hf3vdks2xhklgkxmsk5y6-892925382596.asia-east1.run.app"
-    private val _appDownloadUrl = MutableStateFlow(prefs.getString("app_download_url", defaultAppDownloadUrl) ?: defaultAppDownloadUrl)
+    // Default download URL for sharing with direct APK download/install capability (GitHub Releases)
+    val defaultAppDownloadUrl = "https://github.com/22f3000982/Lumio_/releases/download/v2.1/Lumio_Class10.apk"
+    private val _appDownloadUrl = MutableStateFlow(
+        prefs.getString("app_download_url", null)?.ifBlank { null }?.let { saved ->
+            if (saved == "https://www.mediafire.com" || saved.contains("gofile.io") || saved.contains("temp.sh")) {
+                defaultAppDownloadUrl
+            } else {
+                saved
+            }
+        } ?: defaultAppDownloadUrl
+    )
     val appDownloadUrl: StateFlow<String> = _appDownloadUrl.asStateFlow()
+
+    // App Update State
+    private val _appUpdateInfo = MutableStateFlow<AppUpdateInfo?>(null)
+    val appUpdateInfo: StateFlow<AppUpdateInfo?> = _appUpdateInfo.asStateFlow()
+
+    private val _isCheckingUpdate = MutableStateFlow(false)
+    val isCheckingUpdate: StateFlow<Boolean> = _isCheckingUpdate.asStateFlow()
+
+    private val _versionStats = MutableStateFlow(VersionStats())
+    val versionStats: StateFlow<VersionStats> = _versionStats.asStateFlow()
+
+    init {
+        // Ensure app download URL defaults to latest GitHub Release APK
+        val existingUrl = prefs.getString("app_download_url", null)
+        if (existingUrl.isNullOrBlank() || existingUrl == "https://www.mediafire.com" || existingUrl.contains("gofile.io") || existingUrl.contains("temp.sh")) {
+            prefs.edit().putString("app_download_url", defaultAppDownloadUrl).apply()
+            _appDownloadUrl.value = defaultAppDownloadUrl
+        }
+
+        // Ensure default subjects (Physics, Chemistry, Biology) and learning resources exist
+        repoScope.launch {
+            try {
+                if (database.subjectDao().getCount() == 0) {
+                    AppDatabase.populateInitialData(database)
+                }
+                val currentOwner = database.ownerInfoDao().getOwnerInfoDirect()
+                if (currentOwner == null || currentOwner.description.contains("Class 10 Resource Manager")) {
+                    database.ownerInfoDao().insertOrUpdate(
+                        OwnerInfo(
+                            id = 1,
+                            name = "Ashish Maurya",
+                            description = "Physics Teacher & Educator | Pursuing BS in Data Science at IIT Madras | Full Stack & Web Developer | Dedicated to making Class 10 concepts intuitive, rigorous, and accessible.",
+                            contact = "ashraj77777@gmail.com",
+                            photoFilename = "mee.jpeg",
+                            instagramLink = "https://www.instagram.com/ashraj7777/",
+                            mcqLink = "https://www.perplexity.ai/apps/1d5d3a09-a3b4-4c9d-ae02-b5951bb98a80"
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                // Ignore
+            }
+        }
+
+        // Register this device telemetry in Firebase so Admin knows how many students have updated
+        repoScope.launch {
+            try {
+                val vCode = getCurrentVersionCode()
+                val vName = getCurrentVersionName()
+                firebaseSyncManager.registerDeviceTelemetry(vCode, vName)
+                // Ensure update trigger is deactivated in cloud so no student is forced to update
+                firebaseSyncManager.setUpdateTriggerActive(false)
+                refreshVersionStats()
+            } catch (e: Exception) {
+                // Ignore
+            }
+        }
+
+        // Start real-time Firestore listener for remote update broadcasts
+        firebaseSyncManager.startUpdateListener { remoteInfo ->
+            if (remoteInfo != null && remoteInfo.isTriggerActive) {
+                val currentVersionCode = getCurrentVersionCode()
+                // ONLY prompt if current version is older than latest remote version
+                val isStudentOnOlderVersion = remoteInfo.latestVersionCode > currentVersionCode
+                val dismissedVersion = prefs.getInt("dismissed_version_code", -1)
+                val isDismissed = prefs.getBoolean("update_prompt_dismissed", false)
+
+                // Never force anyone, and respect dismissal
+                if (isStudentOnOlderVersion && !isDismissed && dismissedVersion != remoteInfo.latestVersionCode) {
+                    _appUpdateInfo.value = remoteInfo.copy(isForceUpdate = false)
+                } else {
+                    _appUpdateInfo.value = null
+                }
+            } else {
+                _appUpdateInfo.value = null
+            }
+            repoScope.launch {
+                refreshVersionStats()
+            }
+        }
+    }
+
+    suspend fun refreshVersionStats() {
+        val targetCode = _appUpdateInfo.value?.latestVersionCode ?: (getCurrentVersionCode() + 1)
+        val stats = firebaseSyncManager.fetchVersionStats(targetCode)
+        _versionStats.value = stats
+    }
+
+    suspend fun checkForAppUpdates(): AppUpdateInfo? {
+        _isCheckingUpdate.value = true
+        return try {
+            val remoteInfo = firebaseSyncManager.fetchAppUpdateInfo()
+            if (remoteInfo != null) {
+                // If remote version code is strictly greater than current app version code (2)
+                val currentVersionCode = getCurrentVersionCode()
+                if (remoteInfo.isTriggerActive && remoteInfo.latestVersionCode > currentVersionCode) {
+                    _appUpdateInfo.value = remoteInfo
+                    remoteInfo
+                } else {
+                    _appUpdateInfo.value = null
+                    null
+                }
+            } else {
+                _appUpdateInfo.value = null
+                null
+            }
+        } catch (e: Exception) {
+            _appUpdateInfo.value = null
+            null
+        } finally {
+            _isCheckingUpdate.value = false
+        }
+    }
+
+    suspend fun checkForAppUpdatesStatus(): String {
+        _isCheckingUpdate.value = true
+        return try {
+            val remoteInfo = firebaseSyncManager.fetchAppUpdateInfo()
+            if (remoteInfo != null) {
+                val currentVersionCode = getCurrentVersionCode()
+                val currentVersionName = getCurrentVersionName()
+                if (remoteInfo.isTriggerActive && remoteInfo.latestVersionCode > currentVersionCode) {
+                    _appUpdateInfo.value = remoteInfo
+                    "New update v${remoteInfo.latestVersionName} found! Displaying update prompt."
+                } else if (!remoteInfo.isTriggerActive) {
+                    _appUpdateInfo.value = null
+                    "Update broadcast is currently set to INACTIVE in Cloud."
+                } else {
+                    _appUpdateInfo.value = null
+                    "App is already on latest version (v$currentVersionName). Update popup will trigger for students on older versions."
+                }
+            } else {
+                _appUpdateInfo.value = null
+                "No update published in Cloud yet. Tap '⚡ Trigger Popup' to publish."
+            }
+        } catch (e: Exception) {
+            _appUpdateInfo.value = null
+            "Could not check updates: ${e.localizedMessage}"
+        } finally {
+            _isCheckingUpdate.value = false
+        }
+    }
+
+    fun previewUpdatePrompt() {
+        val currentCode = getCurrentVersionCode()
+        val currentName = getCurrentVersionName()
+        val preview = AppUpdateInfo(
+            latestVersionCode = currentCode + 1,
+            latestVersionName = "2.2",
+            updateTitle = "New Lumio Update Available! 🚀",
+            releaseNotes = "• New CBSE Class 10 Physics notes\n• Fresh Daily Practice Problems (DPP)\n• Faster PDF loading and interactive MCQs",
+            apkDownloadUrl = _appDownloadUrl.value,
+            isForceUpdate = false,
+            releasedAt = "Preview Test",
+            isTriggerActive = true
+        )
+        _appUpdateInfo.value = preview
+    }
+
+    fun dismissUpdatePrompt() {
+        val current = _appUpdateInfo.value
+        val editor = prefs.edit()
+        editor.putLong("last_dismissed_update_time", System.currentTimeMillis())
+        editor.putBoolean("update_prompt_dismissed", true)
+        if (current != null) {
+            editor.putInt("dismissed_version_code", current.latestVersionCode)
+        }
+        editor.apply()
+        _appUpdateInfo.value = null
+    }
+
+    suspend fun triggerInstantUpdate(
+        versionCode: Int,
+        versionName: String,
+        title: String,
+        notes: String,
+        downloadUrl: String,
+        forceUpdate: Boolean = false
+    ): Result<Unit> {
+        val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+        val dateStr = sdf.format(Date())
+        val update = AppUpdateInfo(
+            latestVersionCode = versionCode,
+            latestVersionName = versionName,
+            updateTitle = title,
+            releaseNotes = notes,
+            apkDownloadUrl = downloadUrl.ifBlank { _appDownloadUrl.value },
+            isForceUpdate = false, // Never force update, students can always dismiss
+            releasedAt = dateStr,
+            isTriggerActive = true,
+            triggerTimestamp = System.currentTimeMillis()
+        )
+        if (downloadUrl.isNotBlank()) {
+            updateAppDownloadUrl(downloadUrl)
+        }
+        return firebaseSyncManager.publishAppUpdate(update)
+    }
+
+    suspend fun setUpdateTriggerActive(active: Boolean): Result<Unit> {
+        return firebaseSyncManager.setUpdateTriggerActive(active)
+    }
+
+    suspend fun publishNewVersion(
+        versionCode: Int,
+        versionName: String,
+        title: String,
+        notes: String,
+        downloadUrl: String,
+        forceUpdate: Boolean = false
+    ): Result<Unit> {
+        return triggerInstantUpdate(versionCode, versionName, title, notes, downloadUrl, forceUpdate)
+    }
+
+    fun getCurrentVersionCode(): Int {
+        return try {
+            val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                pInfo.longVersionCode.toInt()
+            } else {
+                @Suppress("DEPRECATION")
+                pInfo.versionCode
+            }
+        } catch (e: Exception) {
+            3 // Fallback to current build versionCode
+        }
+    }
+
+    fun getCurrentVersionName(): String {
+        return try {
+            val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            pInfo.versionName ?: "2.1"
+        } catch (e: Exception) {
+            "2.1"
+        }
+    }
 
     fun updateAppDownloadUrl(url: String) {
         val cleanUrl = url.trim()
