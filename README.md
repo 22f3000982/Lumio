@@ -87,6 +87,6 @@ The database (`AppDatabase`, Version 2) contains 5 relational tables:
 ---
 
 ## 🔐 Admin Access
-- **Admin Password**: `4129`
+- **Admin Password**: `4**9`
 - Allows adding, editing, and deleting resources, DPPs, and notes.
 - Password input includes an eye toggle to reveal/hide characters safely.
